@@ -11,7 +11,7 @@ int** genTerrain();
 
 
 const int MAP_WIDTH = 80;
-const int MAP_HEIGHT = 22;
+const int MAP_HEIGHT = 23;
 
 
 
@@ -48,7 +48,7 @@ void renderWindow(int** blocks, std::string msg)
 
 	//Renders from top-left to bottom-right
 	//The y loop increments backwards here so blocks can be set intuitively elsewhere
-	for (int y = 22; y >= 0; --y)
+	for (int y = 23; y >= 0; --y)
 	{
 		for (int x = 0; x < 80; ++x)
 		{
@@ -86,8 +86,8 @@ int** genTerrain()
 
 
 
-	//Height limit 20 of 22. 1 for bedrock (later), 1 for open space on top.
-	int height = rand() % 20 + 1;
+	//Height limit 21 of 23. 1 for bedrock (later), 1 for open space on top.
+	int height = rand() % 21 + 1;
 
 	for (int x = 0; x < MAP_WIDTH; ++x)
 	{
@@ -108,7 +108,7 @@ int** genTerrain()
 			}
 		}
 
-		if (height < 20)
+		if (height < 21)
 		{
 			height += rand() % 3 - 1;
 		}
