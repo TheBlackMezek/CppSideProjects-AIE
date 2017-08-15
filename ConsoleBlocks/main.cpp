@@ -52,13 +52,24 @@ void renderWindow(int** blocks, std::string msg)
 	{
 		for (int x = 0; x < 80; ++x)
 		{
-			if (blocks[x][y] == 0) {
-				std::cout << " ";
-			}
-			else
+			switch (blocks[x][y])
 			{
+			case 0:
+				//Empty space
+				std::cout << " ";
+				break;
+			case 1:
+				//Normal block
+				std::cout << "X";
+				break;
+			case 2:
+				//Bedrock, holding up the world
+				std::cout << "W";
+				break;
+			default:
 				//E is for Error
 				std::cout << "E";
+				break;
 			}
 		}
 	}
