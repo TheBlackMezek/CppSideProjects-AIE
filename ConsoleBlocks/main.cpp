@@ -48,7 +48,7 @@ void renderWindow(int** blocks, std::string msg)
 
 	//Renders from top-left to bottom-right
 	//The y loop increments backwards here so blocks can be set intuitively elsewhere
-	for (int y = 23; y >= 0; --y)
+	for (int y = 22; y >= 0; --y)
 	{
 		for (int x = 0; x < 80; ++x)
 		{
@@ -81,6 +81,8 @@ void renderWindow(int** blocks, std::string msg)
 
 int** genTerrain()
 {
+	//Create array
+
 	//REMEMBER TO DELETE THIS ARRAY WHEN DONE WITH IT
 	int** blocks = 0;
 	blocks = new int*[MAP_WIDTH];
@@ -96,6 +98,8 @@ int** genTerrain()
 	}
 
 
+
+	//Generate base terrain
 
 	//Height limit 21 of 23. 1 for bedrock (later), 1 for open space on top.
 	int height = rand() % 21 + 1;
@@ -121,7 +125,7 @@ int** genTerrain()
 
 		if (height < 21)
 		{
-			height += rand() % 3 - 1;
+			height += rand() % 3 - 1; // collatz series (sort-of not really)
 		}
 		else
 		{
@@ -130,5 +134,52 @@ int** genTerrain()
 
 	}
 
+
+
+	//Clean little bumps on terrain
+	int right = 1;
+	for (int x = 0; x < MAP_WIDTH; ++x)
+	{
+		if (x == MAP_WIDTH -1)
+		{
+			right = 0;
+		}
+		for (int y = 0; y < MAP_HEIGHT; ++y)
+		{
+			bool res = true;
+
+			if(y < MAP_HEIGHT)  res = res && !blocks[x][y + 1];
+			if(x < MAP_WIDTH-1) res = res && !blocks[x + 1][y];
+			if(x != 0)		    res = res && !blocks[x - 1][y];
+
+			// non-branching single statement solution
+			res = ((y < MAP_HEIGHT)    && !blocks[x][y + 1]) &&
+				  ((x < MAP_WIDTH - 1) && !blocks[x + 1][y]) &&
+				  ((x != 0)            && !blocks[x - 1][y]);
+			 
+			// in C++, non-zero values are true.
+			if (res) blocks[x][y] = 0;
+			/*
+			if ((blocks[x][y] != 0 
+				&& (y == MAP_HEIGHT-1 || blocks[x][y + 1] == 0))
+				&& 
+					((x == 0 && blocks[x+right][y] == 0)
+					|| (x == MAP_WIDTH-1 && blocks[x-1][y] == 0)
+					|| (blocks[x + 1][y] == 0 && blocks[x - 1][y] == 0))
+				)
+			{
+				blocks[x][y] = 0;
+			}*/
+		}
+
+	}
+	
+
+
 	return blocks;
 }
+
+// short-circuiting 
+
+//	A && B : if A is false, then there is no need to bother evaluating B
+//  A || B : if A is true, then there is no need to bother evaluating B
