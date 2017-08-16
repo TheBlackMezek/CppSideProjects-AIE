@@ -136,7 +136,7 @@ int** genTerrain()
 
 
 
-	//Clean little bumps on terrain
+	//Clean little bumps and divets in terrain
 	int right = 1;
 	for (int x = 0; x < MAP_WIDTH; ++x)
 	{
@@ -159,6 +159,13 @@ int** genTerrain()
 			 
 			// in C++, non-zero values are true.
 			if (res) blocks[x][y] = 0;
+
+			
+			res = ((y > 0)				&& blocks[x][y - 1]) &&
+				  ((x == MAP_WIDTH - 1) || blocks[x + 1][y]) &&
+				  ((x == 0)				|| blocks[x - 1][y]);
+
+			if (res) blocks[x][y] = 1;
 			/*
 			if ((blocks[x][y] != 0 
 				&& (y == MAP_HEIGHT-1 || blocks[x][y + 1] == 0))
