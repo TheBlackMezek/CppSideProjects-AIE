@@ -153,9 +153,9 @@ int** genTerrain()
 			if(x != 0)		    res = res && !blocks[x - 1][y];
 
 			// non-branching single statement solution
-			res = ((y < MAP_HEIGHT)    && !blocks[x][y + 1]) &&
-				  ((x < MAP_WIDTH - 1) && !blocks[x + 1][y]) &&
-				  ((x != 0)            && !blocks[x - 1][y]);
+			res = ((y < MAP_HEIGHT)     && !blocks[x][y + 1]) &&
+				  ((x == MAP_WIDTH - 1) || !blocks[x + 1][y]) &&
+				  ((x == 0)             || !blocks[x - 1][y]);
 			 
 			// in C++, non-zero values are true.
 			if (res) blocks[x][y] = 0;
