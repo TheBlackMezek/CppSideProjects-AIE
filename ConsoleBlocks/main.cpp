@@ -1,6 +1,7 @@
 
 #include <iostream>
 #include <time.h>
+#include <windows.h>
 
 
 
@@ -13,13 +14,24 @@ int** genTerrain();
 const int MAP_WIDTH = 80;
 const int MAP_HEIGHT = 23;
 
+HANDLE hstdin;
+HANDLE hstdout;
+
 
 
 //Default console size at home is 80x24 characters. Check at AIE.
 
+//Text color code copied from:
+//http://www.cplusplus.com/forum/beginner/5830/
+
+
 int main()
 {
-	std::cout << "Hello world!" << std::endl;
+
+	hstdin = GetStdHandle(STD_INPUT_HANDLE);
+	hstdout = GetStdHandle(STD_OUTPUT_HANDLE);
+
+
 
 	srand(time(nullptr));
 
@@ -35,6 +47,12 @@ int main()
 	delete[] blockTest;
 
 
+
+
+	FlushConsoleInputBuffer(hstdin);
+
+
+
 	system("pause");
 
 	return 0;
@@ -45,6 +63,10 @@ void renderWindow(int** blocks, std::string msg)
 {
 	//Makeshift "clear window"
 	std::cout << "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n";
+
+	// Remember how things were when we started
+	CONSOLE_SCREEN_BUFFER_INFO csbi;
+	GetConsoleScreenBufferInfo(hstdout, &csbi);
 
 	//Renders from top-left to bottom-right
 	//The y loop increments backwards here so blocks can be set intuitively elsewhere
@@ -60,10 +82,12 @@ void renderWindow(int** blocks, std::string msg)
 				break;
 			case 1:
 				//Normal block
+				SetConsoleTextAttribute(hstdout, 0x06);
 				std::cout << "X";
 				break;
 			case 2:
 				//Bedrock, holding up the world
+				SetConsoleTextAttribute(hstdout, 0x66);
 				std::cout << "W";
 				break;
 			default:
@@ -73,6 +97,9 @@ void renderWindow(int** blocks, std::string msg)
 			}
 		}
 	}
+
+	// Return to original state
+	SetConsoleTextAttribute(hstdout, csbi.wAttributes);
 
 	//If the msg is longer, it might create a new line, which would hide some of the world render.
 	msg.resize(80, ' ');
