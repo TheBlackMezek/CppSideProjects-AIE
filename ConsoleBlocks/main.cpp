@@ -9,10 +9,15 @@
 void renderWindow(int** blocks, std::string msg);
 //I read that this will return a pointer to a 2D array
 int** genTerrain();
+void game();
 
 
 const int MAP_WIDTH = 80;
 const int MAP_HEIGHT = 23;
+
+bool endGame = false;
+int** blocks;
+std::string winmsg = "";
 
 HANDLE hstdin;
 HANDLE hstdout;
@@ -36,15 +41,17 @@ int main()
 	srand(time(nullptr));
 
 
-	int** blockTest = genTerrain();
+	blocks = genTerrain();
 
-	renderWindow(blockTest, "Test message. This has to be very long so that I can test the string resize function. I don't have a clue how many characters I've written in it so far.");
+	renderWindow(blocks, "Test message. This has to be very long so that I can test the string resize function. I don't have a clue how many characters I've written in it so far.");
+
+	game();
 
 	for (int w = 0; w < MAP_WIDTH; ++w)
 	{
-		delete[] blockTest[w];
+		delete[] blocks[w];
 	}
-	delete[] blockTest;
+	delete[] blocks;
 
 
 
@@ -53,9 +60,18 @@ int main()
 
 
 
-	system("pause");
+	//system("pause");
 
 	return 0;
+}
+
+//The game loop
+void game()
+{
+	while (!endGame)
+	{
+		renderWindow(blocks, winmsg);
+	}
 }
 
 
