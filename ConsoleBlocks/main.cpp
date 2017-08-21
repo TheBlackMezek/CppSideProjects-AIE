@@ -2,13 +2,15 @@
 #include <iostream>
 #include <time.h>
 #include <windows.h>
+#include <string>
 
 
 
 //Is passing arrays bad?
 void renderWindow(int** blocks, std::string msg);
 //I read that this will return a pointer to a 2D array
-int** genTerrain();
+int** genTerrainArray();
+int** genTerrain(int** blocks);
 void game();
 
 
@@ -41,9 +43,9 @@ int main()
 	srand(time(nullptr));
 
 
-	blocks = genTerrain();
+	blocks = genTerrain(genTerrainArray());
 
-	renderWindow(blocks, "Test message. This has to be very long so that I can test the string resize function. I don't have a clue how many characters I've written in it so far.");
+	//renderWindow(blocks, "Test message. This has to be very long so that I can test the string resize function. I don't have a clue how many characters I've written in it so far.");
 
 	game();
 
@@ -68,8 +70,24 @@ int main()
 //The game loop
 void game()
 {
+	std::string input;
+
+	renderWindow(blocks, winmsg);
+
 	while (!endGame)
 	{
+		//std::cin >> input;
+		std::getline(std::cin, input);
+
+		if (input == "exit")
+		{
+			endGame = true;
+		}
+		else if (input == "regen")
+		{
+			genTerrain(blocks);
+		}
+
 		renderWindow(blocks, winmsg);
 	}
 }
@@ -122,7 +140,7 @@ void renderWindow(int** blocks, std::string msg)
 	std::cout << msg.c_str();
 }
 
-int** genTerrain()
+int** genTerrainArray()
 {
 	//Create array
 
@@ -140,7 +158,11 @@ int** genTerrain()
 		}
 	}
 
+	return blocks;
+}
 
+int** genTerrain(int** blocks)
+{
 
 	//Generate base terrain
 
