@@ -140,6 +140,19 @@ void game()
 			}
 			simulate();
 		}
+		else if (input.substr(0, 4) == "life")
+		{
+			for (int y = 0; y < MAP_HEIGHT; ++y)
+			{
+				for (int x = 0; x < MAP_WIDTH; ++x)
+				{
+					if (!blocks[x][y] && blocks[x][y - 1] == 1 && rand() % 10 == 0)
+					{
+						blocks[x][y] = 4;
+					}
+				}
+			}
+		}
 
 		renderWindow(blocks, winmsg);
 	}
@@ -233,6 +246,11 @@ void renderWindow(int** blocks, std::string msg)
 				//Water
 				SetConsoleTextAttribute(hstdout, 0x03);
 				std::cout << "-";
+				break;
+			case 4:
+				//Plant1
+				SetConsoleTextAttribute(hstdout, 0x02);
+				std::cout << "%";
 				break;
 			default:
 				//E is for Error
