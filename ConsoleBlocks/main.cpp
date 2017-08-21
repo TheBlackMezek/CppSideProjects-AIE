@@ -11,6 +11,7 @@ void renderWindow(int** blocks, std::string msg);
 //I read that this will return a pointer to a 2D array
 int** genTerrainArray();
 int** genTerrain(int** blocks);
+void simulate();
 void game();
 
 
@@ -76,8 +77,10 @@ void game()
 
 	while (!endGame)
 	{
-		//std::cin >> input;
+		winmsg = "";
+
 		std::getline(std::cin, input);
+		system("cls");
 
 		if (input == "exit")
 		{
@@ -86,6 +89,41 @@ void game()
 		else if (input == "regen")
 		{
 			genTerrain(blocks);
+			winmsg = "Terrain regenerated";
+		}
+		else if (input.substr(0, 4) == "seed")
+		{
+			if (input.substr(5, input.npos) == "time")
+			{
+				srand(time(NULL));
+			}
+			else
+			{
+				srand(std::stoi(input.substr(5, input.npos)));
+			}
+			winmsg = "Seed set to " + input.substr(5, input.npos);
+		}
+		else if (input == "rain")
+		{
+			for (int x = 0; x < MAP_WIDTH; ++x)
+			{
+				blocks[x][MAP_HEIGHT - 1] = 3;
+			}
+			winmsg = "Rain added";
+		}
+		else if (input.substr(0, 3) == "sim")
+		{
+			if (input.size() != 3)
+			{
+				int runs = std::stoi(input.substr(4, input.npos));
+				for (int i = 0; i < runs - 1; ++i)
+				{
+					simulate();
+					renderWindow(blocks, winmsg);
+					Sleep(250);
+				}
+			}
+			simulate();
 		}
 
 		renderWindow(blocks, winmsg);
@@ -93,10 +131,58 @@ void game()
 }
 
 
+
+void simulate()
+{
+	for (int y = 0; y < MAP_HEIGHT; ++y)
+	{
+		int leftRight = rand() % 2;
+		if (leftRight == 0) { leftRight = -1; }
+		for (int x = 0; x < MAP_WIDTH; ++x)
+		{
+			//Water flow
+			if (blocks[x][y] == 3)
+			{
+				
+				if (!blocks[x][y - 1])
+				{
+					blocks[x][y] = 0;
+					blocks[x][y - 1] = 3;
+				}
+				else if ((x + leftRight >= 0 && x + leftRight < MAP_WIDTH)
+					&& !blocks[x + leftRight][y - 1])
+				{
+					blocks[x][y] = 0;
+					blocks[x + leftRight][y - 1] = 3;
+				}
+				else if ((x - leftRight >= 0 && x - leftRight < MAP_WIDTH)
+					&& !blocks[x - leftRight][y - 1])
+				{
+					blocks[x][y] = 0;
+					blocks[x - leftRight][y - 1] = 3;
+				}
+				else if ((x + leftRight >= 0 && x + leftRight < MAP_WIDTH)
+					&& !blocks[x + leftRight][y])
+				{
+					blocks[x][y] = 0;
+					blocks[x + leftRight][y] = 3;
+				}
+				else if ((x - leftRight >= 0 && x - leftRight < MAP_WIDTH)
+					&& !blocks[x - leftRight][y])
+				{
+					blocks[x][y] = 0;
+					blocks[x - leftRight][y] = 3;
+				}
+			}
+		}
+
+	}
+}
+
 void renderWindow(int** blocks, std::string msg)
 {
 	//Makeshift "clear window"
-	std::cout << "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n";
+	//std::cout << "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n";
 
 	// Remember how things were when we started
 	CONSOLE_SCREEN_BUFFER_INFO csbi;
@@ -123,6 +209,11 @@ void renderWindow(int** blocks, std::string msg)
 				//Bedrock, holding up the world
 				SetConsoleTextAttribute(hstdout, 0x66);
 				std::cout << "W";
+				break;
+			case 3:
+				//Water
+				SetConsoleTextAttribute(hstdout, 0x03);
+				std::cout << "-";
 				break;
 			default:
 				//E is for Error
