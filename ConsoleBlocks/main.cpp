@@ -153,13 +153,13 @@ void simulate()
 
 	for (int y = 0; y < MAP_HEIGHT; ++y)
 	{
-		int leftRight = rand() % 2;
-		if (leftRight == 0) { leftRight = -1; }
 		for (int x = 0; x < MAP_WIDTH; ++x)
 		{
 			//Water flow
 			if (blocks[x][y] == 3)
 			{
+				int leftRight = rand() % 2;
+				if (leftRight == 0) { leftRight = -1; }
 				
 				if (!blocksNew[x][y - 1])
 				{
