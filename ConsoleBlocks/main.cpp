@@ -9,8 +9,11 @@
 //Is passing arrays bad?
 void renderWindow(int** blocks, std::string msg);
 //I read that this will return a pointer to a 2D array
-int** genTerrainArray();
+int** genBlockArray();
+int** genBlockNewArray();
 int** genTerrain(int** blocks);
+//a2 = a1
+void copyBlockArray(int** a1, int** a2);
 void simulate();
 void game();
 
@@ -19,7 +22,11 @@ const int MAP_WIDTH = 80;
 const int MAP_HEIGHT = 23;
 
 bool endGame = false;
+//When simulating, blocks is copied to blocksNew
+//blocks is used to determine what needs to be simulated
+//blocksNew is used for collisions, etc.
 int** blocks;
+int** blocksNew;
 std::string winmsg = "";
 
 HANDLE hstdin;
@@ -44,7 +51,9 @@ int main()
 	srand(time(nullptr));
 
 
-	blocks = genTerrain(genTerrainArray());
+	blocks = genTerrain(genBlockArray());
+	blocksNew = genBlockNewArray();
+	copyBlockArray(blocks, blocksNew);
 
 	//renderWindow(blocks, "Test message. This has to be very long so that I can test the string resize function. I don't have a clue how many characters I've written in it so far.");
 
@@ -55,6 +64,12 @@ int main()
 		delete[] blocks[w];
 	}
 	delete[] blocks;
+
+	for (int w = 0; w < MAP_WIDTH; ++w)
+	{
+		delete[] blocksNew[w];
+	}
+	delete[] blocksNew;
 
 
 
@@ -134,6 +149,8 @@ void game()
 
 void simulate()
 {
+	copyBlockArray(blocks, blocksNew);
+
 	for (int y = 0; y < MAP_HEIGHT; ++y)
 	{
 		int leftRight = rand() % 2;
@@ -144,39 +161,41 @@ void simulate()
 			if (blocks[x][y] == 3)
 			{
 				
-				if (!blocks[x][y - 1])
+				if (!blocksNew[x][y - 1])
 				{
-					blocks[x][y] = 0;
-					blocks[x][y - 1] = 3;
+					blocksNew[x][y] = 0;
+					blocksNew[x][y - 1] = 3;
 				}
 				else if ((x + leftRight >= 0 && x + leftRight < MAP_WIDTH)
-					&& !blocks[x + leftRight][y - 1])
+					&& !blocksNew[x + leftRight][y - 1])
 				{
-					blocks[x][y] = 0;
-					blocks[x + leftRight][y - 1] = 3;
+					blocksNew[x][y] = 0;
+					blocksNew[x + leftRight][y - 1] = 3;
 				}
 				else if ((x - leftRight >= 0 && x - leftRight < MAP_WIDTH)
-					&& !blocks[x - leftRight][y - 1])
+					&& !blocksNew[x - leftRight][y - 1])
 				{
-					blocks[x][y] = 0;
-					blocks[x - leftRight][y - 1] = 3;
+					blocksNew[x][y] = 0;
+					blocksNew[x - leftRight][y - 1] = 3;
 				}
 				else if ((x + leftRight >= 0 && x + leftRight < MAP_WIDTH)
-					&& !blocks[x + leftRight][y])
+					&& !blocksNew[x + leftRight][y])
 				{
-					blocks[x][y] = 0;
-					blocks[x + leftRight][y] = 3;
+					blocksNew[x][y] = 0;
+					blocksNew[x + leftRight][y] = 3;
 				}
 				else if ((x - leftRight >= 0 && x - leftRight < MAP_WIDTH)
-					&& !blocks[x - leftRight][y])
+					&& !blocksNew[x - leftRight][y])
 				{
-					blocks[x][y] = 0;
-					blocks[x - leftRight][y] = 3;
+					blocksNew[x][y] = 0;
+					blocksNew[x - leftRight][y] = 3;
 				}
 			}
 		}
 
 	}
+
+	copyBlockArray(blocksNew, blocks);
 }
 
 void renderWindow(int** blocks, std::string msg)
@@ -231,7 +250,7 @@ void renderWindow(int** blocks, std::string msg)
 	std::cout << msg.c_str();
 }
 
-int** genTerrainArray()
+int** genBlockArray()
 {
 	//Create array
 
@@ -250,6 +269,27 @@ int** genTerrainArray()
 	}
 
 	return blocks;
+}
+
+int** genBlockNewArray()
+{
+	//Create array
+
+	//REMEMBER TO DELETE THIS ARRAY WHEN DONE WITH IT
+	int** blocksNew = 0;
+	blocksNew = new int*[MAP_WIDTH];
+
+	for (int w = 0; w < MAP_WIDTH; ++w)
+	{
+		blocksNew[w] = new int[MAP_HEIGHT];
+
+		for (int h = 0; h < MAP_HEIGHT; ++h)
+		{
+			blocksNew[w][h] = 0;
+		}
+	}
+
+	return blocksNew;
 }
 
 int** genTerrain(int** blocks)
@@ -340,6 +380,17 @@ int** genTerrain(int** blocks)
 
 
 	return blocks;
+}
+
+void copyBlockArray(int** a1, int** a2)
+{
+	for (int y = 0; y < MAP_HEIGHT; ++y)
+	{
+		for (int x = 0; x < MAP_WIDTH; ++x)
+		{
+			a2[x][y] = a1[x][y];
+		}
+	}
 }
 
 // short-circuiting 
