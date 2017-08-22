@@ -12,6 +12,8 @@
 const int MAP_WIDTH = 80;
 const int MAP_HEIGHT = 23;
 
+void game();
+void simulate();
 //Is passing arrays bad?
 void renderWindow(int** blocks, std::string msg);
 //I read that this will return a pointer to a 2D array
@@ -22,24 +24,27 @@ int** genTerrain(int** blocks);
 //a2 = a1
 void copyBlockArray(int** a1, int** a2);
 void killPlants();
-void simulate();
-void game();
+void rain();
+
 
 bool endGame = false;
+std::string winmsg = "";
 //When simulating, blocks is copied to blocksNew
 //blocks is used to determine what needs to be simulated
 //blocksNew is used for collisions, etc.
 int** blocks;
 int** blocksNew;
 Plant** plants;
-std::string winmsg = "";
-
 Plant plantTypes[]
 {
 	{ 0, 0, 0, 0, 0, 0}, //No plant
 	{ 1, '%', 6, 6, 10, 10 }, //Simple spreader
 	{ 2, '|', 10, 10, 8, 8 } //Reed
 };
+
+int sleepTime = 250;
+int rainInterval = -1;
+int rainTimer = 0;
 
 HANDLE hstdin;
 HANDLE hstdout;
@@ -127,7 +132,7 @@ void game()
 			killPlants();
 			winmsg = "Terrain regenerated";
 		}
-		else if (input.substr(0, 4) == "seed")
+		else if (input.substr(0, 5) == "seed ")
 		{
 			if (input.substr(5, input.npos) == "time")
 			{
@@ -139,15 +144,21 @@ void game()
 			}
 			winmsg = "Seed set to " + input.substr(5, input.npos);
 		}
-		else if (input == "rain")
+		else if (input.substr(0, 4) == "rain")
 		{
-			for (int x = 0; x < MAP_WIDTH; ++x)
+			if (input.size() == 4)
 			{
-				blocks[x][MAP_HEIGHT - 1] = 3;
+				rain();
+				winmsg = "Rain added";
 			}
-			winmsg = "Rain added";
+			else
+			{
+				rainInterval = std::stoi(input.substr(5, input.npos));
+				rainTimer = 0;
+				winmsg = "Rain interval set to " + std::to_string(rainInterval);
+			}
 		}
-		else if (input.substr(0, 3) == "sim")
+		else if (input.substr(0, 4) == "sim ")
 		{
 			if (input.size() != 3)
 			{
@@ -156,12 +167,12 @@ void game()
 				{
 					simulate();
 					renderWindow(blocks, winmsg);
-					Sleep(250);
+					Sleep(sleepTime);
 				}
 			}
 			simulate();
 		}
-		else if (input.substr(0, 4) == "life")
+		else if (input.substr(0, 5) == "life ")
 		{
 			int type = stoi(input.substr(5, input.npos));
 			for (int y = 0; y < MAP_HEIGHT; ++y)
@@ -182,6 +193,24 @@ void game()
 		else if (input == "kill")
 		{
 			killPlants();
+		}
+		else if (input == "dry")
+		{
+			for (int y = 0; y < MAP_HEIGHT; ++y)
+			{
+				for (int x = 0; x < MAP_WIDTH; ++x)
+				{
+					if (blocks[x][y] == 3)
+					{
+						blocks[x][y] = 0;
+					}
+				}
+			}
+		}
+		else if (input.substr(0, 7) == "simwait")
+		{
+			sleepTime = stoi(input.substr(8, input.npos));
+			winmsg = "Sim wait time set to " + std::to_string(sleepTime) + " milliseconds";
 		}
 
 		renderWindow(blocks, winmsg);
@@ -240,6 +269,21 @@ void simulate()
 	}
 
 	copyBlockArray(blocksNew, blocks);
+
+	//Rainfall
+	if (rainInterval >= 0)
+	{
+		if (rainTimer == 0)
+		{
+			winmsg = "Raining";
+			rainTimer = rainInterval;
+			rain();
+		}
+		else
+		{
+			--rainTimer;
+		}
+	}
 
 	//Plant simulation
 	for (int y = 0; y < MAP_HEIGHT; ++y)
@@ -569,6 +613,17 @@ void killPlants()
 		for (int x = 0; x < MAP_WIDTH; ++x)
 		{
 			plants[x][y] = plantTypes[0];
+		}
+	}
+}
+
+void rain()
+{
+	for (int x = 0; x < MAP_WIDTH; ++x)
+	{
+		if (blocks[x][MAP_HEIGHT - 1] == 0)
+		{
+			blocks[x][MAP_HEIGHT - 1] = 3;
 		}
 	}
 }
