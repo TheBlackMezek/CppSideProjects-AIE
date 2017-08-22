@@ -41,7 +41,10 @@ Plant plantTypes[]
 {
 	{ 0, 0, 0, 0, 0, 0}, //No plant
 	{ 1, '%', 6, 6, 10, 10 }, //Simple spreader
-	{ 2, '|', 6, 6, 10, 10 } //Reed
+	{ 2, '|', 6, 6, 10, 10 }, //Reed
+	{ 3, '$', 6, 6, 10, 10 }, //Thirsty spreader
+	{ 4, 'I', 6, 6, 10, 10 }, //Thirsty reed
+	{ 5, 'l', 6, 6, 10, 10 } //Equalizer reed
 };
 //Each CHAR_INFO contains data for a single character: its ASCII char and color
 CHAR_INFO consoleBuffer[WIN_WIDTH * WIN_HEIGHT];
@@ -50,8 +53,8 @@ COORD charPosition = { 0, 0 };
 SMALL_RECT consoleWriteArea{ 0, 0, WIN_WIDTH - 1, WIN_HEIGHT - 1 };
 
 int seed = 0;
-int sleepTime = 250;
-int rainInterval = -1;
+int sleepTime = 100;
+int rainInterval = 10;
 int rainTimer = 0;
 
 HANDLE hstdin;
@@ -217,7 +220,7 @@ void game()
 			{
 				for (int x = 0; x < MAP_WIDTH; ++x)
 				{
-					if (type == 1 || type == 2) {
+					if (type == 1 || type == 2 || type == 3 || type == 4 || type == 5) {
 						if (!blocks[x][y] && blocks[x][y - 1] == 1
 							&& rand() % 10 == 0
 							&& plants[x][y].type == 0)
@@ -528,6 +531,356 @@ void simulate()
 					plants[x][y] = plantTypes[0];
 				}
 			}
+			//Thirsty spreader
+			else if (plants[x][y].type == 3)
+			{
+				//Heal if full on food
+				if (plants[x][y].food == plants[x][y].maxFood &&
+					plants[x][y].health < plants[x][y].maxHealth)
+				{
+					++plants[x][y].health;
+				}
+
+				//Seed if full enough and healthy
+				if (plants[x][y].food   >  plants[x][y].maxFood / 2
+					&& plants[x][y].health == plants[x][y].maxHealth)
+				{
+					bool seeded = false;
+					for (int xx = x - 2; xx <= x + 2; ++xx)
+					{
+						if (xx >= 0 && xx < MAP_WIDTH)
+						{
+							for (int yy = y - 2; yy <= y + 2; ++yy)
+							{
+								if (yy > 0 && yy < MAP_HEIGHT
+									&& plants[xx][yy].type == 0
+									&& !blocks[xx][yy] && blocks[xx][yy - 1] == 1)
+								{
+									seeded = true;
+									plants[xx][yy] = plantTypes[3];
+									plants[xx][yy].food = plants[x][y].food / 2;
+									plants[x][y].food /= 2;
+									break;
+								}
+							}
+						}
+						if (seeded) { break; }
+					}
+				}
+
+				//Use up food
+				--plants[x][y].food;
+
+				//No negative food
+				if (plants[x][y].food < 0)
+				{
+					plants[x][y].food = 0;
+				}
+
+				//Water-in-tile logic
+				if (blocks[x][y] == 3)
+				{
+					//Consume water if hungry
+					if (plants[x][y].food < plants[x][y].maxFood - 1)
+					{
+						blocks[x][y] = 0;
+						plants[x][y].food += 5;
+					}
+					//If not hungry and submerged, drown
+					else if (y != MAP_HEIGHT - 1 && blocks[x][y + 1] == 3)
+					{
+						plants[x][y].health -= 2;
+					}
+				}
+				//If no water in tile and hungry, check local tiles for water
+				else if(plants[x][y].food < plants[x][y].maxFood - 1)
+				{
+					for (int xx = x - 2; xx <= x + 2; ++xx)
+					{
+						if (xx >= 0 && xx < MAP_WIDTH)
+						{
+							for (int yy = y - 2; yy <= y + 2; ++yy)
+							{
+								if (yy > 0 && yy < MAP_HEIGHT
+									&& blocks[xx][yy] == 3)
+								{
+									blocks[xx][yy] = 0;
+									plants[x][y].food += 5;
+								}
+							}
+						}
+					}
+				}
+
+				//No food overflow
+				if (plants[x][y].food > plants[x][y].maxFood)
+				{
+					plants[x][y].food = plants[x][y].maxFood;
+				}
+
+				//Starvation
+				if (plants[x][y].food < 1)
+				{
+					plants[x][y].health -= 2;
+				}
+
+				//Death
+				if (plants[x][y].health < 1)
+				{
+					plants[x][y] = plantTypes[0];
+				}
+			}
+			//Thirsty reed
+			else if (plants[x][y].type == 4)
+			{
+				//Heal if full on food
+				if (plants[x][y].food == plants[x][y].maxFood &&
+					plants[x][y].health < plants[x][y].maxHealth)
+				{
+					++plants[x][y].health;
+				}
+
+				//Grow if full enough and healthy
+				if (plants[x][y].food   >  plants[x][y].maxFood / 2
+					&& plants[x][y].health == plants[x][y].maxHealth)
+				{
+					//If reed below, seed
+					if (plants[x][y - 1].type == 4)
+					{
+						bool seeded = false;
+						for (int xx = x - 2; xx <= x + 2; ++xx)
+						{
+							if (xx >= 0 && xx < MAP_WIDTH)
+							{
+								for (int yy = y - 2; yy <= y + 2; ++yy)
+								{
+									if (yy > 0 && yy < MAP_HEIGHT
+										&& plants[xx][yy].type == 0
+										&& !blocks[xx][yy] && blocks[xx][yy - 1] == 1)
+									{
+										seeded = true;
+										plants[xx][yy] = plantTypes[4];
+										plants[xx][yy].food = plants[x][y].food / 2;
+										plants[x][y].food /= 2;
+										break;
+									}
+								}
+							}
+							if (seeded) { break; }
+						}
+					}
+					//If ground below, grow
+					else
+					{
+						for (int yy = y + 1; yy < MAP_HEIGHT; ++yy)
+						{
+							if (plants[x][yy].type == 0 && plants[x][yy - 1].type == 4)
+							{
+								plants[x][yy] = plantTypes[4];
+								plants[x][yy].food = plants[x][y].food / 2;
+								plants[x][y].food /= 2;
+								break;
+							}
+						}
+					}
+				}
+
+				//Share food
+				if (plants[x][y - 1].type == 4
+					&& plants[x][y - 1].food < plants[x][y - 1].maxFood)
+				{
+					--plants[x][y].food;
+					++plants[x][y - 1].food;
+				}
+
+				//Use up food
+				--plants[x][y].food;
+				//No negative food
+				if (plants[x][y].food < 0)
+				{
+					plants[x][y].food = 0;
+				}
+
+				//Water-in-tile logic
+				if (blocks[x][y] == 3)
+				{
+					//Consume water if hungry
+					if (plants[x][y].food < plants[x][y].maxFood - 1)
+					{
+						blocks[x][y] = 0;
+						plants[x][y].food += 5;
+					}
+					//If not hungry and submerged, drown
+					else if (y != MAP_HEIGHT - 1 && blocks[x][y + 1] == 3)
+					{
+						plants[x][y].health -= 2;
+					}
+
+					//No food overflow
+					if (plants[x][y].food > plants[x][y].maxFood)
+					{
+						plants[x][y].food = plants[x][y].maxFood;
+					}
+				}
+				//If no water in tile and hungry, check local tiles for water
+				else if (plants[x][y].food < plants[x][y].maxFood - 1)
+				{
+					for (int xx = x - 1; xx <= x + 1; ++xx)
+					{
+						if (xx >= 0 && xx < MAP_WIDTH)
+						{
+							for (int yy = y - 1; yy <= y + 1; ++yy)
+							{
+								if (yy > 0 && yy < MAP_HEIGHT
+									&& blocks[xx][yy] == 3)
+								{
+									blocks[xx][yy] = 0;
+									plants[x][y].food += 5;
+								}
+							}
+						}
+					}
+				}
+
+				//Starvation
+				if (plants[x][y].food < 1)
+				{
+					plants[x][y].health -= 2;
+				}
+
+				//Death
+				if (plants[x][y].health < 1
+					|| (blocks[x][y - 1] != 1 && !plants[x][y - 1].type))
+				{
+					plants[x][y] = plantTypes[0];
+				}
+			}
+			//Equalizer reed
+			else if (plants[x][y].type == 5)
+			{
+				//Heal if full on food
+				if (plants[x][y].food == plants[x][y].maxFood &&
+					plants[x][y].health < plants[x][y].maxHealth)
+				{
+					++plants[x][y].health;
+				}
+
+				//Grow if full enough and healthy
+				if (plants[x][y].food   >  plants[x][y].maxFood / 2
+					&& plants[x][y].health == plants[x][y].maxHealth)
+				{
+					//If reed below, seed
+					if (plants[x][y - 1].type == 4)
+					{
+						bool seeded = false;
+						for (int xx = x - 2; xx <= x + 2; ++xx)
+						{
+							if (xx >= 0 && xx < MAP_WIDTH)
+							{
+								for (int yy = y - 2; yy <= y + 2; ++yy)
+								{
+									if (yy > 0 && yy < MAP_HEIGHT
+										&& plants[xx][yy].type == 0
+										&& !blocks[xx][yy] && blocks[xx][yy - 1] == 1)
+									{
+										seeded = true;
+										plants[xx][yy] = plantTypes[5];
+										plants[xx][yy].food = plants[x][y].food / 2;
+										plants[x][y].food /= 2;
+										break;
+									}
+								}
+							}
+							if (seeded) { break; }
+						}
+					}
+					//If ground below, grow
+					else
+					{
+						for (int yy = y + 1; yy < MAP_HEIGHT; ++yy)
+						{
+							if (plants[x][yy].type == 0 && plants[x][yy - 1].type == 5)
+							{
+								plants[x][yy] = plantTypes[5];
+								plants[x][yy].food = plants[x][y].food / 2;
+								plants[x][y].food /= 2;
+								break;
+							}
+						}
+					}
+				}
+
+				//Share food
+				if (plants[x][y - 1].type == 5
+					&& plants[x][y - 1].food < plants[x][y - 1].maxFood)
+				{
+					int foodTotal = plants[x][y].food + plants[x][y - 1].food;
+					plants[x][y].food = foodTotal / 2;
+					plants[x][y - 1].food = foodTotal / 2 + foodTotal % 2;
+				}
+
+				//Use up food
+				--plants[x][y].food;
+				//No negative food
+				if (plants[x][y].food < 0)
+				{
+					plants[x][y].food = 0;
+				}
+
+				//Water-in-tile logic
+				if (blocks[x][y] == 3)
+				{
+					//Consume water if hungry
+					if (plants[x][y].food < plants[x][y].maxFood - 1)
+					{
+						blocks[x][y] = 0;
+						plants[x][y].food += 5;
+					}
+					//If not hungry and submerged, drown
+					else if (y != MAP_HEIGHT - 1 && blocks[x][y + 1] == 3)
+					{
+						plants[x][y].health -= 2;
+					}
+
+					//No food overflow
+					if (plants[x][y].food > plants[x][y].maxFood)
+					{
+						plants[x][y].food = plants[x][y].maxFood;
+					}
+				}
+				//If no water in tile and hungry, check local tiles for water
+				else if (plants[x][y].food < plants[x][y].maxFood - 1)
+				{
+					for (int xx = x - 1; xx <= x + 1; ++xx)
+					{
+						if (xx >= 0 && xx < MAP_WIDTH)
+						{
+							for (int yy = y - 1; yy <= y + 1; ++yy)
+							{
+								if (yy > 0 && yy < MAP_HEIGHT
+									&& blocks[xx][yy] == 3)
+								{
+									blocks[xx][yy] = 0;
+									plants[x][y].food += 5;
+								}
+							}
+						}
+					}
+				}
+
+				//Starvation
+				if (plants[x][y].food < 1)
+				{
+					plants[x][y].health -= 2;
+				}
+
+				//Death
+				if (plants[x][y].health < 1
+					|| (blocks[x][y - 1] != 1 && !plants[x][y - 1].type))
+				{
+					plants[x][y] = plantTypes[0];
+				}
+			}
 
 
 		}
@@ -587,8 +940,8 @@ void renderWindow(int** blocks, std::string msg)
 				break;
 			}
 
-			//consoleBuffer[x + WIN_WIDTH * y].Char.AsciiChar = chr;
-			//consoleBuffer[x + WIN_WIDTH * y].Attributes = frontColor + backColor;
+			/*consoleBuffer[x + WIN_WIDTH * y].Char.AsciiChar = chr;
+			consoleBuffer[x + WIN_WIDTH * y].Attributes = frontColor + backColor;*/
 			consoleBuffer[bufferCoord].Char.AsciiChar = chr;
 			consoleBuffer[bufferCoord].Attributes = frontColor + backColor;
 			++bufferCoord;
