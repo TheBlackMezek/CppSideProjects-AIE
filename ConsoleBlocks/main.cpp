@@ -56,6 +56,7 @@ int seed = 0;
 int sleepTime = 100;
 int rainInterval = 10;
 int rainTimer = 0;
+int rainChance = 100;
 
 HANDLE hstdin;
 HANDLE hstdout;
@@ -179,6 +180,11 @@ void game()
 			}
 			winmsg = "Seed set to " + input.substr(5, input.npos);
 		}
+		else if (input.substr(0, 5) == "rainc")
+		{
+			rainChance = stoi(input.substr(6, input.npos));
+			winmsg = "Raindrop chance set to " + std::to_string(rainChance) + "%";
+		}
 		else if (input.substr(0, 4) == "rain")
 		{
 			if (input.size() == 4)
@@ -265,6 +271,10 @@ void game()
 			else if (input.substr(6, input.npos) == "seed")
 			{
 				winmsg = "The seed is " + std::to_string(seed);
+			}
+			else if (input.substr(6, input.npos) == "rainc")
+			{
+				winmsg = "The rain chance is " + std::to_string(rainChance) + "%";
 			}
 		}
 
@@ -1149,7 +1159,8 @@ void rain()
 {
 	for (int x = 0; x < MAP_WIDTH; ++x)
 	{
-		if (blocks[x][MAP_HEIGHT - 1] == 0)
+		if (blocks[x][MAP_HEIGHT - 1] == 0
+		&&  rand() % 100 + 1 <= rainChance)
 		{
 			blocks[x][MAP_HEIGHT - 1] = 3;
 		}
