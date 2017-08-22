@@ -169,7 +169,9 @@ void game()
 				for (int x = 0; x < MAP_WIDTH; ++x)
 				{
 					if (type == 1 || type == 2) {
-						if (!blocks[x][y] && blocks[x][y - 1] == 1 && rand() % 10 == 0)
+						if (!blocks[x][y] && blocks[x][y - 1] == 1
+							&& rand() % 10 == 0
+							&& plants[x][y].type == 0)
 						{
 							plants[x][y] = plantTypes[type];
 						}
@@ -237,6 +239,55 @@ void simulate()
 	}
 
 	copyBlockArray(blocksNew, blocks);
+
+	for (int y = 0; y < MAP_HEIGHT; ++y)
+	{
+		for (int x = 0; x < MAP_WIDTH; ++x)
+		{
+
+			//Basic spreader
+			if (plants[x][y].type == 1)
+			{
+				if (plants[x][y].food == plants[x][y].maxFood &&
+					plants[x][y].health < plants[x][y].maxHealth)
+				{
+					++plants[x][y].health;
+				}
+
+				--plants[x][y].food;
+
+				if (blocks[x][y] == 3)
+				{
+					if (plants[x][y].food < plants[x][y].maxFood - 1)
+					{
+						blocks[x][y] = 0;
+						plants[x][y].food += 5;
+					}
+					else
+					{
+						plants[x][y].health -= 2;
+					}
+
+					if (plants[x][y].food > plants[x][y].maxFood)
+					{
+						plants[x][y].food = plants[x][y].maxFood;
+					}
+				}
+
+				if (plants[x][y].food < 1)
+				{
+					plants[x][y].health -= 2;
+				}
+
+				if (plants[x][y].health < 1)
+				{
+					plants[x][y] = plantTypes[0];
+				}
+			}
+
+
+		}
+	}
 }
 
 void renderWindow(int** blocks, std::string msg)
