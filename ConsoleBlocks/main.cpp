@@ -9,8 +9,10 @@
 
 
 
-const int MAP_WIDTH = 80;
-const int MAP_HEIGHT = 23;
+const int WIN_WIDTH = 100;
+const int WIN_HEIGHT = 50;
+const int MAP_WIDTH = WIN_WIDTH;
+const int MAP_HEIGHT = WIN_HEIGHT - 2;
 
 void game();
 void simulate();
@@ -41,6 +43,11 @@ Plant plantTypes[]
 	{ 1, '%', 6, 6, 10, 10 }, //Simple spreader
 	{ 2, '|', 6, 6, 10, 10 } //Reed
 };
+//Each CHAR_INFO contains data for a single character: its ASCII char and color
+CHAR_INFO consoleBuffer[WIN_WIDTH * WIN_HEIGHT];
+COORD charBufferSize = { WIN_WIDTH, WIN_HEIGHT };
+COORD charPosition = { 0, 0 };
+SMALL_RECT consoleWriteArea{ 0, 0, WIN_WIDTH - 1, WIN_HEIGHT - 1 };
 
 int seed = 0;
 int sleepTime = 250;
@@ -56,13 +63,33 @@ HANDLE hstdout;
 
 //Text color code copied from:
 //http://www.cplusplus.com/forum/beginner/5830/
+//Fancy console stuff learned/copied from:
+//http://cecilsunkure.blogspot.com/2011/11/windows-console-game-setting-up-window.html
 
 
 int main()
 {
-	
+	//Window size coordinates, must start at 0
+	SMALL_RECT winSize = { 0, 0, WIN_WIDTH-1, WIN_HEIGHT-1 };
+
+	//COORD struct for specifying screen buffer simensions
+	COORD bufferSize = { WIN_WIDTH, WIN_HEIGHT };
+
+	//Get window handles
 	hstdin = GetStdHandle(STD_INPUT_HANDLE);
 	hstdout = GetStdHandle(STD_OUTPUT_HANDLE);
+
+	SetConsoleTitle("Console Blocks: An Ecosystem Simulator");
+
+	//Set screen buffer size
+	SetConsoleScreenBufferSize(hstdout, bufferSize);
+
+	//Set window size
+	SetConsoleWindowInfo(hstdout, TRUE, &winSize);
+
+
+
+
 
 
 	seed = time(nullptr);
@@ -120,6 +147,8 @@ void game()
 	{
 		winmsg = "";
 
+		for (int i = 0; i < WIN_HEIGHT-1; ++i) { std::cout << std::endl; }
+		//std::cout << "\n\n\n\n\n\n\n\n\n\n";
 		std::getline(std::cin, input);
 		system("cls");
 
@@ -161,7 +190,12 @@ void game()
 				winmsg = "Rain interval set to " + std::to_string(rainInterval);
 			}
 		}
-		else if (input.substr(0, 4) == "sim ")
+		else if (input.substr(0, 7) == "simwait")
+		{
+			sleepTime = stoi(input.substr(8, input.npos));
+			winmsg = "Sim wait time set to " + std::to_string(sleepTime) + " milliseconds";
+		}
+		else if (input.substr(0, 3) == "sim")
 		{
 			if (input.size() != 3)
 			{
@@ -170,6 +204,7 @@ void game()
 				{
 					simulate();
 					renderWindow(blocks, winmsg);
+					winmsg = "";
 					Sleep(sleepTime);
 				}
 			}
@@ -209,11 +244,6 @@ void game()
 					}
 				}
 			}
-		}
-		else if (input.substr(0, 7) == "simwait")
-		{
-			sleepTime = stoi(input.substr(8, input.npos));
-			winmsg = "Sim wait time set to " + std::to_string(sleepTime) + " milliseconds";
 		}
 		else if (input.substr(0, 5) == "print")
 		{
@@ -515,59 +545,76 @@ void renderWindow(int** blocks, std::string msg)
 
 	//Renders from top-left to bottom-right
 	//The y loop increments backwards here so blocks can be set intuitively elsewhere
-	for (int y = 22; y >= 0; --y)
+	int bufferCoord = 0;
+	for (int y = MAP_HEIGHT-1; y >= 0; --y)
+	//for (int y = 0; y < MAP_HEIGHT; ++y)
 	{
-		for (int x = 0; x < 80; ++x)
+		for (int x = 0; x < MAP_WIDTH; ++x)
 		{
 			char chr = plants[x][y].chr;
 			int frontColor = 0;
 			int backColor = 0;
 			if (chr != 0)
 			{
-				frontColor = 0x02;
+				frontColor = 0x0002;
 			}
 
 			switch (blocks[x][y])
 			{
 			case 0:
-				//Empty space
-				chr = (chr == 0) ? ' ' : chr;
+				//Empty space ' '
+				chr = (chr == 0) ? 0x00 : chr;
 				break;
 			case 1:
-				//Normal block
-				frontColor = 0x06;
-				chr = (chr == 0) ? 'X' : chr;
+				//Normal block 'X'
+				frontColor = 0x0006;
+				chr = (chr == 0) ? 0x58 : chr;
 				break;
 			case 2:
-				//Bedrock, holding up the world
-				//SetConsoleTextAttribute(hstdout, 0x66);
-				//std::cout << "W";
-				backColor = 0x60;
-				frontColor = 0x06;
-				chr = (chr == 0) ? 'W' : chr;
+				//Bedrock, holding up the world 'W'
+				backColor = 0x0060;
+				frontColor = 0x0006;
+				chr = (chr == 0) ? 0x57 : chr;
 				break;
 			case 3:
-				//Water
-				frontColor = 0x03;
-				chr = (chr == 0) ? '-' : chr;
+				//Water '-'
+				frontColor = 0x0003;
+				chr = (chr == 0) ? 0xC4 : chr;
 				break;
 			default:
-				//E is for Error
+				//E is for Error 'E'
 				std::cout << "E";
 				break;
 			}
 
-			SetConsoleTextAttribute(hstdout, frontColor + backColor);
-			std::cout << chr;
+			//consoleBuffer[x + WIN_WIDTH * y].Char.AsciiChar = chr;
+			//consoleBuffer[x + WIN_WIDTH * y].Attributes = frontColor + backColor;
+			consoleBuffer[bufferCoord].Char.AsciiChar = chr;
+			consoleBuffer[bufferCoord].Attributes = frontColor + backColor;
+			++bufferCoord;
+			//SetConsoleTextAttribute(hstdout, frontColor + backColor);
+			//std::cout << chr;
 		}
 	}
 
 	// Return to original state
-	SetConsoleTextAttribute(hstdout, csbi.wAttributes);
+	//SetConsoleTextAttribute(hstdout, csbi.wAttributes);
 
 	//If the msg is longer, it might create a new line, which would hide some of the world render.
-	msg.resize(80, ' ');
-	std::cout << msg.c_str();
+	msg.resize(MAP_WIDTH, ' ');
+	//std::cout << msg.c_str();
+
+	for (int y = MAP_HEIGHT; y < WIN_HEIGHT - 1; ++y)
+	{
+		for (int x = 0; x < MAP_WIDTH; ++x)
+		{
+			consoleBuffer[x + WIN_WIDTH * y].Char.AsciiChar = msg.at(x);
+			consoleBuffer[x + WIN_WIDTH * y].Attributes = FOREGROUND_BLUE | FOREGROUND_GREEN |
+														  FOREGROUND_RED | FOREGROUND_INTENSITY;
+		}
+	}
+
+	WriteConsoleOutputA(hstdout, consoleBuffer, charBufferSize, charPosition, &consoleWriteArea);
 }
 
 int** genBlockArray()
@@ -638,8 +685,8 @@ int** genTerrain(int** blocks)
 
 	//Generate base terrain
 
-	//Height limit 21 of 23. 1 for bedrock (later), 1 for open space on top.
-	int height = rand() % 21 + 1;
+	//Height limit MAP_HEIGHT - 2. 1 for bedrock, 1 for open space on top.
+	int height = rand() % (MAP_HEIGHT - 2) + 1;
 
 	for (int x = 0; x < MAP_WIDTH; ++x)
 	{
@@ -660,7 +707,7 @@ int** genTerrain(int** blocks)
 			}
 		}
 
-		if (height < 21)
+		if (height < MAP_HEIGHT-2)
 		{
 			height += rand() % 3 - 1; // collatz series (sort-of not really)
 		}
