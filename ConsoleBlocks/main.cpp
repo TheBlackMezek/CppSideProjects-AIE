@@ -42,6 +42,7 @@ Plant plantTypes[]
 	{ 2, '|', 6, 6, 10, 10 } //Reed
 };
 
+int seed = 0;
 int sleepTime = 250;
 int rainInterval = -1;
 int rainTimer = 0;
@@ -64,8 +65,8 @@ int main()
 	hstdout = GetStdHandle(STD_OUTPUT_HANDLE);
 
 
-
-	srand(time(nullptr));
+	seed = time(nullptr);
+	srand(seed);
 
 
 	blocks = genTerrain(genBlockArray());
@@ -136,11 +137,13 @@ void game()
 		{
 			if (input.substr(5, input.npos) == "time")
 			{
-				srand(time(NULL));
+				seed = time(NULL);
+				srand(seed);
 			}
 			else
 			{
-				srand(std::stoi(input.substr(5, input.npos)));
+				seed = std::stoi(input.substr(5, input.npos));
+				srand(seed);
 			}
 			winmsg = "Seed set to " + input.substr(5, input.npos);
 		}
@@ -211,6 +214,25 @@ void game()
 		{
 			sleepTime = stoi(input.substr(8, input.npos));
 			winmsg = "Sim wait time set to " + std::to_string(sleepTime) + " milliseconds";
+		}
+		else if (input.substr(0, 5) == "print")
+		{
+			if (input.substr(6, input.npos) == "simwait")
+			{
+				winmsg = "Sim wait time is " + std::to_string(sleepTime) + " milliseconds";
+			}
+			else if (input.substr(6, input.npos) == "rainint")
+			{
+				winmsg = "Rain interval is " + std::to_string(rainInterval);
+			}
+			else if (input.substr(6, input.npos) == "raintime")
+			{
+				winmsg = "Rain timer is at " + std::to_string(rainTimer);
+			}
+			else if (input.substr(6, input.npos) == "seed")
+			{
+				winmsg = "The seed is " + std::to_string(seed);
+			}
 		}
 
 		renderWindow(blocks, winmsg);
