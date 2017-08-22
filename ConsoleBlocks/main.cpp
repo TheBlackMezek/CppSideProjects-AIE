@@ -4,22 +4,26 @@
 #include <windows.h>
 #include <string>
 
+#include "PlantStruct.h"
 
+
+
+
+const int MAP_WIDTH = 80;
+const int MAP_HEIGHT = 23;
 
 //Is passing arrays bad?
 void renderWindow(int** blocks, std::string msg);
 //I read that this will return a pointer to a 2D array
 int** genBlockArray();
 int** genBlockNewArray();
+void genPlantArray();
 int** genTerrain(int** blocks);
 //a2 = a1
 void copyBlockArray(int** a1, int** a2);
+void killPlants();
 void simulate();
 void game();
-
-
-const int MAP_WIDTH = 80;
-const int MAP_HEIGHT = 23;
 
 bool endGame = false;
 //When simulating, blocks is copied to blocksNew
@@ -27,7 +31,15 @@ bool endGame = false;
 //blocksNew is used for collisions, etc.
 int** blocks;
 int** blocksNew;
+Plant** plants;
 std::string winmsg = "";
+
+Plant plantTypes[]
+{
+	{ 0, 0, 0, 0, 0, 0}, //No plant
+	{ 1, '%', 10, 10, 8, 8 }, //Simple spreader
+	{ 2, '|', 10, 10, 8, 8 } //Reed
+};
 
 HANDLE hstdin;
 HANDLE hstdout;
@@ -42,7 +54,7 @@ HANDLE hstdout;
 
 int main()
 {
-
+	
 	hstdin = GetStdHandle(STD_INPUT_HANDLE);
 	hstdout = GetStdHandle(STD_OUTPUT_HANDLE);
 
@@ -54,6 +66,8 @@ int main()
 	blocks = genTerrain(genBlockArray());
 	blocksNew = genBlockNewArray();
 	copyBlockArray(blocks, blocksNew);
+
+	genPlantArray();
 
 	//renderWindow(blocks, "Test message. This has to be very long so that I can test the string resize function. I don't have a clue how many characters I've written in it so far.");
 
@@ -70,6 +84,12 @@ int main()
 		delete[] blocksNew[w];
 	}
 	delete[] blocksNew;
+
+	for (int w = 0; w < MAP_WIDTH; ++w)
+	{
+		delete[] plants[w];
+	}
+	delete[] plants;
 
 
 
@@ -104,6 +124,7 @@ void game()
 		else if (input == "regen")
 		{
 			genTerrain(blocks);
+			killPlants();
 			winmsg = "Terrain regenerated";
 		}
 		else if (input.substr(0, 4) == "seed")
@@ -142,16 +163,23 @@ void game()
 		}
 		else if (input.substr(0, 4) == "life")
 		{
+			int type = stoi(input.substr(5, input.npos));
 			for (int y = 0; y < MAP_HEIGHT; ++y)
 			{
 				for (int x = 0; x < MAP_WIDTH; ++x)
 				{
-					if (!blocks[x][y] && blocks[x][y - 1] == 1 && rand() % 10 == 0)
-					{
-						blocks[x][y] = 4;
+					if (type == 1 || type == 2) {
+						if (!blocks[x][y] && blocks[x][y - 1] == 1 && rand() % 10 == 0)
+						{
+							plants[x][y] = plantTypes[type];
+						}
 					}
 				}
 			}
+		}
+		else if (input == "kill")
+		{
+			killPlants();
 		}
 
 		renderWindow(blocks, winmsg);
@@ -226,37 +254,46 @@ void renderWindow(int** blocks, std::string msg)
 	{
 		for (int x = 0; x < 80; ++x)
 		{
+			char chr = plants[x][y].chr;
+			int frontColor = 0;
+			int backColor = 0;
+			if (chr != 0)
+			{
+				frontColor = 0x02;
+			}
+
 			switch (blocks[x][y])
 			{
 			case 0:
 				//Empty space
-				std::cout << " ";
+				chr = (chr == 0) ? ' ' : chr;
 				break;
 			case 1:
 				//Normal block
-				SetConsoleTextAttribute(hstdout, 0x06);
-				std::cout << "X";
+				frontColor = 0x06;
+				chr = (chr == 0) ? 'X' : chr;
 				break;
 			case 2:
 				//Bedrock, holding up the world
-				SetConsoleTextAttribute(hstdout, 0x66);
-				std::cout << "W";
+				//SetConsoleTextAttribute(hstdout, 0x66);
+				//std::cout << "W";
+				backColor = 0x60;
+				frontColor = 0x06;
+				chr = (chr == 0) ? 'W' : chr;
 				break;
 			case 3:
 				//Water
-				SetConsoleTextAttribute(hstdout, 0x03);
-				std::cout << "-";
-				break;
-			case 4:
-				//Plant1
-				SetConsoleTextAttribute(hstdout, 0x02);
-				std::cout << "%";
+				frontColor = 0x03;
+				chr = (chr == 0) ? '-' : chr;
 				break;
 			default:
 				//E is for Error
 				std::cout << "E";
 				break;
 			}
+
+			SetConsoleTextAttribute(hstdout, frontColor + backColor);
+			std::cout << chr;
 		}
 	}
 
@@ -308,6 +345,27 @@ int** genBlockNewArray()
 	}
 
 	return blocksNew;
+}
+
+void genPlantArray()
+{
+	//Create array
+
+	//REMEMBER TO DELETE THIS ARRAY WHEN DONE WITH IT
+	Plant** ar = 0;
+	ar = new Plant*[MAP_WIDTH];
+
+	for (int w = 0; w < MAP_WIDTH; ++w)
+	{
+		ar[w] = new Plant[MAP_HEIGHT];
+
+		for (int h = 0; h < MAP_HEIGHT; ++h)
+		{
+			ar[w][h] = { 0, 0, 0, 0, 0, 0 };
+		}
+	}
+
+	plants = ar;
 }
 
 int** genTerrain(int** blocks)
@@ -411,7 +469,41 @@ void copyBlockArray(int** a1, int** a2)
 	}
 }
 
+void killPlants()
+{
+	for (int y = 0; y < MAP_HEIGHT; ++y)
+	{
+		for (int x = 0; x < MAP_WIDTH; ++x)
+		{
+			plants[x][y] = plantTypes[0];
+		}
+	}
+}
+
 // short-circuiting 
 
 //	A && B : if A is false, then there is no need to bother evaluating B
 //  A || B : if A is true, then there is no need to bother evaluating B
+
+
+//IDEAS FOR LIFE FORMS
+//
+//Blocktype life: just a block type with special rules
+//No additional data possible
+//
+//Superblock life: exists in a block array of one type of struct/class
+//Data storage ability has same limit for all life forms
+//No overlapping possible, but very easy to find what you want
+//
+//Entity life: exists in a 1d array of one type of struct/class
+//Data storage ability has same limit for all life forms
+//Overlapping possible, but must loop through whole list to find one organism
+//
+//
+//SUPERBLOCK IDEAS
+//
+//Simple spreader: replicates on nearby terrain
+//
+//Reed: replicates upward and shares food
+//
+//Kelp: like reed but underwater
