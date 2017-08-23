@@ -14,8 +14,13 @@ struct vec2
 
 
 
-DWORD getInput(INPUT_RECORD **eventBuffer);
 
+
+DWORD getInput(INPUT_RECORD **eventBuffer);
+//Returns the distance between two points
+float dist(int x1, int y1, int x2, int y2);
+
+void simulate();
 void renderWindow();
 void genTerrain();
 
@@ -42,6 +47,15 @@ DWORD numEventsRead;
 
 int tiles[WIN_WIDTH * MAP_HEIGHT];
 std::string winmsg;
+
+vec2 player{ 50, 48 };
+vec2 mouse{ 0, 0 };
+bool left = false;
+bool right = false;
+bool up = false;
+bool down = false;
+bool lclick = false;
+bool rclick = false;
 
 
 
@@ -76,19 +90,10 @@ int main()
 	SetConsoleWindowInfo(hstdout, TRUE, &winSize);
 
 
-	//for (int i = 0; i < WIN_WIDTH * WIN_HEIGHT; ++i)
-	//{
-	//	//consoleBuffer[i].Char.AsciiChar = 0xB2; //That solid-grate char
-	//	/*consoleBuffer[i].Char.AsciiChar = 't';
-	//	consoleBuffer[i].Attributes = 0x00FF;*/
-	//	consoleBuffer[i].Char.AsciiChar = ' ';
-	//	consoleBuffer[i].Attributes = 0x0000; 
-	//}
 
 
 
 
-	//WriteConsoleOutputA(hstdout, consoleBuffer, charBufferSize, charPosition, &consoleWriteArea);
 
 	genTerrain();
 
@@ -104,23 +109,54 @@ int main()
 				switch (eventBuffer[i].EventType)
 				{
 				case KEY_EVENT:
-					switch (eventBuffer[i].Event.KeyEvent.wVirtualKeyCode)
+					if (eventBuffer[i].Event.KeyEvent.bKeyDown)
 					{
-					case VK_ESCAPE:
-						return 0;
+						switch (eventBuffer[i].Event.KeyEvent.wVirtualKeyCode)
+						{
+						case VK_ESCAPE:
+							return 0;
+						case 0x57: //W
+							//++player.y;
+							up = true;
+							break;
+						case 0x41: //A
+							//--player.x;
+							left = true;
+							break;
+						case 0x53: //S
+							//--player.y;
+							down = true;
+							break;
+						case 0x44: //D
+							//++player.x;
+							right = true;
+							break;
+						}
 					}
 				case MOUSE_EVENT:
-					int offsetx = eventBuffer[i].Event.MouseEvent.dwMousePosition.X;
-					int offsety = eventBuffer[i].Event.MouseEvent.dwMousePosition.Y;
+					//int offsetx = eventBuffer[i].Event.MouseEvent.dwMousePosition.X;
+					//int offsety = eventBuffer[i].Event.MouseEvent.dwMousePosition.Y;
 					/*consoleBuffer[lastpos.x + lastpos.y * WIN_WIDTH].Char.AsciiChar = ' ';
 					consoleBuffer[lastpos.x + lastpos.y * WIN_WIDTH].Attributes = 0x0000;
 					consoleBuffer[offsetx + offsety * WIN_WIDTH].Char.AsciiChar = 0xB2;
 					consoleBuffer[offsetx + offsety * WIN_WIDTH].Attributes = 0x00FF;*/
-					lastpos = { offsetx, offsety };
+					//lastpos = { offsetx, offsety };
+					mouse.x = eventBuffer[i].Event.MouseEvent.dwMousePosition.X;
+					mouse.y = MAP_HEIGHT - 1 - eventBuffer[i].Event.MouseEvent.dwMousePosition.Y;
+					if (eventBuffer[i].Event.MouseEvent.dwButtonState = FROM_LEFT_1ST_BUTTON_PRESSED)
+					{
+						lclick = true;
+					}
+					if (eventBuffer[i].Event.MouseEvent.dwButtonState = FROM_LEFT_2ND_BUTTON_PRESSED)
+					{
+						rclick = true;
+					}
 				}
 			}
 			//WriteConsoleOutputA(hstdout, consoleBuffer, charBufferSize, charPosition, &consoleWriteArea);
 		}
+
+		simulate();
 
 		renderWindow();
 	}
@@ -154,6 +190,86 @@ DWORD getInput(INPUT_RECORD **evB)
 	return numEventsRead;
 }
 
+float dist(int x1, int y1, int x2, int y2)
+{
+	return sqrt(pow(((float)x2 - (float)x1), 2) + pow(((float)y2 - (float)y1), 2));
+}
+
+
+
+void simulate()
+{
+	if ((lclick || rclick) && (player.x != mouse.x || player.y != mouse.y))
+	{
+		if (lclick)
+		{
+			tiles[mouse.x + mouse.y * WIN_WIDTH] = 0;
+		}
+		if (rclick)
+		{
+			tiles[mouse.x + mouse.y * WIN_WIDTH] = 1;
+		}
+	}
+
+	if (!tiles[player.x + (player.y - 1) * WIN_WIDTH])
+	{
+		--player.y;
+	}
+
+	if (right && player.y < WIN_WIDTH - 1)
+	{
+		//Check for straight right movement
+		if (    tiles[player.x + 1 + (player.y - 1) * WIN_WIDTH]
+			&& !tiles[player.x + 1 + player.y * WIN_WIDTH])
+		{
+			++player.x;
+		}
+		//Check for up-right movement
+		else if (player.y < MAP_HEIGHT - 1
+			&&	tiles[player.x + 1 + player.y * WIN_WIDTH]
+			&& !tiles[player.x + 1 + (player.y + 1) * WIN_WIDTH])
+		{
+			++player.x;
+			++player.y;
+		}
+		//Check for down-right movement
+		else if (player.y > 1
+			 &&  tiles[player.x + 1 + (player.y - 2) * WIN_WIDTH]
+			 && !tiles[player.x + 1 + (player.y - 1) * WIN_WIDTH])
+		{
+			++player.x;
+			--player.y;
+		}
+	}
+
+	if (left && player.y > 0)
+	{
+		//Check for straight right movement
+		if     (tiles[player.x - 1 + (player.y - 1) * WIN_WIDTH]
+			&& !tiles[player.x - 1 + player.y * WIN_WIDTH])
+		{
+			--player.x;
+		}
+		//Check for up-right movement
+		else if (player.y < MAP_HEIGHT - 1
+			&&  tiles[player.x - 1 + player.y * WIN_WIDTH]
+			&& !tiles[player.x - 1 + (player.y + 1) * WIN_WIDTH])
+		{
+			--player.x;
+			++player.y;
+		}
+		//Check for down-right movement
+		else if (player.y > 1
+			&&  tiles[player.x - 1 + (player.y - 2) * WIN_WIDTH]
+			&& !tiles[player.x - 1 + (player.y - 1) * WIN_WIDTH])
+		{
+			--player.x;
+			--player.y;
+		}
+	}
+
+	up = down = right = left = rclick = lclick = false;
+}
 
 void renderWindow()
 {
@@ -169,6 +285,16 @@ void renderWindow()
 			char chr = 0;
 			int frontColor = 0;
 			int backColor = 0;
+
+			if (player.x == x && player.y == y)
+			{
+				chr = '@';
+				frontColor = 0x000F;
+			}
+			if (mouse.x == x && mouse.y == y)
+			{
+				backColor = 0x00F0;
+			}
 
 			switch (tiles[x + y * WIN_WIDTH])
 			{
