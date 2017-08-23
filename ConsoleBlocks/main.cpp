@@ -942,7 +942,8 @@ void renderWindow(int** blocks, std::string msg)
 			case 3:
 				//Water '-'
 				frontColor = 0x0003;
-				chr = (chr == 0) ? 0xC4 : chr;
+				//chr = (chr == 0) ? 0xC4 : chr;
+				chr = (chr == 0) ? 176 : chr;
 				break;
 			default:
 				//E is for Error 'E'
