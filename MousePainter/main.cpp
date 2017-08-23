@@ -133,6 +133,7 @@ int main()
 							break;
 						}
 					}
+					break;
 				case MOUSE_EVENT:
 					//int offsetx = eventBuffer[i].Event.MouseEvent.dwMousePosition.X;
 					//int offsety = eventBuffer[i].Event.MouseEvent.dwMousePosition.Y;
@@ -141,16 +142,25 @@ int main()
 					consoleBuffer[offsetx + offsety * WIN_WIDTH].Char.AsciiChar = 0xB2;
 					consoleBuffer[offsetx + offsety * WIN_WIDTH].Attributes = 0x00FF;*/
 					//lastpos = { offsetx, offsety };
-					mouse.x = eventBuffer[i].Event.MouseEvent.dwMousePosition.X;
-					mouse.y = MAP_HEIGHT - 1 - eventBuffer[i].Event.MouseEvent.dwMousePosition.Y;
-					if (eventBuffer[i].Event.MouseEvent.dwButtonState = FROM_LEFT_1ST_BUTTON_PRESSED)
+					if (eventBuffer[i].Event.MouseEvent.dwButtonState == 0x0001)
 					{
 						lclick = true;
 					}
-					if (eventBuffer[i].Event.MouseEvent.dwButtonState = FROM_LEFT_2ND_BUTTON_PRESSED)
+					if (eventBuffer[i].Event.MouseEvent.dwButtonState == 0x0002)
 					{
 						rclick = true;
 					}
+					if (eventBuffer[i].Event.MouseEvent.dwEventFlags == 0x0001)
+					{
+						mouse.x = eventBuffer[i].Event.MouseEvent.dwMousePosition.X;
+						mouse.y = MAP_HEIGHT - 1 - eventBuffer[i].Event.MouseEvent.dwMousePosition.Y;
+						
+					}
+					else if (eventBuffer[i].Event.MouseEvent.dwEventFlags == 0x0000)
+					{
+						
+					}
+					break;
 				}
 			}
 			//WriteConsoleOutputA(hstdout, consoleBuffer, charBufferSize, charPosition, &consoleWriteArea);
