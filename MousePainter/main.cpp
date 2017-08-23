@@ -76,14 +76,14 @@ int main()
 	SetConsoleWindowInfo(hstdout, TRUE, &winSize);
 
 
-	for (int i = 0; i < WIN_WIDTH * WIN_HEIGHT; ++i)
-	{
-		//consoleBuffer[i].Char.AsciiChar = 0xB2; //That solid-grate char
-		/*consoleBuffer[i].Char.AsciiChar = 't';
-		consoleBuffer[i].Attributes = 0x00FF;*/
-		consoleBuffer[i].Char.AsciiChar = ' ';
-		consoleBuffer[i].Attributes = 0x0000; 
-	}
+	//for (int i = 0; i < WIN_WIDTH * WIN_HEIGHT; ++i)
+	//{
+	//	//consoleBuffer[i].Char.AsciiChar = 0xB2; //That solid-grate char
+	//	/*consoleBuffer[i].Char.AsciiChar = 't';
+	//	consoleBuffer[i].Attributes = 0x00FF;*/
+	//	consoleBuffer[i].Char.AsciiChar = ' ';
+	//	consoleBuffer[i].Attributes = 0x0000; 
+	//}
 
 
 
@@ -157,7 +157,7 @@ DWORD getInput(INPUT_RECORD **evB)
 
 void renderWindow()
 {
-
+	
 	//Renders from top-left to bottom-right
 	//The y loop increments backwards here so blocks can be set intuitively elsewhere
 	int bufferCoord = 0;
@@ -166,7 +166,7 @@ void renderWindow()
 	{
 		for (int x = 0; x < WIN_WIDTH; ++x)
 		{
-			char chr = ' ';
+			char chr = 0;
 			int frontColor = 0;
 			int backColor = 0;
 
@@ -178,8 +178,10 @@ void renderWindow()
 				break;
 			case 1:
 				//Normal block 'X'
+				//backColor = 0x0020;
 				frontColor = 0x0006;
-				chr = (chr == 0) ? 0x58 : chr;
+				chr = (chr == 0) ? 'X' : chr;
+				//chr = 'X';
 				break;
 			case 2:
 				//Bedrock, holding up the world 'W'
@@ -276,9 +278,9 @@ void genTerrain()
 		{
 			bool res = true;
 
-			if (y < MAP_HEIGHT)  res = res && !tiles[x + (y+1) * WIN_WIDTH];
+			if (y < MAP_HEIGHT)    res = res && !tiles[x + (y+1) * WIN_WIDTH];
 			if (x < WIN_WIDTH - 1) res = res && !tiles[x + 1 + y * WIN_WIDTH];
-			if (x != 0)		    res = res && !tiles[x - 1 + y * WIN_WIDTH];
+			if (x != 0)		       res = res && !tiles[x - 1 + y * WIN_WIDTH];
 
 			// non-branching single statement solution
 			res = ((y < MAP_HEIGHT) && !tiles[x + (y+1) * WIN_WIDTH]) &&
@@ -294,17 +296,6 @@ void genTerrain()
 				((x == 0) || tiles[x - 1 + y * WIN_WIDTH]);
 
 			if (res) tiles[x + y * WIN_WIDTH] = 1;
-			/*
-			if ((blocks[x][y] != 0
-			&& (y == MAP_HEIGHT-1 || blocks[x][y + 1] == 0))
-			&&
-			((x == 0 && blocks[x+right][y] == 0)
-			|| (x == MAP_WIDTH-1 && blocks[x-1][y] == 0)
-			|| (blocks[x + 1][y] == 0 && blocks[x - 1][y] == 0))
-			)
-			{
-			blocks[x][y] = 0;
-			}*/
 		}
 
 	}
