@@ -45,6 +45,9 @@ INPUT_RECORD* eventBuffer;
 DWORD numEventsRead;
 // ----------------------------------------- //
 
+//Framerate is 1000/framepause
+int framepause = 10;
+
 int tiles[WIN_WIDTH * MAP_HEIGHT];
 std::string winmsg;
 
@@ -169,6 +172,8 @@ int main()
 		simulate();
 
 		renderWindow();
+
+		Sleep(framepause);
 	}
 
 
@@ -229,8 +234,7 @@ void simulate()
 	if (right && player.y < WIN_WIDTH - 1)
 	{
 		//Check for straight right movement
-		if (    tiles[player.x + 1 + (player.y - 1) * WIN_WIDTH]
-			&& !tiles[player.x + 1 + player.y * WIN_WIDTH])
+		if (!tiles[player.x + 1 + player.y * WIN_WIDTH])
 		{
 			++player.x;
 		}
@@ -255,8 +259,7 @@ void simulate()
 	if (left && player.y > 0)
 	{
 		//Check for straight right movement
-		if     (tiles[player.x - 1 + (player.y - 1) * WIN_WIDTH]
-			&& !tiles[player.x - 1 + player.y * WIN_WIDTH])
+		if (!tiles[player.x - 1 + player.y * WIN_WIDTH])
 		{
 			--player.x;
 		}
