@@ -23,6 +23,10 @@ float dist(int x1, int y1, int x2, int y2);
 void simulate();
 void renderWindow();
 void genTerrain();
+void copyTileToNew();
+void copyNewToTile();
+
+void rain(int chance);
 
 
 // ---------- FANCY CONSOLE STUFF ---------- //
@@ -48,7 +52,13 @@ DWORD numEventsRead;
 //Framerate is 1000/framepause
 int framepause = 10;
 
+int lastFrame = GetTickCount();
+int tBetweenWaves = 10 * 1000;
+int tSinceWave = 0;
+int rainChance = 50;
+
 int tiles[WIN_WIDTH * MAP_HEIGHT];
+int tilesNew[WIN_WIDTH * MAP_HEIGHT];
 std::string winmsg;
 
 vec2 player{ 50, 48 };
@@ -214,7 +224,11 @@ float dist(int x1, int y1, int x2, int y2)
 
 void simulate()
 {
-	if ((lclick || rclick) && (player.x != mouse.x || player.y != mouse.y))
+	int deltaT = GetTickCount() - lastFrame;
+	lastFrame = GetTickCount();
+
+	if ((lclick || rclick) && (player.x != mouse.x || player.y != mouse.y)
+		&& tiles[mouse.x + mouse.y * WIN_WIDTH] != 2)
 	{
 		if (lclick)
 		{
@@ -226,7 +240,8 @@ void simulate()
 		}
 	}
 
-	if (!tiles[player.x + (player.y - 1) * WIN_WIDTH])
+	if (!tiles[player.x + (player.y - 1) * WIN_WIDTH]
+		|| tiles[player.x + (player.y - 1) * WIN_WIDTH] == 3)
 	{
 		--player.y;
 	}
@@ -234,14 +249,16 @@ void simulate()
 	if (right && player.y < WIN_WIDTH - 1)
 	{
 		//Check for straight right movement
-		if (!tiles[player.x + 1 + player.y * WIN_WIDTH])
+		if (!tiles[player.x + 1 + player.y * WIN_WIDTH]
+			|| tiles[player.x + 1 + player.y * WIN_WIDTH] == 3)
 		{
 			++player.x;
 		}
 		//Check for up-right movement
 		else if (player.y < MAP_HEIGHT - 1
-			&&	tiles[player.x + 1 + player.y * WIN_WIDTH]
-			&& !tiles[player.x + 1 + (player.y + 1) * WIN_WIDTH])
+			&&	tiles[player.x + 1 + player.y * WIN_WIDTH] == 1
+			&& (!tiles[player.x + 1 + (player.y + 1) * WIN_WIDTH]
+			||	tiles[player.x + 1 + (player.y + 1) * WIN_WIDTH] == 3))
 		{
 			++player.x;
 			++player.y;
@@ -249,7 +266,8 @@ void simulate()
 		//Check for down-right movement
 		else if (player.y > 1
 			 &&  tiles[player.x + 1 + (player.y - 2) * WIN_WIDTH]
-			 && !tiles[player.x + 1 + (player.y - 1) * WIN_WIDTH])
+			 && (!tiles[player.x + 1 + (player.y - 1) * WIN_WIDTH]
+			 ||  tiles[player.x + 1 + (player.y - 1) * WIN_WIDTH] == 3))
 		{
 			++player.x;
 			--player.y;
@@ -259,22 +277,25 @@ void simulate()
 	if (left && player.y > 0)
 	{
 		//Check for straight right movement
-		if (!tiles[player.x - 1 + player.y * WIN_WIDTH])
+		if (!tiles[player.x - 1 + player.y * WIN_WIDTH]
+			|| tiles[player.x - 1 + player.y * WIN_WIDTH] == 3)
 		{
 			--player.x;
 		}
 		//Check for up-right movement
 		else if (player.y < MAP_HEIGHT - 1
-			&&  tiles[player.x - 1 + player.y * WIN_WIDTH]
-			&& !tiles[player.x - 1 + (player.y + 1) * WIN_WIDTH])
+			&& tiles[player.x - 1 + player.y * WIN_WIDTH] == 1
+			&& (!tiles[player.x - 1 + (player.y + 1) * WIN_WIDTH]
+				|| tiles[player.x - 1 + (player.y + 1) * WIN_WIDTH] == 3))
 		{
 			--player.x;
 			++player.y;
 		}
 		//Check for down-right movement
 		else if (player.y > 1
-			&&  tiles[player.x - 1 + (player.y - 2) * WIN_WIDTH]
-			&& !tiles[player.x - 1 + (player.y - 1) * WIN_WIDTH])
+			&& tiles[player.x - 1 + (player.y - 2) * WIN_WIDTH]
+			&& (!tiles[player.x - 1 + (player.y - 1) * WIN_WIDTH]
+				|| tiles[player.x - 1 + (player.y - 1) * WIN_WIDTH] == 3))
 		{
 			--player.x;
 			--player.y;
@@ -282,13 +303,70 @@ void simulate()
 	}
 
 	up = down = right = left = rclick = lclick = false;
+
+
+	copyTileToNew();
+
+	//Block simulation
+	for (int y = 0; y < MAP_HEIGHT; ++y)
+	{
+		for (int x = 0; x < WIN_WIDTH; ++x)
+		{
+			//Water flow
+			if (tiles[x + y * WIN_WIDTH] == 3)
+			{
+				int leftRight = rand() % 2;
+				if (leftRight == 0) { leftRight = -1; }
+
+				if (!tilesNew[x + (y - 1) * WIN_WIDTH])
+				{
+					tilesNew[x + y * WIN_WIDTH] = 0;
+					tilesNew[x + (y - 1) * WIN_WIDTH] = 3;
+				}
+				else if ((x + leftRight >= 0 && x + leftRight < WIN_WIDTH)
+					&& !tilesNew[x + leftRight + (y - 1) * WIN_WIDTH])
+				{
+					tilesNew[x + y * WIN_WIDTH] = 0;
+					tilesNew[x + leftRight + (y - 1) * WIN_WIDTH] = 3;
+				}
+				else if ((x - leftRight >= 0 && x - leftRight < WIN_WIDTH)
+					&& !tilesNew[x - leftRight + (y - 1) * WIN_WIDTH])
+				{
+					tilesNew[x + y * WIN_WIDTH] = 0;
+					tilesNew[x - leftRight + (y - 1) * WIN_WIDTH] = 3;
+				}
+				else if ((x + leftRight >= 0 && x + leftRight < WIN_WIDTH)
+					&& !tilesNew[x + leftRight + y * WIN_WIDTH])
+				{
+					tilesNew[x + y * WIN_WIDTH] = 0;
+					tilesNew[x + leftRight + y * WIN_WIDTH] = 3;
+				}
+				else if ((x - leftRight >= 0 && x - leftRight < WIN_WIDTH)
+					&& !tilesNew[x - leftRight + y * WIN_WIDTH])
+				{
+					tilesNew[x + y * WIN_WIDTH] = 0;
+					tilesNew[x - leftRight + y * WIN_WIDTH] = 3;
+				}
+			}
+		}
+
+	}
+
+	copyNewToTile();
+
+	tSinceWave += deltaT;
+	if (tSinceWave >= tBetweenWaves)
+	{
+		tSinceWave -= tBetweenWaves;
+		rain(rainChance);
+	}
 }
 
 void renderWindow()
 {
 	
 	//Renders from top-left to bottom-right
-	//The y loop increments backwards here so blocks can be set intuitively elsewhere
+	//The y loop increments backwards here so tiles can be set intuitively elsewhere
 	int bufferCoord = 0;
 	for (int y = MAP_HEIGHT - 1; y >= 0; --y)
 		//for (int y = 0; y < MAP_HEIGHT; ++y)
@@ -437,5 +515,38 @@ void genTerrain()
 			if (res) tiles[x + y * WIN_WIDTH] = 1;
 		}
 
+	}
+}
+
+void rain(int chance)
+{
+	for (int x = 0; x < WIN_WIDTH; ++x)
+	{
+		if (rand() % 100 + 1 < chance)
+		{
+			tiles[x + (MAP_HEIGHT-1) * WIN_WIDTH] = 3;
+		}
+	}
+}
+
+void copyNewToTile()
+{
+	for (int y = 0; y < MAP_HEIGHT; ++y)
+	{
+		for (int x = 0; x < WIN_WIDTH; ++x)
+		{
+			tiles[x + y * WIN_WIDTH] = tilesNew[x + y * WIN_WIDTH];
+		}
+	}
+}
+
+void copyTileToNew()
+{
+	for (int y = 0; y < MAP_HEIGHT; ++y)
+	{
+		for (int x = 0; x < WIN_WIDTH; ++x)
+		{
+			tilesNew[x + y * WIN_WIDTH] = tiles[x + y * WIN_WIDTH];
+		}
 	}
 }
