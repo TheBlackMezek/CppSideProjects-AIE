@@ -4,6 +4,8 @@
 #include <iostream>
 #include <time.h>
 
+#include "TextButton.h"
+
 
 
 struct vec2
@@ -71,6 +73,11 @@ bool lclick = false;
 bool rclick = false;
 
 
+//Button testing
+TextButton button;
+void buttonTest();
+
+
 
 
 
@@ -104,6 +111,13 @@ int main()
 
 
 
+	button = TextButton();
+	button.setPos(10, WIN_HEIGHT - 10);
+	button.setSize(10, 5);
+	button.setText("Test");
+	button.makeImage();
+	button.setCallback(&buttonTest);
+	
 
 
 
@@ -177,6 +191,12 @@ int main()
 				}
 			}
 			//WriteConsoleOutputA(hstdout, consoleBuffer, charBufferSize, charPosition, &consoleWriteArea);
+		}
+
+		button.update(mouse.x, MAP_HEIGHT - mouse.y - 1);
+		if (lclick)
+		{
+			button.click();
 		}
 
 		simulate();
@@ -440,6 +460,26 @@ void renderWindow()
 		}
 	}
 
+	for (int x = button.getPosX(); x < button.getPosX() + button.getSizeX(); ++x)
+	{
+		for (int y = button.getPosY(); y < button.getPosY() + button.getSizeY(); ++y)
+		{
+			if (x < WIN_WIDTH && y >= 0)
+			{
+				consoleBuffer[x + y * WIN_WIDTH].Char.AsciiChar = button.getImage().at((x - button.getPosX()) + (y - button.getPosY()) * button.getSizeX());
+				if (!button.isMouseOver())
+				{
+					consoleBuffer[x + y * WIN_WIDTH].Attributes = FOREGROUND_BLUE | FOREGROUND_GREEN |
+						FOREGROUND_RED | FOREGROUND_INTENSITY;
+				}
+				else
+				{
+					consoleBuffer[x + y * WIN_WIDTH].Attributes = FOREGROUND_BLUE | FOREGROUND_GREEN;
+				}
+			}
+		}
+	}
+
 	WriteConsoleOutputA(hstdout, consoleBuffer, charBufferSize, charPosition, &consoleWriteArea);
 }
 
@@ -549,4 +589,12 @@ void copyTileToNew()
 			tilesNew[x + y * WIN_WIDTH] = tiles[x + y * WIN_WIDTH];
 		}
 	}
+}
+
+
+
+void buttonTest()
+{
+	player.x = 0;
+	player.y = MAP_HEIGHT - 1;
 }
