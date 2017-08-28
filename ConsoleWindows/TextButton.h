@@ -10,6 +10,13 @@
 #include "ScreenElement.h"
 
 
+struct ButtonData
+{
+	bool mouseOver;
+	std::string text;
+	void(*callback)();
+};
+
 
 class TextButton : public ScreenElement
 {

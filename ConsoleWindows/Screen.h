@@ -8,8 +8,8 @@
 //I wish I didn't have to include in a header
 #include <vector>
 #include <string>
-#include "ScreenElement.h"
-
+//struct CharData is in ScreenElement.h
+#include "TextButton.h"
 
 
 class Screen
@@ -17,8 +17,14 @@ class Screen
 private:
 	int sizeX;
 	int sizeY;
-	std::string image;
-	std::vector<ScreenElement> elements;
+	//std::string image;
+	std::vector<CharData> image;
+	//std::vector<ScreenElement> elements;
+	// ---------- AGGREGATION TEST ---------- //
+	Element     elements[100];
+	ElementData elmDat[100];
+	ButtonData  butdat[100];
+	// -------------------------------------- //
 public:
 	void update(int mouseX, int mouseY);
 	void makeImage();
@@ -29,7 +35,7 @@ public:
 
 	int getSizeX();
 	int getSizeY();
-	std::string getImage();
+	std::vector<CharData> getImage();
 };
 
 

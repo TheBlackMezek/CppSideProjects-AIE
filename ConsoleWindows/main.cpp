@@ -4,6 +4,10 @@
 #include <iostream>
 #include <time.h>
 
+#include "Screen.h"
+#include "ScreenElement.h"
+#include "TextButton.h"
+
 
 
 struct vec2
@@ -31,7 +35,6 @@ vec2 lastpos{ 0, 0 };
 
 const int WIN_WIDTH = 100;
 const int WIN_HEIGHT = 50;
-const int MAP_HEIGHT = WIN_HEIGHT - 1;
 
 //Each CHAR_INFO contains data for a single character: its ASCII char and color
 CHAR_INFO consoleBuffer[WIN_WIDTH * WIN_HEIGHT];
@@ -46,9 +49,7 @@ INPUT_RECORD* eventBuffer;
 DWORD numEventsRead;
 // ----------------------------------------- //
 
-int framePause = 100;
 
-int rainChance = 50;
 
 vec2 mouse{ 0, 0 };
 bool left = false;
@@ -57,6 +58,9 @@ bool up = false;
 bool down = false;
 bool lclick = false;
 bool rclick = false;
+
+Screen test;
+TextButton testButton;
 
 
 
@@ -94,6 +98,18 @@ int main()
 
 
 
+	test = Screen();
+	test.setSize(WIN_WIDTH, WIN_HEIGHT);
+	test.makeImage();
+
+	testButton = TextButton();
+	testButton.setSize(6, 3);
+	testButton.setPos(10, 10);
+	testButton.setText("Hi");
+	testButton.makeImage();
+
+	test.addElement(testButton);
+	test.makeImage();
 
 
 
@@ -144,7 +160,7 @@ int main()
 					if (eventBuffer[i].Event.MouseEvent.dwEventFlags == 0x0001)
 					{
 						mouse.x = eventBuffer[i].Event.MouseEvent.dwMousePosition.X;
-						mouse.y = MAP_HEIGHT - 1 - eventBuffer[i].Event.MouseEvent.dwMousePosition.Y;
+						mouse.y = WIN_HEIGHT - 1 - eventBuffer[i].Event.MouseEvent.dwMousePosition.Y;
 
 					}
 					else if (eventBuffer[i].Event.MouseEvent.dwEventFlags == 0x0000)
@@ -159,8 +175,6 @@ int main()
 
 
 		renderWindow();
-
-		Sleep(framePause);
 	}
 
 
@@ -206,25 +220,31 @@ void renderWindow()
 
 	//Renders from top-left to bottom-right
 	//The y loop increments backwards here so tiles can be set intuitively elsewhere
+	std::vector<CharData> image = test.getImage();
 	int bufferCoord = 0;
-	for (int y = MAP_HEIGHT - 1; y >= 0; --y)
+	for (int y = WIN_HEIGHT - 1; y >= 0; --y)
 	{
 		for (int x = 0; x < WIN_WIDTH; ++x)
 		{
 			char chr = 0;
 			int frontColor = 0;
 			int backColor = 0;
+			int color = 0;
 
 			
-			if (mouse.x == x && mouse.y == y)
+			/*if (mouse.x == x && mouse.y == y)
 			{
 				backColor = 0x00F0;
 			}
 
+			frontColor = 0x000F;*/
+			chr = image[bufferCoord].chr;
+			color = image[bufferCoord].color;
+
 			
 
 			consoleBuffer[bufferCoord].Char.AsciiChar = chr;
-			consoleBuffer[bufferCoord].Attributes = frontColor + backColor;
+			consoleBuffer[bufferCoord].Attributes = color;
 			++bufferCoord;
 		}
 	}

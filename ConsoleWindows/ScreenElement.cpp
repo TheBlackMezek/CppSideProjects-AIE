@@ -6,21 +6,25 @@
 
 
 
-std::string ScreenElement::getImage()
+std::vector<CharData> ScreenElement::getImage()
 {
 	return image;
 }
 
 void ScreenElement::makeImage()
 {
-	image = "";
+	image = std::vector<CharData>();
+	image.resize(sizeX * sizeY);
+	//TEMPORARY, should be in constructor
+	textColor = 0x000F;
 	char ap = ' ';
 
 	for (int y = 0; y < sizeY; ++y)
 	{
 		for (int x = 0; x < sizeX; ++x)
 		{
-			image += "#";
+			image[x + y * sizeX].chr = '#';
+			image[x + y * sizeX].color = textColor;
 		}
 	}
 }

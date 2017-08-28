@@ -6,6 +6,32 @@
 
 
 #include <string>
+#include <vector>
+
+
+
+struct CharData
+{
+	char chr;
+	int color;
+};
+
+struct ElementData
+{
+	int posX;
+	int posY;
+	int sizeX;
+	int sizeY;
+	int textColor;
+	std::vector<CharData> image;
+};
+
+struct Element
+{
+	bool exists     = false;
+	int elementData = -1;
+	int buttonData  = -1;
+};
 
 
 
@@ -16,10 +42,11 @@ protected:
 	int posY;
 	int sizeX;
 	int sizeY;
-	std::string image;
+	int textColor;
+	std::vector<CharData> image;
 public:
 	void makeImage();
-	std::string getImage();
+	std::vector<CharData> getImage();
 
 	void setPos(int x, int y);
 	void setSize(int x, int y);
