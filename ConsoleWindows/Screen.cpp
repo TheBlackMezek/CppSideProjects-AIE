@@ -17,8 +17,25 @@ void Screen::update(int mouseX, int mouseY)
 {
 	for (int i = 0; i < maxElms; ++i)
 	{
-		
+		if (elements[i].exists && elements[i].buttonData >= 0)
+		{
+			if (mouseX >= elmDat[elements[i].elementData].posX &&
+				mouseX <= elmDat[elements[i].elementData].posX + elmDat[elements[i].elementData].sizeX - 1 &&
+				mouseY > elmDat[elements[i].elementData].posY &&
+				mouseY <= elmDat[elements[i].elementData].posY + elmDat[elements[i].elementData].sizeY)
+			{
+				butDat[elements[i].buttonData].mouseOver = true;
+				TextButton::makeImage(&elmDat[elements[i].elementData], &butDat[elements[i].buttonData]);
+			}
+			else
+			{
+				butDat[elements[i].buttonData].mouseOver = false;
+				TextButton::makeImage(&elmDat[elements[i].elementData], &butDat[elements[i].buttonData]);
+			}
+			TextButton::makeImage(&elmDat[0], &butDat[0]);
+		}
 	}
+	makeImage();
 }
 
 void Screen::makeImage()
@@ -40,20 +57,22 @@ void Screen::makeImage()
 	//Add images from elements
 	for (int i = 0; i < maxElms; ++i)
 	{
-		//std::vector<CharData> eimg = elements[i].getImage();
-		std::vector<CharData> eimg = elmDat[elements[i].elementData].image;
-		for (int y = elmDat[elements[i].elementData].posY; y < elmDat[elements[i].elementData].posY + elmDat[elements[i].elementData].sizeY; ++y)
+		if (elements[i].exists)
 		{
-			for (int x = elmDat[elements[i].elementData].posX; x < elmDat[elements[i].elementData].posX + elmDat[elements[i].elementData].sizeX; ++x)
+			std::vector<CharData> eimg = elmDat[elements[i].elementData].image;
+			for (int y = elmDat[elements[i].elementData].posY; y < elmDat[elements[i].elementData].posY + elmDat[elements[i].elementData].sizeY; ++y)
 			{
-				if (x < sizeX && y < sizeY)
+				for (int x = elmDat[elements[i].elementData].posX; x < elmDat[elements[i].elementData].posX + elmDat[elements[i].elementData].sizeX; ++x)
 				{
-					int imgPos = x - elmDat[elements[i].elementData].posX + (y - elmDat[elements[i].elementData].posY) * elmDat[elements[i].elementData].sizeX;
-					image[x + y * sizeX].chr = elmDat[elements[i].elementData].image.at(imgPos).chr;
-					image[x + y * sizeX].color = elmDat[elements[i].elementData].image.at(imgPos).color;
+					if (x < sizeX && y < sizeY)
+					{
+						int imgPos = x - elmDat[elements[i].elementData].posX + (y - elmDat[elements[i].elementData].posY) * elmDat[elements[i].elementData].sizeX;
+						image[x + y * sizeX].chr = elmDat[elements[i].elementData].image.at(imgPos).chr;
+						image[x + y * sizeX].color = elmDat[elements[i].elementData].image.at(imgPos).color;
 
-					/*image.replace(x + y * sizeX, 1, 
-						eimg.substr( x - elements[i].getPosX() + (y - elements[i].getPosY()) * elements[i].getSizeX(), 1 ) );*/
+						/*image.replace(x + y * sizeX, 1,
+							eimg.substr( x - elements[i].getPosX() + (y - elements[i].getPosY()) * elements[i].getSizeX(), 1 ) );*/
+					}
 				}
 			}
 		}
@@ -71,8 +90,8 @@ void Screen::click()
 
 int Screen::addElement(ElementData ed)
 {
-	//elements.push_back(e);
 	Element e;
+	e.exists = true;
 	int open = getOpenIndex(elmDat);
 	elmDat[open] = ed;
 	e.elementData = open;

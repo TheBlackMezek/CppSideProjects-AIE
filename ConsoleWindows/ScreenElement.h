@@ -47,7 +47,7 @@ protected:
 	int sizeX;
 	int sizeY;
 	int textColor;
-	std::vector<CharData> image;
+	//std::vector<CharData> image;
 public:
 	void makeImage();
 	std::vector<CharData> getImage();

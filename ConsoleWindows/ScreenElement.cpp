@@ -8,12 +8,13 @@
 
 std::vector<CharData> ScreenElement::getImage()
 {
-	return image;
+	//return image;
+	return std::vector<CharData>();
 }
 
 void ScreenElement::makeImage()
 {
-	image = std::vector<CharData>();
+	std::vector<CharData> image = std::vector<CharData>();
 	image.resize(sizeX * sizeY);
 	//TEMPORARY, should be in constructor
 	textColor = 0x000F;

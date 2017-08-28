@@ -26,7 +26,7 @@ private:
 	void(*callback)();
 public:
 	void update(int mouseX, int mouseY);
-	void makeImage(ElementData* e, ButtonData* b);
+	static void makeImage(ElementData* e, ButtonData* b);
 	void click();
 
 	void setText(std::string t);

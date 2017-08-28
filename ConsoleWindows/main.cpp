@@ -116,10 +116,13 @@ int main()
 	testButElmDat.textColor = 0x000F;
 	ButtonData testButDat;
 	testButDat.exists = true;
-	testButDat.text = "Hi";
+	testButDat.mouseOver = false;
+	testButDat.text = "Test";
+	TextButton::makeImage(&testButElmDat, &testButDat);
 
 	//test.addElement(testButton);
 	int butIdx = test.addElement(testButElmDat);
+	test.addButton(butIdx, testButDat);
 	test.makeImage();
 
 
@@ -183,7 +186,7 @@ int main()
 			}
 		}
 
-
+		test.update(mouse.x, WIN_HEIGHT - mouse.y);
 
 		renderWindow();
 	}
