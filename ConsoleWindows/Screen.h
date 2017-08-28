@@ -21,16 +21,21 @@ private:
 	std::vector<CharData> image;
 	//std::vector<ScreenElement> elements;
 	// ---------- AGGREGATION TEST ---------- //
+	int maxElms; //This needs to be made static, constant
 	Element     elements[100];
 	ElementData elmDat[100];
-	ButtonData  butdat[100];
+	ButtonData  butDat[100];
 	// -------------------------------------- //
+	int getOpenIndex(Component *c);
 public:
+	Screen();
+
 	void update(int mouseX, int mouseY);
 	void makeImage();
 	void click();
 
-	void addElement(ScreenElement e);
+	int addElement(ElementData ed);
+	int addButton(int elm, ButtonData b);
 	void setSize(int x, int y);
 
 	int getSizeX();

@@ -10,7 +10,7 @@
 #include "ScreenElement.h"
 
 
-struct ButtonData
+struct ButtonData : Component
 {
 	bool mouseOver;
 	std::string text;
@@ -26,7 +26,7 @@ private:
 	void(*callback)();
 public:
 	void update(int mouseX, int mouseY);
-	void makeImage();
+	void makeImage(ElementData* e, ButtonData* b);
 	void click();
 
 	void setText(std::string t);

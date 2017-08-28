@@ -17,12 +17,12 @@ void TextButton::update(int mouseX, int mouseY)
 		mouseOver = false;
 		textColor = 0x000F;
 	}
-	makeImage();
+	//makeImage();
 }
 
-void TextButton::makeImage()
+void TextButton::makeImage(ElementData* e, ButtonData* b)
 {
-	image = std::vector<CharData>();
+	std::vector<CharData> image = std::vector<CharData>();
 	image.resize(sizeX * sizeY);
 	char ap = ' ';
 	//TEMPORARY
@@ -81,6 +81,8 @@ void TextButton::makeImage()
 			image[x + y * sizeX].color = textColor;
 		}
 	}
+
+	e->image = image;
 }
 
 void TextButton::click()

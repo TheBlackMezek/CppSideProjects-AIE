@@ -10,13 +10,18 @@
 
 
 
-struct CharData
+struct Component
+{
+	bool exists = false;
+};
+
+struct CharData : Component
 {
 	char chr;
 	int color;
 };
 
-struct ElementData
+struct ElementData : Component
 {
 	int posX;
 	int posY;
@@ -26,9 +31,8 @@ struct ElementData
 	std::vector<CharData> image;
 };
 
-struct Element
+struct Element : Component
 {
-	bool exists     = false;
 	int elementData = -1;
 	int buttonData  = -1;
 };

@@ -87,7 +87,7 @@ int main()
 	hstdin = GetStdHandle(STD_INPUT_HANDLE);
 	hstdout = GetStdHandle(STD_OUTPUT_HANDLE);
 
-	SetConsoleTitle("Mouse Painter");
+	SetConsoleTitle("Console Windows Test");
 
 	//Set screen buffer size
 	SetConsoleScreenBufferSize(hstdout, bufferSize);
@@ -106,9 +106,20 @@ int main()
 	testButton.setSize(6, 3);
 	testButton.setPos(10, 10);
 	testButton.setText("Hi");
-	testButton.makeImage();
+	//testButton.makeImage();
+	ElementData testButElmDat;
+	testButElmDat.exists = true;
+	testButElmDat.sizeX = 6;
+	testButElmDat.sizeY = 3;
+	testButElmDat.posX = 10;
+	testButElmDat.posY = 10;
+	testButElmDat.textColor = 0x000F;
+	ButtonData testButDat;
+	testButDat.exists = true;
+	testButDat.text = "Hi";
 
-	test.addElement(testButton);
+	//test.addElement(testButton);
+	int butIdx = test.addElement(testButElmDat);
 	test.makeImage();
 
 
