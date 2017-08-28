@@ -112,8 +112,8 @@ int main()
 
 
 	button = TextButton();
-	button.setPos(10, WIN_HEIGHT - 10);
-	button.setSize(10, 5);
+	button.setPos(10, WIN_HEIGHT - 20);
+	button.setSize(15, 5);
 	button.setText("Test");
 	button.makeImage();
 	button.setCallback(&buttonTest);

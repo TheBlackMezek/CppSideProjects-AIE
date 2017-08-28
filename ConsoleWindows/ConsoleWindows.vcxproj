@@ -111,11 +111,13 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="Screen.cpp" />
     <ClCompile Include="ScreenElement.cpp" />
     <ClCompile Include="TextButton.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Planning.h" />
+    <ClInclude Include="Screen.h" />
     <ClInclude Include="ScreenElement.h" />
     <ClInclude Include="TextButton.h" />
   </ItemGroup>
