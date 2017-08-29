@@ -33,6 +33,8 @@ public:
 	void setCallback(void(*f)());
 
 	bool isMouseOver();
+
+	static ButtonData makeButtonData(std::string text, void(*c)());
 };
 
 

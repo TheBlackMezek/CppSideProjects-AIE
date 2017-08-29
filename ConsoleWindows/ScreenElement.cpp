@@ -64,3 +64,16 @@ int ScreenElement::getSizeY()
 {
 	return sizeY;
 }
+
+
+
+ElementData ScreenElement::makeElementData(int px, int py, int sx, int sy, int color)
+{
+	ElementData ret;
+	ret.exists = true;
+	ret.posX = px;
+	ret.posY = py;
+	ret.sizeX = sx;
+	ret.sizeY = sy;
+	return ret;
+}

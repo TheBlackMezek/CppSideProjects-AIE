@@ -116,3 +116,15 @@ bool TextButton::isMouseOver()
 {
 	return mouseOver;
 }
+
+
+
+ButtonData TextButton::makeButtonData(std::string text, void(*c)())
+{
+	ButtonData ret;
+	ret.exists = true;
+	ret.mouseOver = false;
+	ret.text = text;
+	ret.callback = c;
+	return ret;
+}

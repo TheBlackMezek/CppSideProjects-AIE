@@ -12,8 +12,11 @@
 
 struct Component
 {
-	bool exists = false;
+	bool exists;
+
+	//Component(bool t) : exists(t) { }
 };
+
 
 struct CharData : Component
 {
@@ -59,6 +62,8 @@ public:
 	int getPosY();
 	int getSizeX();
 	int getSizeY();
+
+	ElementData static makeElementData(int px, int py, int sx, int sy, int color);
 };
 
 

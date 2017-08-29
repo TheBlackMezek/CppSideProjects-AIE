@@ -10,6 +10,10 @@
 Screen::Screen()
 {
 	maxElms = 100;
+	for (int i = 0; i < maxElms; ++i)
+	{
+		elements[i].exists = false;
+	}
 }
 
 
@@ -32,7 +36,6 @@ void Screen::update(int mouseX, int mouseY)
 				butDat[elements[i].buttonData].mouseOver = false;
 				TextButton::makeImage(&elmDat[elements[i].elementData], &butDat[elements[i].buttonData]);
 			}
-			TextButton::makeImage(&elmDat[0], &butDat[0]);
 		}
 	}
 	makeImage();
@@ -67,7 +70,8 @@ void Screen::makeImage()
 					if (x < sizeX && y < sizeY)
 					{
 						int imgPos = x - elmDat[elements[i].elementData].posX + (y - elmDat[elements[i].elementData].posY) * elmDat[elements[i].elementData].sizeX;
-						image[x + y * sizeX].chr = elmDat[elements[i].elementData].image.at(imgPos).chr;
+						//image[x + y * sizeX].chr = elmDat[elements[i].elementData].image.at(imgPos).chr;
+						image[x + y * sizeX].chr = i;
 						image[x + y * sizeX].color = elmDat[elements[i].elementData].image.at(imgPos).color;
 
 						/*image.replace(x + y * sizeX, 1,
@@ -92,6 +96,7 @@ int Screen::addElement(ElementData ed)
 {
 	Element e;
 	e.exists = true;
+	e.buttonData = -1;
 	int open = getOpenIndex(elmDat);
 	elmDat[open] = ed;
 	e.elementData = open;

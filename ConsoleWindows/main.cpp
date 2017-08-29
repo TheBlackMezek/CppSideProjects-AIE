@@ -102,10 +102,10 @@ int main()
 	test.setSize(WIN_WIDTH, WIN_HEIGHT);
 	test.makeImage();
 
-	testButton = TextButton();
+	/*testButton = TextButton();
 	testButton.setSize(6, 3);
 	testButton.setPos(10, 10);
-	testButton.setText("Hi");
+	testButton.setText("Hi");*/
 	//testButton.makeImage();
 	ElementData testButElmDat;
 	testButElmDat.exists = true;
@@ -120,9 +120,20 @@ int main()
 	testButDat.text = "Test";
 	TextButton::makeImage(&testButElmDat, &testButDat);
 
+	Component cp = { true };
+
+	ElementData button2 =  ScreenElement::makeElementData(20, 20, 10, 4, 0x000A);
+	ButtonData buttondat2 = TextButton::makeButtonData("Test2", NULL);
+	TextButton::makeImage(&button2, &buttondat2);
+
+
 	//test.addElement(testButton);
 	int butIdx = test.addElement(testButElmDat);
 	test.addButton(butIdx, testButDat);
+
+	butIdx = test.addElement(button2);
+	test.addButton(butIdx, buttondat2);
+
 	test.makeImage();
 
 
