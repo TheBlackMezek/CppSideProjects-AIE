@@ -8,14 +8,10 @@
 //I wish I didn't have to include in a header
 #include <string>
 #include "ScreenElement.h"
+//#include "ElementStructs.h" //Included in ScreenElement.h
 
 
-struct ButtonData : Component
-{
-	bool mouseOver;
-	std::string text;
-	void(*callback)();
-};
+
 
 
 class TextButton : public ScreenElement

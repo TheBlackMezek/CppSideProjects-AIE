@@ -8,37 +8,11 @@
 #include <string>
 #include <vector>
 
+#include "ElementStructs.h"
 
 
-struct Component
-{
-	bool exists;
-
-	//Component(bool t) : exists(t) { }
-};
 
 
-struct CharData : Component
-{
-	char chr;
-	int color;
-};
-
-struct ElementData : Component
-{
-	int posX;
-	int posY;
-	int sizeX;
-	int sizeY;
-	int textColor;
-	std::vector<CharData> image;
-};
-
-struct Element : Component
-{
-	int elementData = -1;
-	int buttonData  = -1;
-};
 
 
 

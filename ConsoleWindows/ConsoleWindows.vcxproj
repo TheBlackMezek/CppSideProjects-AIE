@@ -110,6 +110,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="InputGetter.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Screen.cpp" />
     <ClCompile Include="ScreenElement.cpp" />
@@ -117,6 +118,8 @@
     <ClCompile Include="WindowSetup.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="ElementStructs.h" />
+    <ClInclude Include="InputGetter.h" />
     <ClInclude Include="Planning.h" />
     <ClInclude Include="Screen.h" />
     <ClInclude Include="ScreenElement.h" />
