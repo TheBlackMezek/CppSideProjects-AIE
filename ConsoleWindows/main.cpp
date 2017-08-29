@@ -35,38 +35,43 @@ Screen test;
 
 
 
-
 int main()
 {
 	srand(time(NULL));
 
-
-	//// ---------- WINDOW SETUP ---------- //
+	// ---------- WINDOW SETUP ---------- //
 	WindowSetup();
 
 	test = Screen();
 	test.setSize(WIN_WIDTH, WIN_HEIGHT);
-	test.makeImage(); //Unnecessary, but here unless you forget to do it later
+	//test.makeImage(); //Unnecessary, but here unless you forget to do it later
 	// -------------------------------- //
 
 	
+
+	// ---------- TEST BUTTONS ---------- //
 	ElementData testButElmDat = makeElementData(10, 10, 6, 3, 0x000F);
 	ButtonData testButDat = makeButtonData(false, "Test", NULL);
-	//TextButton::makeImage(&testButElmDat, &testButDat);
 	makeButtonImage(&testButElmDat, &testButDat);
-
-	ElementData button2 =  makeElementData(20, 20, 10, 4, 0x000A);
-	ButtonData buttondat2 = makeButtonData(true, "Test2", NULL);
-	makeButtonImage(&button2, &buttondat2);
-	//TextButton::makeImage(&button2, &buttondat2);
-
-
-	//test.addElement(testButton);
 	int butIdx = test.addElement(testButElmDat);
 	test.addButton(butIdx, testButDat);
 
+	ElementData button2 =  makeElementData(20, 20, 10, 4, 0x000F);
+	ButtonData buttondat2 = makeButtonData(true, "Test2", NULL);
+	makeButtonImage(&button2, &buttondat2);
 	butIdx = test.addElement(button2);
 	test.addButton(butIdx, buttondat2);
+
+	ElementData button3 = makeElementData(50, 20, 5, 3, 0x000F);
+	ButtonData buttondat3 = makeButtonData(true, "Hi!", NULL);
+	makeButtonImage(&button3, &buttondat3);
+	butIdx = test.addElement(button3);
+	test.addButton(butIdx, buttondat3);
+	// ---------------------------------- //
+
+
+
+
 
 	test.makeImage();
 
@@ -144,3 +149,22 @@ void renderWindow()
 	WriteConsoleOutputA(hstdout, consoleBuffer, charBufferSize, charPosition, &consoleWriteArea);
 }
 
+
+
+
+
+
+/*
+read-only  : const reference
+				const & : required
+				const * : optional
+				const * w/size : array
+				
+		   : value
+
+read-write : reference
+				& : required
+				* : optional
+				* w/size : array
+
+*/

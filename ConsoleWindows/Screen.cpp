@@ -91,12 +91,18 @@ void Screen::makeImage()
 			}
 		}
 	}
-	//numThatExist = numThatExist; //Just here as a point to break on
+	numThatExist = numThatExist; //Just here as a point to break on
 }
 
 void Screen::click()
 {
-	
+	for (int i = 0; i < maxElms; ++i)
+	{
+		if (butDat[i].mouseOver)
+		{
+			butDat[i].callback();
+		}
+	}
 }
 
 
@@ -155,10 +161,59 @@ std::vector<CharData> Screen::getImage()
 
 
 
-int Screen::getOpenIndex(Component c[])
-{
-	int i = 0;
-	for (; c[i].exists; ++i) {}
-	//c[i].exists = true;
-	return i;
-}
+//int Screen::getOpenIndex(Component c[])
+//{
+//	int i = 0;
+//	for (; c[i].exists; ++i) 
+//	{
+//	
+//	}
+//	//c[i].exists = true;
+//	return i;
+//}
+//
+//int Screen::getOpenIndex(Element c[])
+//{
+//	int i = 0;
+//	for (; c[i].exists; ++i)
+//	{
+//
+//	}
+//	//c[i].exists = true;
+//	return i;
+//}
+//
+//int Screen::getOpenIndex(ElementData c[])
+//{
+//	int i = 0;
+//	for (; c[i].exists; ++i)
+//	{
+//
+//	}
+//	//c[i].exists = true;
+//	return i;
+//}
+//
+//int Screen::getOpenIndex(ButtonData c[])
+//{
+//	int i = 0;
+//	for (; c[i].exists; ++i)
+//	{
+//
+//	}
+//	//c[i].exists = true;
+//	return i;
+//}
+//
+//// getOpenIndex(elmData, sizeof(ElementData));
+//int Screen::getOpenIndex(Component * data, int stride)
+//{
+//	char *test = (char*)data;
+//	int i = 0;
+//	for (; ((Component*)test)->exists && i < maxElms; test += stride)
+//	{
+//		++i;
+//	}
+//	//c[i].exists = true;
+//	return i;
+//}

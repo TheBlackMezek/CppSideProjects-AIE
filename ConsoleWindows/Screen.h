@@ -25,7 +25,22 @@ private:
 	ElementData elmDat[100];
 	ButtonData  butDat[100];
 	// -------------------------------------- //
-	int getOpenIndex(Component c[]);
+	/*int getOpenIndex(Component c[]);
+	int getOpenIndex(Element c[]);
+	int getOpenIndex(ElementData c[]);
+	int getOpenIndex(ButtonData c[]);
+
+	int getOpenIndex(Component *data, int stride);*/
+
+	template<typename T>
+	int getOpenIndex(const T data[])
+	{
+		//return getOpenIndex(data, sizeof(T));
+		int i = 0;
+		for (; data[i].exists; ++i);
+		return i;
+	}
+
 public:
 	Screen();
 
