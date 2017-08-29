@@ -114,12 +114,14 @@
     <ClCompile Include="Screen.cpp" />
     <ClCompile Include="ScreenElement.cpp" />
     <ClCompile Include="TextButton.cpp" />
+    <ClCompile Include="WindowSetup.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Planning.h" />
     <ClInclude Include="Screen.h" />
     <ClInclude Include="ScreenElement.h" />
     <ClInclude Include="TextButton.h" />
+    <ClInclude Include="WindowSetup.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

@@ -26,7 +26,7 @@ private:
 	ElementData elmDat[100];
 	ButtonData  butDat[100];
 	// -------------------------------------- //
-	int getOpenIndex(Component *c);
+	int getOpenIndex(Component c[]);
 public:
 	Screen();
 

@@ -1,9 +1,10 @@
 
 
-#include <windows.h>
+//#include <windows.h>
 #include <iostream>
 #include <time.h>
 
+#include "WindowSetup.h"
 #include "Screen.h"
 #include "ScreenElement.h"
 #include "TextButton.h"
@@ -24,26 +25,11 @@ DWORD getInput(INPUT_RECORD **eventBuffer);
 //Returns the distance between two points
 float dist(int x1, int y1, int x2, int y2);
 
-void simulate();
 void renderWindow();
-
-void rain(int chance);
 
 
 // ---------- FANCY CONSOLE STUFF ---------- //
 vec2 lastpos{ 0, 0 };
-
-const int WIN_WIDTH = 100;
-const int WIN_HEIGHT = 50;
-
-//Each CHAR_INFO contains data for a single character: its ASCII char and color
-CHAR_INFO consoleBuffer[WIN_WIDTH * WIN_HEIGHT];
-COORD charBufferSize = { WIN_WIDTH, WIN_HEIGHT };
-COORD charPosition = { 0, 0 };
-SMALL_RECT consoleWriteArea{ 0, 0, WIN_WIDTH - 1, WIN_HEIGHT - 1 };
-
-HANDLE hstdin;
-HANDLE hstdout;
 
 INPUT_RECORD* eventBuffer;
 DWORD numEventsRead;
@@ -68,8 +54,6 @@ TextButton testButton;
 
 
 
-//Fancy console stuff learned/copied from:
-//http://cecilsunkure.blogspot.com/2011/11/windows-console-game-setting-up-window.html
 
 
 int main()
@@ -77,47 +61,19 @@ int main()
 	srand(time(NULL));
 
 
-	//Window size coordinates, must start at 0
-	SMALL_RECT winSize = { 0, 0, WIN_WIDTH - 1, WIN_HEIGHT - 1 };
+	//// ---------- WINDOW SETUP ---------- //
 
-	//COORD struct for specifying screen buffer simensions
-	COORD bufferSize = { WIN_WIDTH, WIN_HEIGHT };
-
-	//Get window handles
-	hstdin = GetStdHandle(STD_INPUT_HANDLE);
-	hstdout = GetStdHandle(STD_OUTPUT_HANDLE);
-
-	SetConsoleTitle("Console Windows Test");
-
-	//Set screen buffer size
-	SetConsoleScreenBufferSize(hstdout, bufferSize);
-
-	//Set window size
-	SetConsoleWindowInfo(hstdout, TRUE, &winSize);
-
-
+	WindowSetup();
 
 
 	test = Screen();
 	test.setSize(WIN_WIDTH, WIN_HEIGHT);
-	test.makeImage();
+	test.makeImage(); //Unnecessary, but here unless you forget to do it later
+	// -------------------------------- //
 
-	/*testButton = TextButton();
-	testButton.setSize(6, 3);
-	testButton.setPos(10, 10);
-	testButton.setText("Hi");*/
-	//testButton.makeImage();
-	ElementData testButElmDat;
-	testButElmDat.exists = true;
-	testButElmDat.sizeX = 6;
-	testButElmDat.sizeY = 3;
-	testButElmDat.posX = 10;
-	testButElmDat.posY = 10;
-	testButElmDat.textColor = 0x000F;
-	ButtonData testButDat;
-	testButDat.exists = true;
-	testButDat.mouseOver = false;
-	testButDat.text = "Test";
+	
+	ElementData testButElmDat = ScreenElement::makeElementData(10, 10, 6, 3, 0x000F);
+	ButtonData testButDat = TextButton::makeButtonData("Test", NULL);
 	TextButton::makeImage(&testButElmDat, &testButDat);
 
 	Component cp = { true };

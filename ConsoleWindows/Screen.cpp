@@ -14,6 +14,14 @@ Screen::Screen()
 	{
 		elements[i].exists = false;
 	}
+	for (int i = 0; i < maxElms; ++i)
+	{
+		elmDat[i].exists = false;
+	}
+	for (int i = 0; i < maxElms; ++i)
+	{
+		butDat[i].exists = false;
+	}
 }
 
 
@@ -56,12 +64,13 @@ void Screen::makeImage()
 			image[x + y * sizeX].color = 0x000F;
 		}
 	}
-
+	int numThatExist = 0;
 	//Add images from elements
 	for (int i = 0; i < maxElms; ++i)
 	{
 		if (elements[i].exists)
 		{
+			++numThatExist;
 			std::vector<CharData> eimg = elmDat[elements[i].elementData].image;
 			for (int y = elmDat[elements[i].elementData].posY; y < elmDat[elements[i].elementData].posY + elmDat[elements[i].elementData].sizeY; ++y)
 			{
@@ -70,8 +79,8 @@ void Screen::makeImage()
 					if (x < sizeX && y < sizeY)
 					{
 						int imgPos = x - elmDat[elements[i].elementData].posX + (y - elmDat[elements[i].elementData].posY) * elmDat[elements[i].elementData].sizeX;
-						//image[x + y * sizeX].chr = elmDat[elements[i].elementData].image.at(imgPos).chr;
-						image[x + y * sizeX].chr = i;
+						image[x + y * sizeX].chr = elmDat[elements[i].elementData].image.at(imgPos).chr;
+						//image[x + y * sizeX].chr = i;
 						image[x + y * sizeX].color = elmDat[elements[i].elementData].image.at(imgPos).color;
 
 						/*image.replace(x + y * sizeX, 1,
@@ -81,6 +90,7 @@ void Screen::makeImage()
 			}
 		}
 	}
+	//numThatExist = numThatExist; //Just here as a point to break on
 }
 
 void Screen::click()
@@ -144,10 +154,10 @@ std::vector<CharData> Screen::getImage()
 
 
 
-int Screen::getOpenIndex(Component *c)
+int Screen::getOpenIndex(Component c[])
 {
 	int i = 0;
 	for (; c[i].exists; ++i) {}
-	c[i].exists = true;
+	//c[i].exists = true;
 	return i;
 }
