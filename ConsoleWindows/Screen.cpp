@@ -2,7 +2,7 @@
 #include "Screen.h"
 
 
-
+#include "ImageMaker.h"
 
 
 
@@ -37,13 +37,14 @@ void Screen::update(int mouseX, int mouseY)
 				mouseY <= elmDat[elements[i].elementData].posY + elmDat[elements[i].elementData].sizeY)
 			{
 				butDat[elements[i].buttonData].mouseOver = true;
-				TextButton::makeImage(&elmDat[elements[i].elementData], &butDat[elements[i].buttonData]);
+				//TextButton::makeImage(&elmDat[elements[i].elementData], &butDat[elements[i].buttonData]);
 			}
 			else
 			{
 				butDat[elements[i].buttonData].mouseOver = false;
-				TextButton::makeImage(&elmDat[elements[i].elementData], &butDat[elements[i].buttonData]);
+				//TextButton::makeImage(&elmDat[elements[i].elementData], &butDat[elements[i].buttonData]);
 			}
+			makeButtonImage(&elmDat[elements[i].elementData], &butDat[elements[i].buttonData]);
 		}
 	}
 	makeImage();

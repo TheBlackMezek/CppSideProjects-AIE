@@ -41,6 +41,7 @@ struct ElementData : Component
 
 struct ButtonData : Component
 {
+	bool bordered;
 	bool mouseOver;
 	std::string text;
 	void(*callback)();

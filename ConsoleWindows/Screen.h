@@ -8,8 +8,7 @@
 //I wish I didn't have to include in a header
 #include <vector>
 #include <string>
-//struct CharData is in ScreenElement.h
-#include "TextButton.h"
+#include "ElementStructs.h"
 
 
 class Screen

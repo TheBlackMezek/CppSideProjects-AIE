@@ -7,8 +7,8 @@
 //#include "WindowSetup.h" //This is in InputGetter.h
 #include "InputGetter.h"
 #include "Screen.h"
-#include "ScreenElement.h"
-#include "TextButton.h"
+#include "DataMaker.h"
+#include "ImageMaker.h"
 
 
 
@@ -27,7 +27,6 @@ void renderWindow();
 
 
 Screen test;
-TextButton testButton;
 
 
 
@@ -51,13 +50,15 @@ int main()
 	// -------------------------------- //
 
 	
-	ElementData testButElmDat = ScreenElement::makeElementData(10, 10, 6, 3, 0x000F);
-	ButtonData testButDat = TextButton::makeButtonData("Test", NULL);
-	TextButton::makeImage(&testButElmDat, &testButDat);
+	ElementData testButElmDat = makeElementData(10, 10, 6, 3, 0x000F);
+	ButtonData testButDat = makeButtonData(false, "Test", NULL);
+	//TextButton::makeImage(&testButElmDat, &testButDat);
+	makeButtonImage(&testButElmDat, &testButDat);
 
-	ElementData button2 =  ScreenElement::makeElementData(20, 20, 10, 4, 0x000A);
-	ButtonData buttondat2 = TextButton::makeButtonData("Test2", NULL);
-	TextButton::makeImage(&button2, &buttondat2);
+	ElementData button2 =  makeElementData(20, 20, 10, 4, 0x000A);
+	ButtonData buttondat2 = makeButtonData(true, "Test2", NULL);
+	makeButtonImage(&button2, &buttondat2);
+	//TextButton::makeImage(&button2, &buttondat2);
 
 
 	//test.addElement(testButton);
