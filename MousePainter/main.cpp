@@ -128,9 +128,23 @@ int main()
 	bug.setPosx(40);
 	bug.setPosy(MAP_HEIGHT - 1);
 
+	//First layers
+	for (int l = 0; l < 2; ++l)
+	{
+		NeuronLayer layer;
+		//xpos, ypos, playerx, playery
+		for (int i = 0; i < 4; ++i)
+		{
+			Neuron n;
+			n.randWeights(4);
+			layer.neurons.push_back(n);
+		}
+		bugnet.layers.push_back(layer);
+	}
+
 	NeuronLayer lone;
-	//xpos, ypos
-	for (int i = 0; i < 4; ++i)
+	//left, right
+	for (int i = 0; i < 2; ++i)
 	{
 		Neuron n;
 		n.randWeights(4);
