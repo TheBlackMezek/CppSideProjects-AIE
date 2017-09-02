@@ -33,3 +33,14 @@ public:
 
 	std::vector<float> think(std::vector<float> inputs);
 };
+
+
+class NetTrainer
+{
+public:
+	float prevDist;
+	float c; //Training constant
+	NeuralNet* net;
+
+	void train(float dist);
+};

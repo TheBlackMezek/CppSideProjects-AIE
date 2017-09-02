@@ -82,6 +82,7 @@ void buttonTest();
 //Neuron testing
 Entity bug;
 NeuralNet bugnet;
+NetTrainer trainer;
 
 
 
@@ -124,18 +125,21 @@ int main()
 	button.makeImage();
 	button.setCallback(&buttonTest);
 
-	bug.setPosx(50);
-	bug.setPosy(MAP_HEIGHT/2);
+	bug.setPosx(40);
+	bug.setPosy(MAP_HEIGHT - 1);
 
 	NeuronLayer lone;
 	//xpos, ypos
-	for (int i = 0; i < 2; ++i)
+	for (int i = 0; i < 4; ++i)
 	{
 		Neuron n;
-		n.randWeights(2);
+		n.randWeights(4);
 		lone.neurons.push_back(n);
 	}
 	bugnet.layers.push_back(lone);
+
+	trainer.net = &bugnet;
+	trainer.c = 0.01f;
 	
 
 
@@ -285,7 +289,7 @@ void simulate()
 		--player.y;
 	}
 
-	if (right && player.y < WIN_WIDTH - 1)
+	if (right && player.x < WIN_WIDTH - 1)
 	{
 		//Check for straight right movement
 		if (!tiles[player.x + 1 + player.y * WIN_WIDTH]
@@ -313,7 +317,7 @@ void simulate()
 		}
 	}
 
-	if (left && player.y > 0)
+	if (left && player.x > 0)
 	{
 		//Check for straight right movement
 		if (!tiles[player.x - 1 + player.y * WIN_WIDTH]
@@ -345,32 +349,84 @@ void simulate()
 
 
 
-	std::vector<float> thot = bugnet.think({ (float)bug.getPosx(), (float)bug.getPosy() });
-	bug.setPosx(bug.getPosx() + thot[0]);
-	bug.setPosy(bug.getPosy() + thot[1]);
 
-	if (bug.getPosx() < 0)
-	{
-		bug.setPosx(0);
-	}
-	else if (bug.getPosx() > WIN_WIDTH - 1)
-	{
-		bug.setPosx(WIN_WIDTH - 1);
-	}
+	trainer.prevDist = dist(player.x, player.y, bug.getPosx(), bug.getPosy());
 
-	if (bug.getPosy() < 0)
+	std::vector<float> thot = bugnet.think({ (float)bug.getPosx(), (float)bug.getPosy(), (float)player.x, (float)player.y });
+	//bug.setPosx(bug.getPosx() + thot[0]);
+	//bug.setPosy(bug.getPosy() + thot[1]);
+
+
+	if (!tiles[bug.getPosx() + (bug.getPosy() - 1) * WIN_WIDTH]
+		|| tiles[bug.getPosx() + (bug.getPosy() - 1) * WIN_WIDTH] == 3)
 	{
-		bug.setPosy(0);
-	}
-	else if (bug.getPosy() > MAP_HEIGHT - 1)
-	{
-		bug.setPosy(MAP_HEIGHT - 1);
+		bug.setPosy(bug.getPosy() - 1);
 	}
 
-	for (int i = 0; i < 2; ++i)
+	if (thot[0] == 1 && bug.getPosx() < WIN_WIDTH - 1)
+	{
+		//Check for straight right movement
+		if (!tiles[bug.getPosx() + 1 + bug.getPosy() * WIN_WIDTH]
+			|| tiles[bug.getPosx() + 1 + bug.getPosy() * WIN_WIDTH] == 3)
+		{
+			bug.setPosx(bug.getPosx() + 1);
+		}
+		//Check for up-right movement
+		else if (player.y < MAP_HEIGHT - 1
+			&& tiles[bug.getPosx() + 1 + bug.getPosy() * WIN_WIDTH] == 1
+			&& (!tiles[bug.getPosx() + 1 + (bug.getPosy() + 1) * WIN_WIDTH]
+				|| tiles[bug.getPosx() + 1 + (bug.getPosy() + 1) * WIN_WIDTH] == 3))
+		{
+			bug.setPosx(bug.getPosx() + 1);
+			bug.setPosy(bug.getPosy() + 1);
+		}
+		//Check for down-right movement
+		else if (player.y > 1
+			&& tiles[bug.getPosx()  + 1 + (bug.getPosy() - 2) * WIN_WIDTH]
+			&& (!tiles[bug.getPosx() + 1 + (bug.getPosy() - 1) * WIN_WIDTH]
+				|| tiles[bug.getPosx() + 1 + (bug.getPosy() - 1) * WIN_WIDTH] == 3))
+		{
+			bug.setPosx(bug.getPosx() + 1);
+			bug.setPosy(bug.getPosy() - 1);
+		}
+	}
+
+	if (thot[1] == 1 && bug.getPosx() > 0)
+	{
+		//Check for straight right movement
+		if (!tiles[bug.getPosx() - 1 + bug.getPosy() * WIN_WIDTH]
+			|| tiles[bug.getPosx() - 1 + bug.getPosy() * WIN_WIDTH] == 3)
+		{
+			bug.setPosx(bug.getPosx() - 1);
+		}
+		//Check for up-right movement
+		else if (player.y < MAP_HEIGHT - 1
+			&& tiles[bug.getPosx() - 1 + bug.getPosy() * WIN_WIDTH] == 1
+			&& (!tiles[bug.getPosx() - 1 + (bug.getPosy() + 1) * WIN_WIDTH]
+				|| tiles[bug.getPosx() - 1 + (bug.getPosy() + 1) * WIN_WIDTH] == 3))
+		{
+			bug.setPosx(bug.getPosx() - 1);
+			bug.setPosy(bug.getPosy() + 1);
+		}
+		//Check for down-right movement
+		else if (player.y > 1
+			&& tiles[bug.getPosx() - 1 + (bug.getPosy() - 2) * WIN_WIDTH]
+			&& (!tiles[bug.getPosx() - 1 + (bug.getPosy() - 1) * WIN_WIDTH]
+				|| tiles[bug.getPosx() - 1 + (bug.getPosy() - 1) * WIN_WIDTH] == 3))
+		{
+			bug.setPosx(bug.getPosx() - 1);
+			bug.setPosy(bug.getPosy() - 1);
+		}
+	}
+
+	trainer.train(dist(player.x, player.y, bug.getPosx(), bug.getPosy()));
+
+	
+
+	/*for (int i = 0; i < 2; ++i)
 	{
 		bugnet.layers[0].neurons[i].randWeights(2);
-	}
+	}*/
 
 
 
@@ -423,12 +479,12 @@ void simulate()
 
 	copyNewToTile();
 
-	tSinceWave += deltaT;
+	/*tSinceWave += deltaT;
 	if (tSinceWave >= tBetweenWaves)
 	{
 		tSinceWave -= tBetweenWaves;
 		rain(rainChance);
-	}
+	}*/
 }
 
 void renderWindow()

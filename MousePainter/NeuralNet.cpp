@@ -60,3 +60,29 @@ std::vector<float> NeuralNet::think(std::vector<float> inputs)
 
 	return ret;
 }
+
+
+void NetTrainer::train(float dist)
+{
+	if (dist >= prevDist)
+	{
+		for (int i = 0; i < net->layers.size(); ++i)
+		{
+			for (int q = 0; q < net->layers[i].neurons.size(); ++q)
+			{
+				for (int n = 0; n < net->layers[i].neurons[q].weights.size(); ++n)
+				{
+					net->layers[i].neurons[q].weights[n] += (rand() % 3 - 1) * dist * c;
+					if (net->layers[i].neurons[q].weights[n] > 1)
+					{
+						net->layers[i].neurons[q].weights[n] = 1;
+					}
+					else if (net->layers[i].neurons[q].weights[n] < -1)
+					{
+						net->layers[i].neurons[q].weights[n] = -1;
+					}
+				}
+			}
+		}
+	}
+}
