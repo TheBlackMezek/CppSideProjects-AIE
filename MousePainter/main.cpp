@@ -5,6 +5,8 @@
 #include <time.h>
 
 #include "TextButton.h"
+#include "NeuralNet.h"
+#include "Entity.h"
 
 
 
@@ -77,6 +79,10 @@ bool rclick = false;
 TextButton button;
 void buttonTest();
 
+//Neuron testing
+Entity bug;
+NeuralNet bugnet;
+
 
 
 
@@ -117,6 +123,19 @@ int main()
 	button.setText("Test");
 	button.makeImage();
 	button.setCallback(&buttonTest);
+
+	bug.setPosx(50);
+	bug.setPosy(MAP_HEIGHT/2);
+
+	NeuronLayer lone;
+	//xpos, ypos
+	for (int i = 0; i < 2; ++i)
+	{
+		Neuron n;
+		n.randWeights(2);
+		lone.neurons.push_back(n);
+	}
+	bugnet.layers.push_back(lone);
 	
 
 
@@ -193,7 +212,7 @@ int main()
 			//WriteConsoleOutputA(hstdout, consoleBuffer, charBufferSize, charPosition, &consoleWriteArea);
 		}
 
-		button.update(mouse.x, MAP_HEIGHT - mouse.y - 1);
+		//button.update(mouse.x, MAP_HEIGHT - mouse.y - 1);
 		if (lclick)
 		{
 			button.click();
@@ -325,6 +344,36 @@ void simulate()
 	up = down = right = left = rclick = lclick = false;
 
 
+
+	std::vector<float> thot = bugnet.think({ (float)bug.getPosx(), (float)bug.getPosy() });
+	bug.setPosx(bug.getPosx() + thot[0]);
+	bug.setPosy(bug.getPosy() + thot[1]);
+
+	if (bug.getPosx() < 0)
+	{
+		bug.setPosx(0);
+	}
+	else if (bug.getPosx() > WIN_WIDTH - 1)
+	{
+		bug.setPosx(WIN_WIDTH - 1);
+	}
+
+	if (bug.getPosy() < 0)
+	{
+		bug.setPosy(0);
+	}
+	else if (bug.getPosy() > MAP_HEIGHT - 1)
+	{
+		bug.setPosy(MAP_HEIGHT - 1);
+	}
+
+	for (int i = 0; i < 2; ++i)
+	{
+		bugnet.layers[0].neurons[i].randWeights(2);
+	}
+
+
+
 	copyTileToNew();
 
 	//Block simulation
@@ -407,6 +456,12 @@ void renderWindow()
 				backColor = 0x00F0;
 			}
 
+			if (bug.getPosx() == x && bug.getPosy() == y)
+			{
+				chr = 'B';
+				frontColor = 0x000B;
+			}
+
 			switch (tiles[x + y * WIN_WIDTH])
 			{
 			case 0:
@@ -460,7 +515,8 @@ void renderWindow()
 		}
 	}
 
-	for (int x = button.getPosX(); x < button.getPosX() + button.getSizeX(); ++x)
+
+	/*for (int x = button.getPosX(); x < button.getPosX() + button.getSizeX(); ++x)
 	{
 		for (int y = button.getPosY(); y < button.getPosY() + button.getSizeY(); ++y)
 		{
@@ -478,7 +534,7 @@ void renderWindow()
 				}
 			}
 		}
-	}
+	}*/
 
 	WriteConsoleOutputA(hstdout, consoleBuffer, charBufferSize, charPosition, &consoleWriteArea);
 }
