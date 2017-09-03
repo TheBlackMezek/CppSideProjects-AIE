@@ -5,3 +5,6 @@ Actors are concerned with the biome of a tile, as is rendering, so make array fo
 Biome factors: temperature, rainfall, elevation (affects temp & rain)
 Possible factors: elevation (many effects), snow period, soil, rain shadows
 Waters as well
+
+
+Nearest gridpoint: x / scale	5 / 2 == 2.5 rounded to 2

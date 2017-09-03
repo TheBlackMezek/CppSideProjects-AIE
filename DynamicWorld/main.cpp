@@ -4,6 +4,7 @@
 #include <time.h>
 
 #include "Vecs.h"
+#include "Perlin.h"
 
 
 
@@ -348,7 +349,7 @@ void genTerrain()
 {
 
 	//Generate base terrain
-
+	/*
 	//Height limit MAP_HEIGHT - 2. 1 for bedrock, 1 for open space on top.
 	int height = rand() % (MAP_HEIGHT - 2) + 1;
 
@@ -416,6 +417,25 @@ void genTerrain()
 			if (res) tiles[x + y * WIN_WIDTH] = 1;
 		}
 
+	}
+	*/
+
+	float grid[WIN_WIDTH * MAP_HEIGHT];
+	Perlin::makeGrid(grid, WIN_WIDTH, MAP_HEIGHT, 1, 5, 5);
+
+	for (int x = 0; x < WIN_WIDTH; ++x)
+	{
+		for (int y = 0; y < MAP_HEIGHT; ++y)
+		{
+			if (grid[x + y * WIN_WIDTH] > 2)
+			{
+				tiles[x + y * WIN_WIDTH] = 2;
+			}
+			else
+			{
+				tiles[x + y * WIN_WIDTH] = 0;
+			}
+		}
 	}
 }
 
