@@ -44,8 +44,8 @@ int framepause = 10;
 
 int lastFrame = GetTickCount();
 
-int tiles[WIN_WIDTH * MAP_HEIGHT];
-int tilesNew[WIN_WIDTH * MAP_HEIGHT];
+int tiles[WIN_WIDTH * WIN_HEIGHT];
+int tilesNew[WIN_WIDTH * WIN_HEIGHT];
 std::string winmsg;
 
 vec2 mouse{ 0, 0 };
@@ -136,7 +136,7 @@ int main()
 					if (eventBuffer[i].Event.MouseEvent.dwEventFlags == 0x0001)
 					{
 						mouse.x = eventBuffer[i].Event.MouseEvent.dwMousePosition.X;
-						mouse.y = MAP_HEIGHT - 1 - eventBuffer[i].Event.MouseEvent.dwMousePosition.Y;
+						mouse.y = WIN_HEIGHT - 1 - eventBuffer[i].Event.MouseEvent.dwMousePosition.Y;
 
 					}
 					else if (eventBuffer[i].Event.MouseEvent.dwEventFlags == 0x0000)
@@ -269,7 +269,7 @@ void renderWindow()
 	//Renders from top-left to bottom-right
 	//The y loop increments backwards here so tiles can be set intuitively elsewhere
 	int bufferCoord = 0;
-	for (int y = MAP_HEIGHT - 1; y >= 0; --y)
+	for (int y = WIN_HEIGHT - 1; y >= 0; --y)
 		//for (int y = 0; y < MAP_HEIGHT; ++y)
 	{
 		for (int x = 0; x < WIN_WIDTH; ++x)
@@ -325,19 +325,19 @@ void renderWindow()
 		}
 	}
 
-	//If the msg is longer, it might create a new line, which would hide some of the world render.
-	winmsg.resize(WIN_WIDTH, ' ');
-	//std::cout << msg.c_str();
+	////If the msg is longer, it might create a new line, which would hide some of the world render.
+	//winmsg.resize(WIN_WIDTH, ' ');
+	////std::cout << msg.c_str();
 
-	for (int y = MAP_HEIGHT; y < WIN_HEIGHT - 1; ++y)
-	{
-		for (int x = 0; x < WIN_WIDTH; ++x)
-		{
-			consoleBuffer[x + WIN_WIDTH * y].Char.AsciiChar = winmsg.at(x);
-			consoleBuffer[x + WIN_WIDTH * y].Attributes = FOREGROUND_BLUE | FOREGROUND_GREEN |
-				FOREGROUND_RED | FOREGROUND_INTENSITY;
-		}
-	}
+	//for (int y = MAP_HEIGHT; y < WIN_HEIGHT - 1; ++y)
+	//{
+	//	for (int x = 0; x < WIN_WIDTH; ++x)
+	//	{
+	//		consoleBuffer[x + WIN_WIDTH * y].Char.AsciiChar = winmsg.at(x);
+	//		consoleBuffer[x + WIN_WIDTH * y].Attributes = FOREGROUND_BLUE | FOREGROUND_GREEN |
+	//			FOREGROUND_RED | FOREGROUND_INTENSITY;
+	//	}
+	//}
 
 
 	
@@ -420,12 +420,12 @@ void genTerrain()
 	}
 	*/
 
-	float grid[WIN_WIDTH * MAP_HEIGHT];
-	Perlin::makeGrid(grid, WIN_WIDTH, MAP_HEIGHT, 1, 10, 5);
+	float grid[WIN_WIDTH * WIN_HEIGHT];
+	Perlin::makeGrid(grid, WIN_WIDTH, WIN_HEIGHT, 1, 10, 5);
 
 	for (int x = 0; x < WIN_WIDTH; ++x)
 	{
-		for (int y = 0; y < MAP_HEIGHT; ++y)
+		for (int y = 0; y < WIN_HEIGHT; ++y)
 		{
 			if (grid[x + y * WIN_WIDTH] > 2)
 			{
