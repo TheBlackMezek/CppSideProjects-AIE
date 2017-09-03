@@ -1,0 +1,7 @@
+
+
+
+Actors are concerned with the biome of a tile, as is rendering, so make array for that
+Biome factors: temperature, rainfall, elevation (affects temp & rain)
+Possible factors: elevation (many effects), snow period, soil, rain shadows
+Waters as well
