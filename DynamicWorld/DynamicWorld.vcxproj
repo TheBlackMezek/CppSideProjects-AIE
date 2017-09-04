@@ -113,6 +113,7 @@
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Perlin.cpp" />
     <ClCompile Include="TerrainGenerator.cpp" />
+    <ClCompile Include="Tribe.cpp" />
   </ItemGroup>
   <ItemGroup>
     <Text Include="Thinking.txt" />
@@ -120,6 +121,7 @@
   <ItemGroup>
     <ClInclude Include="Perlin.h" />
     <ClInclude Include="TerrainGenerator.h" />
+    <ClInclude Include="Tribe.h" />
     <ClInclude Include="Vecs.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

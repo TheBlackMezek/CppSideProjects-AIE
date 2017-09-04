@@ -6,6 +6,7 @@
 #include "Vecs.h"
 #include "Perlin.h"
 #include "TerrainGenerator.h"
+#include "Tribe.h"
 
 
 
@@ -56,6 +57,9 @@ bool up = false;
 bool down = false;
 bool lclick = false;
 bool rclick = false;
+
+
+std::vector<Tribe> tribes;
 
 
 
@@ -207,14 +211,19 @@ void simulate()
 			tiles[mouse.x + mouse.y * WIN_WIDTH] = 1;
 		}
 	}
-
-	
 	
 
 	up = down = right = left = rclick = lclick = false;
 
 
-	copyTileToNew();
+
+	for (int i = 0; i < tribes.size(); ++i)
+	{
+		tribes[i].sim(tiles, WIN_WIDTH, WIN_HEIGHT);
+	}
+
+
+	//copyTileToNew();
 
 	//Block simulation
 	//for (int y = 0; y < MAP_HEIGHT; ++y)
@@ -261,7 +270,7 @@ void simulate()
 
 	//}
 
-	copyNewToTile();
+	//copyNewToTile();
 }
 
 void renderWindow()
@@ -284,6 +293,7 @@ void renderWindow()
 			{
 				backColor = 0x00F0;
 			}
+			
 
 			
 
@@ -292,32 +302,39 @@ void renderWindow()
 			case 0:
 				//Water
 				frontColor = 0x0003;
-				//chr = (chr == 0) ? 0xB2 : chr;
-				chr = '0';
+				chr = (chr == 0) ? 0xB2 : chr;
 				break;
 			case 1:
 				//Plains
 				frontColor = 0x0006;
-				//chr = (chr == 0) ? 0xB2 : chr;
-				chr = '1';
+				chr = (chr == 0) ? 0xB2 : chr;
 				break;
 			case 2:
 				//Forest
-				//backColor = 0x0060;
 				frontColor = 0x000A;
-				//chr = (chr == 0) ? 'T' : chr;
-				chr = '2';
+				chr = (chr == 0) ? 'T' : chr;
 				break;
 			case 3:
 				//Mountains
 				frontColor = 0x0007;
-				//chr = (chr == 0) ? '^' : chr;
-				chr = '3';
+				chr = (chr == 0) ? '^' : chr;
 				break;
 			default:
 				//E is for Error 'E'
 				chr = (chr == 0) ? 'E' : chr;
 				break;
+			}
+
+
+
+			for (int i = 0; i < tribes.size(); ++i)
+			{
+				if (x == tribes[i].x && y == tribes[i].y)
+				{
+					chr = '@';
+					frontColor = 0x000E;
+					break;
+				}
 			}
 
 			/*consoleBuffer[x + WIN_WIDTH * y].Char.AsciiChar = chr;
@@ -425,7 +442,22 @@ void genTerrain()
 
 	//float grid[WIN_WIDTH * WIN_HEIGHT];
 	//Perlin::makeGrid(grid, WIN_WIDTH, WIN_HEIGHT, 1, 10, 5);
-	TerrainGenerator::genBiomes(tiles, WIN_WIDTH, WIN_HEIGHT, 4);
+	TerrainGenerator::genBiomes(tiles, WIN_WIDTH, WIN_HEIGHT, 5);
+
+	int tribecount = 30;
+	for (int i = 0; i < tribecount; ++i)
+	{
+		tribes.push_back(Tribe());
+		int posx = -1;
+		int posy = -1;
+		while (posx < 0 || posx >= WIN_WIDTH || posy < 0 || posy >= WIN_HEIGHT || tiles[posx + posy * WIN_WIDTH] == 0)
+		{
+			posx = rand() % WIN_WIDTH;
+			posy = rand() % WIN_HEIGHT;
+		}
+		tribes[i].x = posx;
+		tribes[i].y = posy;
+	}
 
 	/*for (int x = 0; x < WIN_WIDTH; ++x)
 	{
