@@ -60,6 +60,49 @@ void Perlin::makeGrid(float grid[], int sizex, int sizey, int seed, int scale, i
 	}
 }
 
+void Perlin::makeGrid(std::vector<float>* grid, int sizex, int sizey, int seed, int scale, int heightscale)
+{
+	srand(seed);
+
+	grid->clear();
+
+	//Gradient vectors
+	//vec2 grads[sizex]; //I would really rather use this than a vector
+
+	float gradsizex = (float)sizex / (float)scale + 2.5f;
+	std::vector<vec2> grads(ceil(gradsizex * (((float)sizey / (float)scale) + 2.5f)));
+	int gradSizeTotal = grads.size();
+
+	for (int i = 0; i < grads.size(); ++i)
+	{
+		grads[i] = { rand() % (heightscale * 2) - heightscale, rand() % (heightscale * 2) - heightscale };
+	}
+
+	std::vector<vec2> dist(4);
+	for (int y = 0; y < sizey; ++y)
+	{
+		for (int x = 0; x < sizex; ++x)
+		{
+			//Make distance vectors: 0,0  1,0  0,1  1,1
+			dist[0] = { (x / scale) * scale - x,			(y / scale) * scale - y };
+			dist[1] = { (x / scale) * scale + scale - x,	(y / scale) * scale - y };
+			dist[2] = { (x / scale) * scale - x,			(y / scale) * scale + scale - y };
+			dist[3] = { (x / scale) * scale + scale - x,	(y / scale) * scale + scale - y };
+
+			//Get dot products
+			float dot00 = dot(dist[0], grads[x / scale + (y / scale) * gradsizex]);
+			float dot10 = dot(dist[1], grads[x / scale + 1 + (y / scale) * gradsizex]);
+			float dot01 = dot(dist[2], grads[x / scale + (y / scale + 1) * gradsizex]);
+			float dot11 = dot(dist[3], grads[x / scale + 1 + (y / scale + 1) * gradsizex]);
+
+			//Interpolate
+			float lerpy0 = lerp({ (float)((x / scale) * scale) , dot00 }, { (float)((x / scale) * scale + scale) , dot10 }, x);
+			float lerpy1 = lerp({ (float)((x / scale) * scale) , dot01 }, { (float)((x / scale) * scale + scale) , dot11 }, x);
+			grid->push_back(lerp({ (float)((y / scale) * scale) , lerpy0 }, { (float)((y / scale) * scale + scale) , lerpy1 }, y));
+		}
+	}
+}
+
 float Perlin::dot(vec2 v1, vec2 v2)
 {
 	return v1.x * v2.x + v1.y * v2.y;

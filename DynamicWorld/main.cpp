@@ -5,6 +5,7 @@
 
 #include "Vecs.h"
 #include "Perlin.h"
+#include "TerrainGenerator.h"
 
 
 
@@ -216,49 +217,49 @@ void simulate()
 	copyTileToNew();
 
 	//Block simulation
-	for (int y = 0; y < MAP_HEIGHT; ++y)
-	{
-		for (int x = 0; x < WIN_WIDTH; ++x)
-		{
-			//Water flow
-			if (tiles[x + y * WIN_WIDTH] == 3)
-			{
-				int leftRight = rand() % 2;
-				if (leftRight == 0) { leftRight = -1; }
+	//for (int y = 0; y < MAP_HEIGHT; ++y)
+	//{
+	//	for (int x = 0; x < WIN_WIDTH; ++x)
+	//	{
+	//		//Water flow
+	//		if (tiles[x + y * WIN_WIDTH] == 3)
+	//		{
+	//			int leftRight = rand() % 2;
+	//			if (leftRight == 0) { leftRight = -1; }
 
-				if (!tilesNew[x + (y - 1) * WIN_WIDTH])
-				{
-					tilesNew[x + y * WIN_WIDTH] = 0;
-					tilesNew[x + (y - 1) * WIN_WIDTH] = 3;
-				}
-				else if ((x + leftRight >= 0 && x + leftRight < WIN_WIDTH)
-					&& !tilesNew[x + leftRight + (y - 1) * WIN_WIDTH])
-				{
-					tilesNew[x + y * WIN_WIDTH] = 0;
-					tilesNew[x + leftRight + (y - 1) * WIN_WIDTH] = 3;
-				}
-				else if ((x - leftRight >= 0 && x - leftRight < WIN_WIDTH)
-					&& !tilesNew[x - leftRight + (y - 1) * WIN_WIDTH])
-				{
-					tilesNew[x + y * WIN_WIDTH] = 0;
-					tilesNew[x - leftRight + (y - 1) * WIN_WIDTH] = 3;
-				}
-				else if ((x + leftRight >= 0 && x + leftRight < WIN_WIDTH)
-					&& !tilesNew[x + leftRight + y * WIN_WIDTH])
-				{
-					tilesNew[x + y * WIN_WIDTH] = 0;
-					tilesNew[x + leftRight + y * WIN_WIDTH] = 3;
-				}
-				else if ((x - leftRight >= 0 && x - leftRight < WIN_WIDTH)
-					&& !tilesNew[x - leftRight + y * WIN_WIDTH])
-				{
-					tilesNew[x + y * WIN_WIDTH] = 0;
-					tilesNew[x - leftRight + y * WIN_WIDTH] = 3;
-				}
-			}
-		}
+	//			if (!tilesNew[x + (y - 1) * WIN_WIDTH])
+	//			{
+	//				tilesNew[x + y * WIN_WIDTH] = 0;
+	//				tilesNew[x + (y - 1) * WIN_WIDTH] = 3;
+	//			}
+	//			else if ((x + leftRight >= 0 && x + leftRight < WIN_WIDTH)
+	//				&& !tilesNew[x + leftRight + (y - 1) * WIN_WIDTH])
+	//			{
+	//				tilesNew[x + y * WIN_WIDTH] = 0;
+	//				tilesNew[x + leftRight + (y - 1) * WIN_WIDTH] = 3;
+	//			}
+	//			else if ((x - leftRight >= 0 && x - leftRight < WIN_WIDTH)
+	//				&& !tilesNew[x - leftRight + (y - 1) * WIN_WIDTH])
+	//			{
+	//				tilesNew[x + y * WIN_WIDTH] = 0;
+	//				tilesNew[x - leftRight + (y - 1) * WIN_WIDTH] = 3;
+	//			}
+	//			else if ((x + leftRight >= 0 && x + leftRight < WIN_WIDTH)
+	//				&& !tilesNew[x + leftRight + y * WIN_WIDTH])
+	//			{
+	//				tilesNew[x + y * WIN_WIDTH] = 0;
+	//				tilesNew[x + leftRight + y * WIN_WIDTH] = 3;
+	//			}
+	//			else if ((x - leftRight >= 0 && x - leftRight < WIN_WIDTH)
+	//				&& !tilesNew[x - leftRight + y * WIN_WIDTH])
+	//			{
+	//				tilesNew[x + y * WIN_WIDTH] = 0;
+	//				tilesNew[x - leftRight + y * WIN_WIDTH] = 3;
+	//			}
+	//		}
+	//	}
 
-	}
+	//}
 
 	copyNewToTile();
 }
@@ -289,31 +290,33 @@ void renderWindow()
 			switch (tiles[x + y * WIN_WIDTH])
 			{
 			case 0:
-				//Empty space ' '
-				chr = (chr == 0) ? 0x00 : chr;
+				//Water
+				frontColor = 0x0003;
+				//chr = (chr == 0) ? 0xB2 : chr;
+				chr = '0';
 				break;
 			case 1:
-				//Normal block 'X'
-				//backColor = 0x0020;
+				//Plains
 				frontColor = 0x0006;
-				chr = (chr == 0) ? 'X' : chr;
-				//chr = 'X';
+				//chr = (chr == 0) ? 0xB2 : chr;
+				chr = '1';
 				break;
 			case 2:
-				//Bedrock, holding up the world 'W'
-				backColor = 0x0060;
-				frontColor = 0x0006;
-				chr = (chr == 0) ? 0x57 : chr;
+				//Forest
+				//backColor = 0x0060;
+				frontColor = 0x000A;
+				//chr = (chr == 0) ? 'T' : chr;
+				chr = '2';
 				break;
 			case 3:
-				//Water '-'
-				frontColor = 0x0003;
-				//chr = (chr == 0) ? 0xC4 : chr;
-				chr = (chr == 0) ? 176 : chr;
+				//Mountains
+				frontColor = 0x0007;
+				//chr = (chr == 0) ? '^' : chr;
+				chr = '3';
 				break;
 			default:
 				//E is for Error 'E'
-				std::cout << "E";
+				chr = (chr == 0) ? 'E' : chr;
 				break;
 			}
 
@@ -420,10 +423,11 @@ void genTerrain()
 	}
 	*/
 
-	float grid[WIN_WIDTH * WIN_HEIGHT];
-	Perlin::makeGrid(grid, WIN_WIDTH, WIN_HEIGHT, 1, 10, 5);
+	//float grid[WIN_WIDTH * WIN_HEIGHT];
+	//Perlin::makeGrid(grid, WIN_WIDTH, WIN_HEIGHT, 1, 10, 5);
+	TerrainGenerator::genBiomes(tiles, WIN_WIDTH, WIN_HEIGHT, 2);
 
-	for (int x = 0; x < WIN_WIDTH; ++x)
+	/*for (int x = 0; x < WIN_WIDTH; ++x)
 	{
 		for (int y = 0; y < WIN_HEIGHT; ++y)
 		{
@@ -436,7 +440,7 @@ void genTerrain()
 				tiles[x + y * WIN_WIDTH] = 0;
 			}
 		}
-	}
+	}*/
 }
 
 void copyNewToTile()
