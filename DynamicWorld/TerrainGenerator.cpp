@@ -19,7 +19,7 @@ TerrainGenerator::~TerrainGenerator()
 void TerrainGenerator::genBiomes(int grid[], int sizex, int sizey, int seed)
 {
 	std::vector<float> perlin(sizex * sizey);
-	Perlin::makeGrid(&perlin, sizex, sizey, seed, 10, 1);
+	Perlin::makeGridOctaves(&perlin, sizex, sizey, seed, 25, 200, 3, 0.5f, 0.5f);
 
 	//0 is water, 1 is plains, 2 is forest, 3 is mountain
 
@@ -27,15 +27,15 @@ void TerrainGenerator::genBiomes(int grid[], int sizex, int sizey, int seed)
 	{
 		for (int x = 0; x < sizex; ++x)
 		{
-			if (perlin[x + y * sizex] <= 1)
+			if (perlin[x + y * sizex] <= 0)
 			{
 				grid[x + y * sizex] = 0;
 			}
-			else if (perlin[x + y * sizex] <= 5)
+			else if (perlin[x + y * sizex] <= 40)
 			{
 				grid[x + y * sizex] = 1;
 			}
-			else if (perlin[x + y * sizex] <= 9)
+			else if (perlin[x + y * sizex] <= 80)
 			{
 				grid[x + y * sizex] = 2;
 			}

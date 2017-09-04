@@ -425,7 +425,7 @@ void genTerrain()
 
 	//float grid[WIN_WIDTH * WIN_HEIGHT];
 	//Perlin::makeGrid(grid, WIN_WIDTH, WIN_HEIGHT, 1, 10, 5);
-	TerrainGenerator::genBiomes(tiles, WIN_WIDTH, WIN_HEIGHT, 2);
+	TerrainGenerator::genBiomes(tiles, WIN_WIDTH, WIN_HEIGHT, 4);
 
 	/*for (int x = 0; x < WIN_WIDTH; ++x)
 	{

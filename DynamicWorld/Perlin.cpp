@@ -78,16 +78,20 @@ void Perlin::makeGrid(std::vector<float>* grid, int sizex, int sizey, int seed, 
 		grads[i] = { rand() % (heightscale * 2) - heightscale, rand() % (heightscale * 2) - heightscale };
 	}
 
-	std::vector<vec2> dist(4);
+	std::vector<vec2f> dist(4);
 	for (int y = 0; y < sizey; ++y)
 	{
 		for (int x = 0; x < sizex; ++x)
 		{
 			//Make distance vectors: 0,0  1,0  0,1  1,1
-			dist[0] = { (x / scale) * scale - x,			(y / scale) * scale - y };
+			/*dist[0] = { (x / scale) * scale - x,			(y / scale) * scale - y };
 			dist[1] = { (x / scale) * scale + scale - x,	(y / scale) * scale - y };
 			dist[2] = { (x / scale) * scale - x,			(y / scale) * scale + scale - y };
-			dist[3] = { (x / scale) * scale + scale - x,	(y / scale) * scale + scale - y };
+			dist[3] = { (x / scale) * scale + scale - x,	(y / scale) * scale + scale - y };*/
+			dist[0] = { (x / scale) - ((float)x / (float)scale), (y / scale) - ((float)y / (float)scale) };
+			dist[1] = { (x / scale) + 1 - ((float)x / (float)scale), (y / scale) - ((float)y / (float)scale) };
+			dist[2] = { (x / scale) - ((float)x / (float)scale), (y / scale) + 1 - ((float)y / (float)scale) };
+			dist[3] = { (x / scale) + 1 - ((float)x / (float)scale), (y / scale) + 1 - ((float)y / (float)scale) };
 
 			//Get dot products
 			float dot00 = dot(dist[0], grads[x / scale + (y / scale) * gradsizex]);
@@ -103,7 +107,39 @@ void Perlin::makeGrid(std::vector<float>* grid, int sizex, int sizey, int seed, 
 	}
 }
 
+void Perlin::makeGridOctaves(std::vector<float>* grid, int sizex, int sizey, int seed, int scale, int heightscale, int octaves, float lacunarity, float persistence)
+{
+	srand(seed);
+
+	makeGrid(grid, sizex, sizey, rand(), scale, heightscale);
+
+	std::vector<float> octave(sizex * sizey);
+	float scaleMult = 1 * lacunarity;
+	float heightMult = 1 * persistence;
+	for (int i = 1; i < octaves; ++i)
+	{
+		makeGrid(&octave, sizex, sizey, rand(), scale * scaleMult, heightscale * heightMult);
+
+		for (int y = 0; y < sizey; ++y)
+		{
+			for (int x = 0; x < sizex; ++x)
+			{
+				(*grid)[x + y * sizex] = (*grid)[x + y * sizex] + octave[x + y * sizex];
+			}
+		}
+
+		scaleMult *= lacunarity;
+		heightMult *= persistence;
+	}
+	
+}
+
 float Perlin::dot(vec2 v1, vec2 v2)
+{
+	return v1.x * v2.x + v1.y * v2.y;
+}
+
+float Perlin::dot(vec2f v1, vec2 v2)
 {
 	return v1.x * v2.x + v1.y * v2.y;
 }
