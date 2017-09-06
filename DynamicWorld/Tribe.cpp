@@ -26,12 +26,6 @@ void Tribe::sim(Tile map[], int sizex, int sizey)
 	x += rand() % 3 - 1;
 	y += rand() % 3 - 1;
 
-	if (map[x + y * sizex].type == 0)
-	{
-		x = prevx;
-		y = prevy;
-	}
-
 	if (x >= sizex)
 	{
 		x = sizex - 1;
@@ -48,6 +42,12 @@ void Tribe::sim(Tile map[], int sizex, int sizey)
 	else if (y < 0)
 	{
 		y = 0;
+	}
+
+	if (map[x + y * sizex].type == 0)
+	{
+		x = prevx;
+		y = prevy;
 	}
 
 
