@@ -253,6 +253,17 @@ void simulate()
 			tribes[i].food /= 2;
 			tribes[i].foodMax = tribes[i].pop * 2;
 			tribes[i].brain.copyTo(&tb.brain);
+
+			tb.color = tribes[i].color + (rand() % 3 - 1);
+			if (tb.color < 1)
+			{
+				tb.color = 1;
+			}
+			else if (tb.color > 0x000F)
+			{
+				tb.color = 0x000F;
+			}
+
 			tribes.push_back(tb);
 		}
 	}
@@ -367,7 +378,7 @@ void renderWindow()
 				if (x == tribes[i].x && y == tribes[i].y)
 				{
 					chr = '@';
-					frontColor = 0x000E;
+					frontColor = tribes[i].color;
 					break;
 				}
 			}

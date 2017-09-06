@@ -11,6 +11,8 @@ Tribe::Tribe()
 	food = 0;
 	foodMax = pop * 2;
 
+	color = rand() % 0x000F + 1;
+
 	brain = NeuralNet();
 
 	//Current inputs: posx, posy, food, pop, tiletype

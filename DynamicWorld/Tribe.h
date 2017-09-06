@@ -14,6 +14,8 @@ public:
 	int x;
 	int y;
 
+	int color;
+
 	int pop;
 	float food;
 	float foodMax;
