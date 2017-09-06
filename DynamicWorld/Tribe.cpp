@@ -13,14 +13,33 @@ Tribe::Tribe()
 
 	brain = NeuralNet();
 
+	//Current inputs: posx, posy, food, pop, tiletype
 	NeuronLayer input = NeuronLayer();
-	for (int i = 0; i < 2; ++i)
+	for (int i = 0; i < 5; ++i)
 	{
 		Neuron n = Neuron();
-		n.randWeights(2);
+		n.randWeights(5);
 		input.neurons.push_back(n);
 	}
 	brain.layers.push_back(input);
+
+	NeuronLayer mid = NeuronLayer();
+	for (int i = 0; i < 5; ++i)
+	{
+		Neuron n = Neuron();
+		n.randWeights(5);
+		mid.neurons.push_back(n);
+	}
+	brain.layers.push_back(mid);
+
+	NeuronLayer out = NeuronLayer();
+	for (int i = 0; i < 5; ++i)
+	{
+		Neuron n = Neuron();
+		n.randWeights(5);
+		out.neurons.push_back(n);
+	}
+	brain.layers.push_back(out);
 }
 
 
@@ -35,7 +54,8 @@ void Tribe::sim(Tile map[], int sizex, int sizey)
 	int prevx = x;
 	int prevy = y;
 
-	std::vector<float> thot = brain.think(std::vector<float>{(float)x, (float)y});
+	std::vector<float> thot = brain.think(std::vector<float>{(float)x, (float)y, food, (float)pop,
+		(float)map[x + y * sizex].type});
 
 	//x += rand() % 3 - 1;
 	//y += rand() % 3 - 1;
