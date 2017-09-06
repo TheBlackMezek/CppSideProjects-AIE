@@ -61,6 +61,31 @@ std::vector<float> NeuralNet::think(std::vector<float> inputs)
 	return ret;
 }
 
+void NeuralNet::copyTo(NeuralNet* net)
+{
+	net->layers.clear();
+
+	for (int i = 0; i < layers.size(); ++i)
+	{
+		NeuronLayer layer = NeuronLayer();
+
+		for (int q = 0; q < layers[i].neurons.size(); ++q)
+		{
+			Neuron nr = Neuron();
+			nr.weights = std::vector<float>(layers[i].neurons[q].weights.size());
+
+			for (int n = 0; n < layers[i].neurons[q].weights.size(); ++n)
+			{
+				nr.weights[n] = layers[i].neurons[q].weights[n];
+			}
+
+			layer.neurons.push_back(nr);
+		}
+
+		net->layers.push_back(layer);
+	}
+}
+
 
 void NetTrainer::train(float dist)
 {

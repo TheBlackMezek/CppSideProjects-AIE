@@ -77,6 +77,11 @@ void Tribe::sim(Tile map[], int sizex, int sizey)
 		--y;
 	}
 
+	if (thot[2] > 0)
+	{
+		++pop;
+	}
+
 
 
 
@@ -139,5 +144,29 @@ void Tribe::sim(Tile map[], int sizex, int sizey)
 	{
 		++pop;
 		foodMax = pop * 2;
+	}
+
+
+	//Learning
+	if (pop < 10)
+	{
+		for (int i = 0; i < brain.layers.size(); ++i)
+		{
+			for (int q = 0; q < brain.layers[i].neurons.size(); ++q)
+			{
+				for (int n = 0; n < brain.layers[i].neurons[q].weights.size(); ++n)
+				{
+					brain.layers[i].neurons[q].weights[n] += (rand() % 3 - 1) * (10 - pop) * 0.1f;
+					if (brain.layers[i].neurons[q].weights[n] > 1)
+					{
+						brain.layers[i].neurons[q].weights[n] = 1;
+					}
+					else if (brain.layers[i].neurons[q].weights[n] < -1)
+					{
+						brain.layers[i].neurons[q].weights[n] = -1;
+					}
+				}
+			}
+		}
 	}
 }

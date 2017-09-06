@@ -241,7 +241,7 @@ void simulate()
 		{
 			tribes.erase(tribes.begin() + i);
 		}
-		else if (tribes[i].pop > 5)
+		else if (rand() % 100 + 1 < 10 && tribes[i].pop > 5)
 		{
 			tribes[i].pop -= 5;
 			Tribe tb = Tribe();
@@ -252,6 +252,7 @@ void simulate()
 			tb.foodMax = tb.pop * 2;
 			tribes[i].food /= 2;
 			tribes[i].foodMax = tribes[i].pop * 2;
+			tribes[i].brain.copyTo(&tb.brain);
 			tribes.push_back(tb);
 		}
 	}

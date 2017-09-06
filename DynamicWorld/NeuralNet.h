@@ -37,6 +37,7 @@ public:
 	std::vector<NeuronLayer> layers;
 
 	std::vector<float> think(std::vector<float> inputs);
+	void copyTo(NeuralNet* net);
 };
 
 
