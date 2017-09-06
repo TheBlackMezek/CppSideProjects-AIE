@@ -2,6 +2,7 @@
 
 
 #include "MapTile.h"
+#include "NeuralNet.h"
 
 
 class Tribe
@@ -16,6 +17,8 @@ public:
 	int pop;
 	float food;
 	float foodMax;
+
+	NeuralNet brain;
 
 	void sim(Tile map[], int sizex, int sizey);
 };

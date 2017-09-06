@@ -2,6 +2,7 @@
 
 
 #include <random>
+#include <vector>
 
 
 Tribe::Tribe()
@@ -9,6 +10,17 @@ Tribe::Tribe()
 	pop = 5;
 	food = 0;
 	foodMax = pop * 2;
+
+	brain = NeuralNet();
+
+	NeuronLayer input = NeuronLayer();
+	for (int i = 0; i < 2; ++i)
+	{
+		Neuron n = Neuron();
+		n.randWeights(2);
+		input.neurons.push_back(n);
+	}
+	brain.layers.push_back(input);
 }
 
 
@@ -23,8 +35,30 @@ void Tribe::sim(Tile map[], int sizex, int sizey)
 	int prevx = x;
 	int prevy = y;
 
-	x += rand() % 3 - 1;
-	y += rand() % 3 - 1;
+	std::vector<float> thot = brain.think(std::vector<float>{(float)x, (float)y});
+
+	//x += rand() % 3 - 1;
+	//y += rand() % 3 - 1;
+	if (thot[0] > 0)
+	{
+		++x;
+	}
+	else if (thot[0] < 0)
+	{
+		--x;
+	}
+
+	if (thot[1] > 0)
+	{
+		++y;
+	}
+	else if (thot[1] < 0)
+	{
+		--y;
+	}
+
+
+
 
 	if (x >= sizex)
 	{

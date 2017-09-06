@@ -111,6 +111,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="NeuralNet.cpp" />
     <ClCompile Include="Perlin.cpp" />
     <ClCompile Include="TerrainGenerator.cpp" />
     <ClCompile Include="Tribe.cpp" />
@@ -120,6 +121,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="MapTile.h" />
+    <ClInclude Include="NeuralNet.h" />
     <ClInclude Include="Perlin.h" />
     <ClInclude Include="TerrainGenerator.h" />
     <ClInclude Include="Tribe.h" />
