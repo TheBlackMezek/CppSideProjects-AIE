@@ -1,4 +1,9 @@
 #pragma once
+
+
+#include "MapTile.h"
+
+
 class Tribe
 {
 public:
@@ -8,6 +13,10 @@ public:
 	int x;
 	int y;
 
-	void sim(int map[], int sizex, int sizey);
+	int pop;
+	float food;
+	float foodMax;
+
+	void sim(Tile map[], int sizex, int sizey);
 };
 

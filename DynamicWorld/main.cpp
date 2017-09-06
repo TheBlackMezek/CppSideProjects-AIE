@@ -7,6 +7,7 @@
 #include "Perlin.h"
 #include "TerrainGenerator.h"
 #include "Tribe.h"
+#include "MapTile.h"
 
 
 
@@ -42,11 +43,11 @@ DWORD numEventsRead;
 // ----------------------------------------- //
 
 //Framerate is 1000/framepause
-int framepause = 10;
+int framepause = 50;
 
 int lastFrame = GetTickCount();
 
-int tiles[WIN_WIDTH * WIN_HEIGHT];
+Tile tiles[WIN_WIDTH * WIN_HEIGHT];
 int tilesNew[WIN_WIDTH * WIN_HEIGHT];
 std::string winmsg;
 
@@ -200,15 +201,15 @@ void simulate()
 	int deltaT = GetTickCount() - lastFrame;
 	lastFrame = GetTickCount();
 
-	if ((lclick || rclick) && tiles[mouse.x + mouse.y * WIN_WIDTH] != 2)
+	if ((lclick || rclick) && tiles[mouse.x + mouse.y * WIN_WIDTH].type != 2)
 	{
 		if (lclick)
 		{
-			tiles[mouse.x + mouse.y * WIN_WIDTH] = 0;
+			tiles[mouse.x + mouse.y * WIN_WIDTH].type = 0;
 		}
 		if (rclick)
 		{
-			tiles[mouse.x + mouse.y * WIN_WIDTH] = 1;
+			tiles[mouse.x + mouse.y * WIN_WIDTH].type = 1;
 		}
 	}
 	
@@ -216,10 +217,37 @@ void simulate()
 	up = down = right = left = rclick = lclick = false;
 
 
+	for (int y = 0; y < MAP_HEIGHT; ++y)
+	{
+		for (int x = 0; x < WIN_WIDTH; ++x)
+		{
+			tiles[x + y * WIN_WIDTH].food += tiles[x + y * WIN_WIDTH].foodInc;
+			if (tiles[x + y * WIN_WIDTH].food > tiles[x + y * WIN_WIDTH].foodMax)
+			{
+				tiles[x + y * WIN_WIDTH].food = tiles[x + y * WIN_WIDTH].foodMax;
+			}
+		}
+	}
 
-	for (int i = 0; i < tribes.size(); ++i)
+
+	for (int i = tribes.size()-1; i >= 0; --i)
 	{
 		tribes[i].sim(tiles, WIN_WIDTH, WIN_HEIGHT);
+		if (tribes[i].pop < 1)
+		{
+			tribes.erase(tribes.begin() + i);
+		}
+		else if (tribes[i].pop > 5)
+		{
+			tribes[i].pop -= 5;
+			Tribe tb = Tribe();
+			tb.x = tribes[i].x;
+			tb.y = tribes[i].y;
+			tb.pop = 5;
+			tb.food = tribes[i].food / 2;
+			tribes[i].food /= 2;
+			tribes.push_back(tb);
+		}
 	}
 
 
@@ -297,7 +325,7 @@ void renderWindow()
 
 			
 
-			switch (tiles[x + y * WIN_WIDTH])
+			switch (tiles[x + y * WIN_WIDTH].type)
 			{
 			case 0:
 				//Water
@@ -444,13 +472,13 @@ void genTerrain()
 	//Perlin::makeGrid(grid, WIN_WIDTH, WIN_HEIGHT, 1, 10, 5);
 	TerrainGenerator::genBiomes(tiles, WIN_WIDTH, WIN_HEIGHT, 5);
 
-	int tribecount = 30;
+	int tribecount = 10;
 	for (int i = 0; i < tribecount; ++i)
 	{
 		tribes.push_back(Tribe());
 		int posx = -1;
 		int posy = -1;
-		while (posx < 0 || posx >= WIN_WIDTH || posy < 0 || posy >= WIN_HEIGHT || tiles[posx + posy * WIN_WIDTH] == 0)
+		while (posx < 0 || posx >= WIN_WIDTH || posy < 0 || posy >= WIN_HEIGHT || tiles[posx + posy * WIN_WIDTH].type == 0)
 		{
 			posx = rand() % WIN_WIDTH;
 			posy = rand() % WIN_HEIGHT;
@@ -481,7 +509,7 @@ void copyNewToTile()
 	{
 		for (int x = 0; x < WIN_WIDTH; ++x)
 		{
-			tiles[x + y * WIN_WIDTH] = tilesNew[x + y * WIN_WIDTH];
+			tiles[x + y * WIN_WIDTH].type = tilesNew[x + y * WIN_WIDTH];
 		}
 	}
 }
@@ -492,7 +520,7 @@ void copyTileToNew()
 	{
 		for (int x = 0; x < WIN_WIDTH; ++x)
 		{
-			tilesNew[x + y * WIN_WIDTH] = tiles[x + y * WIN_WIDTH];
+			tilesNew[x + y * WIN_WIDTH] = tiles[x + y * WIN_WIDTH].type;
 		}
 	}
 }

@@ -119,6 +119,7 @@
     <Text Include="Thinking.txt" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="MapTile.h" />
     <ClInclude Include="Perlin.h" />
     <ClInclude Include="TerrainGenerator.h" />
     <ClInclude Include="Tribe.h" />

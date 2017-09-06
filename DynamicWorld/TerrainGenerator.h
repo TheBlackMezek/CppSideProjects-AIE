@@ -3,7 +3,7 @@
 #ifndef _TERRAINGENERATOR_H_
 #define _TERRAINGENERATOR_H_
 
-
+#include "MapTile.h"
 
 class TerrainGenerator
 {
@@ -11,7 +11,7 @@ public:
 	TerrainGenerator();
 	~TerrainGenerator();
 
-	static void genBiomes(int grid[], int sizex, int sizey, int seed);
+	static void genBiomes(Tile grid[], int sizex, int sizey, int seed);
 };
 
 
