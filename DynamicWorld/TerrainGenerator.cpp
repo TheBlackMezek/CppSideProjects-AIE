@@ -32,28 +32,28 @@ void TerrainGenerator::genBiomes(Tile grid[], int sizex, int sizey, int seed)
 				grid[x + y * sizex].type = 0;
 				grid[x + y * sizex].foodMax = 10;
 				grid[x + y * sizex].food = grid[x + y * sizex].foodMax;
-				grid[x + y * sizex].foodInc = 1;
+				grid[x + y * sizex].foodInc = 0.25f;
 			}
 			else if (perlin[x + y * sizex] <= 40)
 			{
 				grid[x + y * sizex].type = 1;
 				grid[x + y * sizex].foodMax = 5;
 				grid[x + y * sizex].food = grid[x + y * sizex].foodMax;
-				grid[x + y * sizex].foodInc = 0.2f;
+				grid[x + y * sizex].foodInc = 0.05f;
 			}
 			else if (perlin[x + y * sizex] <= 80)
 			{
 				grid[x + y * sizex].type = 2;
 				grid[x + y * sizex].foodMax = 8;
 				grid[x + y * sizex].food = grid[x + y * sizex].foodMax;
-				grid[x + y * sizex].foodInc = 0.5f;
+				grid[x + y * sizex].foodInc = 0.1f;
 			}
 			else //if (perlin[x + y * sizex] <= 4)
 			{
 				grid[x + y * sizex].type = 3;
 				grid[x + y * sizex].foodMax = 1;
 				grid[x + y * sizex].food = grid[x + y * sizex].foodMax;
-				grid[x + y * sizex].foodInc = 0.1f;
+				grid[x + y * sizex].foodInc = 0.025f;
 			}
 		}
 	}

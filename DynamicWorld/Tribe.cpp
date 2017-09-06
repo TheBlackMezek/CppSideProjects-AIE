@@ -56,7 +56,7 @@ void Tribe::sim(Tile map[], int sizex, int sizey)
 	{
 		if (xx >= 0 && xx < sizex)
 		{
-			for (int yy = x - 1; yy <= x + 1; ++yy)
+			for (int yy = y - 1; yy <= y + 1; ++yy)
 			{
 				if (yy >= 0 && yy < sizey)
 				{
@@ -84,5 +84,6 @@ void Tribe::sim(Tile map[], int sizex, int sizey)
 	else if (food >= 1)
 	{
 		++pop;
+		foodMax = pop * 2;
 	}
 }

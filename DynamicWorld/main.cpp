@@ -201,15 +201,19 @@ void simulate()
 	int deltaT = GetTickCount() - lastFrame;
 	lastFrame = GetTickCount();
 
-	if ((lclick || rclick) && tiles[mouse.x + mouse.y * WIN_WIDTH].type != 2)
+	if ((lclick || rclick) && tiles[mouse.x + mouse.y * WIN_WIDTH].type != 0)
 	{
 		if (lclick)
 		{
-			tiles[mouse.x + mouse.y * WIN_WIDTH].type = 0;
+			Tribe t = Tribe();
+			t.x = mouse.x;
+			t.y = mouse.y;
+			tribes.push_back(t);
+			//tiles[mouse.x + mouse.y * WIN_WIDTH].type = 0;
 		}
 		if (rclick)
 		{
-			tiles[mouse.x + mouse.y * WIN_WIDTH].type = 1;
+			//tiles[mouse.x + mouse.y * WIN_WIDTH].type = 1;
 		}
 	}
 	
@@ -245,7 +249,9 @@ void simulate()
 			tb.y = tribes[i].y;
 			tb.pop = 5;
 			tb.food = tribes[i].food / 2;
+			tb.foodMax = tb.pop * 2;
 			tribes[i].food /= 2;
+			tribes[i].foodMax = tribes[i].pop * 2;
 			tribes.push_back(tb);
 		}
 	}
@@ -472,7 +478,7 @@ void genTerrain()
 	//Perlin::makeGrid(grid, WIN_WIDTH, WIN_HEIGHT, 1, 10, 5);
 	TerrainGenerator::genBiomes(tiles, WIN_WIDTH, WIN_HEIGHT, 5);
 
-	int tribecount = 10;
+	int tribecount = 0;
 	for (int i = 0; i < tribecount; ++i)
 	{
 		tribes.push_back(Tribe());
