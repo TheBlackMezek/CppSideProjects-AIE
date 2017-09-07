@@ -253,6 +253,7 @@ void simulate()
 			tribes[i].food /= 2;
 			tribes[i].foodMax = tribes[i].pop * 2;
 			tribes[i].brain.copyTo(&tb.brain);
+			tb.brain.weightRandLight();
 
 			tb.color = tribes[i].color + (rand() % 3 - 1);
 			if (tb.color < 1)

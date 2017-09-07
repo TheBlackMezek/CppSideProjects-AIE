@@ -42,6 +42,8 @@ Tribe::Tribe()
 		out.neurons.push_back(n);
 	}
 	brain.layers.push_back(out);
+
+
 }
 
 
@@ -150,7 +152,7 @@ void Tribe::sim(Tile map[], int sizex, int sizey)
 
 
 	//Learning
-	if (pop < 10)
+	/*if (pop < 10)
 	{
 		for (int i = 0; i < brain.layers.size(); ++i)
 		{
@@ -170,5 +172,5 @@ void Tribe::sim(Tile map[], int sizex, int sizey)
 				}
 			}
 		}
-	}
+	}*/
 }

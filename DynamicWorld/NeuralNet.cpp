@@ -86,6 +86,28 @@ void NeuralNet::copyTo(NeuralNet* net)
 	}
 }
 
+void NeuralNet::weightRandLight()
+{
+	for (int i = 0; i < layers.size(); ++i)
+	{
+		for (int q = 0; q < layers[i].neurons.size(); ++q)
+		{
+			for (int n = 0; n < layers[i].neurons[q].weights.size(); ++n)
+			{
+				layers[i].neurons[q].weights[n] += (rand() % 3 - 1) * 0.01f;
+				if (layers[i].neurons[q].weights[n] > 1)
+				{
+					layers[i].neurons[q].weights[n] = 1;
+				}
+				else if (layers[i].neurons[q].weights[n] < -1)
+				{
+					layers[i].neurons[q].weights[n] = -1;
+				}
+			}
+		}
+	}
+}
+
 
 void NetTrainer::train(float dist)
 {

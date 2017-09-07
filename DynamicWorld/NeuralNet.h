@@ -38,6 +38,7 @@ public:
 
 	std::vector<float> think(std::vector<float> inputs);
 	void copyTo(NeuralNet* net);
+	void weightRandLight();
 };
 
 
