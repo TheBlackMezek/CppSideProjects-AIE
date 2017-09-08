@@ -9,8 +9,8 @@
 #include "InputGetter.h"
 
 
-Screen* screen;
-Screen gameScreen;
+GameScreen* screen;
+GameScreen gameScreen;
 
 
 
@@ -23,7 +23,7 @@ void initScreens()
 
 void initGameScreen()
 {
-	gameScreen = Screen();
+	gameScreen = GameScreen();
 	gameScreen.setSize(WIN_WIDTH, WIN_HEIGHT);
 
 	std::string termStr = "TERMINOLOGY:\n\n"

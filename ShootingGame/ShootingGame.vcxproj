@@ -114,19 +114,23 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="DataMaker.cpp" />
+    <ClCompile Include="GameScreen.cpp" />
     <ClCompile Include="GameScreens.cpp" />
     <ClCompile Include="ImageMaker.cpp" />
     <ClCompile Include="InputGetter.cpp" />
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="Player.cpp" />
     <ClCompile Include="Screen.cpp" />
     <ClCompile Include="WindowSetup.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="DataMaker.h" />
     <ClInclude Include="ElementStructs.h" />
+    <ClInclude Include="GameScreen.h" />
     <ClInclude Include="GameScreens.h" />
     <ClInclude Include="ImageMaker.h" />
     <ClInclude Include="InputGetter.h" />
+    <ClInclude Include="Player.h" />
     <ClInclude Include="Screen.h" />
     <ClInclude Include="WindowSetup.h" />
   </ItemGroup>

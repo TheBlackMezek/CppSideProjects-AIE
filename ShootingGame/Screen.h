@@ -13,7 +13,7 @@
 
 class Screen
 {
-private:
+protected:
 	int sizeX;
 	int sizeY;
 	std::vector<CharData> image;

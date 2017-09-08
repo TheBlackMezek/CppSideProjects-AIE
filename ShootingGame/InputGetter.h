@@ -25,6 +25,11 @@ extern bool rdown;
 extern bool rclickswitch;
 extern bool shouldExit;
 
+extern bool UP;
+extern bool DOWN;
+extern bool LEFT;
+extern bool RIGHT;
+
 
 DWORD getInput(INPUT_RECORD **evB);
 

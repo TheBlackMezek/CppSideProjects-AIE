@@ -2,10 +2,11 @@
 
 #include "Screen.h"
 
+#include "GameScreen.h"
 
 
-extern Screen* screen;
-extern Screen gameScreen;
+extern GameScreen* screen;
+extern GameScreen gameScreen;
 
 void initScreens();
 

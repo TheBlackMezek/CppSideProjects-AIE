@@ -47,6 +47,12 @@
     <ClCompile Include="WindowSetup.cpp">
       <Filter>Source Files\WindowSystem</Filter>
     </ClCompile>
+    <ClCompile Include="Player.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="GameScreen.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="DataMaker.h">
@@ -69,6 +75,12 @@
     </ClInclude>
     <ClInclude Include="WindowSetup.h">
       <Filter>Header Files\WindowSystem</Filter>
+    </ClInclude>
+    <ClInclude Include="Player.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="GameScreen.h">
+      <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

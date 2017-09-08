@@ -8,6 +8,8 @@
 #include "ImageMaker.h"
 #include "DataMaker.h"
 #include "GameScreens.h"
+#include "Player.h"
+#include "GameScreen.h"
 //#include "Screen.h"
 
 
@@ -45,6 +47,7 @@ int main()
 	//This puts all the data in gal[]
 	//This needs to come before initScreens()
 	//initGalaxy();
+	Player();
 
 
 
@@ -64,9 +67,6 @@ int main()
 
 
 	switchScreenToGame();
-	//switchScreenToShip();
-	//switchScreenToShop();
-	//switchScreenToStar();
 
 
 	std::string input = "";

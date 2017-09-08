@@ -16,5 +16,9 @@ Stats window at end of game, high scores.
 
 
 
-2017-9-8 goals:
+2017-9-8
+Goals:
 Create window, render player and take keyboard input for movement.
+Report:
+Started around 9:00, finished 12:15
+Finished quickly thanks to copying most of the code

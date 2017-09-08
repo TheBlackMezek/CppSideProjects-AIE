@@ -16,6 +16,11 @@ bool rdown = false;
 bool rclickswitch = false;
 bool shouldExit = false;
 
+bool UP = false;
+bool DOWN = false;
+bool RIGHT = false;
+bool LEFT = false;
+
 
 
 //I did not write this function
@@ -45,6 +50,7 @@ void checkInput()
 	ldown = false;
 	lclick = false;
 	rdown = false;
+	LEFT = RIGHT = UP = DOWN = false;
 
 	if (numEventsRead)
 	{
@@ -59,6 +65,18 @@ void checkInput()
 					{
 					case VK_ESCAPE:
 						shouldExit = true;
+					case 0x57: //W
+						UP = true;
+						break;
+					case 0x41: //A
+						LEFT = true;
+						break;
+					case 0x53: //S
+						DOWN = true;
+						break;
+					case 0x44: //D
+						RIGHT = true;
+						break;
 					}
 				}
 				break;
