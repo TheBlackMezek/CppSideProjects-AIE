@@ -1,0 +1,20 @@
+
+Idea:
+A top-down shooter survival game, where the player has to fight off waves of enemies without the ability to regain health.
+
+Mechanics:
+All graphics in ASCII in the console window.
+Screen centers on player, allowing maps larger than window.
+Player move with WASD, shoots with left click in direction of mouse.
+Enemies spawn at regular intervals from spawners and slowly increase in numbers.
+Enemies are one-hit-kill. Bullets stop at killing one enemy, do not shoot through multiple.
+Map has lightmap, only lit tiles and entities render.
+Player has flashlight in mouse direction, if I can figure out how.
+Shooting emits flash of light, light sources can be placed on map.
+Player picks map from list at start of game, returned to menu after end.
+Stats window at end of game, high scores.
+
+
+
+2017-9-8 goals:
+Create window, render player and take keyboard input for movement.
