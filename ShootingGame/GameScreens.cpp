@@ -23,8 +23,8 @@ void initScreens()
 
 void initGameScreen()
 {
-	gameScreen = GameScreen();
-	gameScreen.setSize(WIN_WIDTH, WIN_HEIGHT);
+	gameScreen = GameScreen(WIN_WIDTH, WIN_HEIGHT, 200, 200);
+	//gameScreen.setSize(WIN_WIDTH, WIN_HEIGHT);
 
 	std::string termStr = "TERMINOLOGY:\n\n"
 		"object - Anything in space, be it planet, moon, star, or ship.\n"

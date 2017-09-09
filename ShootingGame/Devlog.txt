@@ -22,3 +22,8 @@ Create window, render player and take keyboard input for movement.
 Report:
 Started around 9:00, finished 12:15
 Finished quickly thanks to copying most of the code
+
+2017-9-9
+Goals:
+Make render map: char, color, light
+Render map around player

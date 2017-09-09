@@ -69,7 +69,6 @@ int main()
 	switchScreenToGame();
 
 
-	std::string input = "";
 	while (!shouldExit)
 	{
 		checkInput();

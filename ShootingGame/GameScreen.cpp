@@ -11,6 +11,32 @@ GameScreen::GameScreen()
 	player = Player();
 }
 
+GameScreen::GameScreen(int winx, int winy, int mapx, int mapy)
+{
+	sizeX = winx;
+	sizeY = winy;
+	mapSizeX = mapx;
+	mapSizeY = mapy;
+
+	player = Player();
+	
+	charMap = std::vector<char>(mapx * mapy);
+	for (int i = 0; i < mapx * mapy; ++i)
+	{
+		charMap[i] = '.';
+	}
+	colorMap = std::vector<int>(mapx * mapy);
+	for (int i = 0; i < mapx * mapy; ++i)
+	{
+		colorMap[i] = 0x000F;
+	}
+	lightMap = std::vector<int>(mapx * mapy);
+	for (int i = 0; i < mapx * mapy; ++i)
+	{
+		lightMap[i] = 0;
+	}
+}
+
 
 GameScreen::~GameScreen()
 {
@@ -53,14 +79,31 @@ void GameScreen::makeImage()
 	{
 		for (int x = 0; x < sizeX; ++x)
 		{
-			image[x + y * sizeX].chr = ' ';
-			image[x + y * sizeX].color = 0x000F;
+			//image[x + y * sizeX].chr = ' ';
+			//image[x + y * sizeX].color = 0x000F;
+			if (x == sizeX / 2 && y == sizeY / 2)
+			{
+				image[x + y * sizeX].chr = '@';
+				image[x + y * sizeX].color = 0x000F;
+			}
+			else if (x - sizeX / 2 + player.x >= 0 && x - sizeX / 2 + player.x < mapSizeX &&
+				     y - sizeY / 2 - player.y >= 0 && y - sizeY / 2 - player.y < mapSizeY)
+			{
+				image[x + y * sizeX].chr =   charMap [(x - sizeX / 2 + player.x) + (y - sizeY / 2 - player.y) * mapSizeX];
+				image[x + y * sizeX].color = colorMap[(x - sizeX / 2 + player.x) + (y - sizeY / 2 - player.y) * mapSizeX];
+			}
+			else
+			{
+				image[x + y * sizeX].chr = ' ';
+				image[x + y * sizeX].color = 0x000F;
+			}
 		}
 	}
 
 	//Add images from elements
-	for (int i = 0; i < maxElms; ++i)
+	/*for (int i = 0; i < maxElms; ++i)
 	{
+
 		if (elements[i].exists && elmDat[elements[i].elementData].visible)
 		{
 			if (elmDat[elements[i].elementData].imgRenderer != NULL)
@@ -90,9 +133,9 @@ void GameScreen::makeImage()
 				}
 			}
 		}
-	}
+	}*/
 
-	image[player.x + (sizeY - 1 - player.y) * sizeX].chr = '@';
-	image[player.x + (sizeY - 1 - player.y) * sizeX].color = 0x000F;
+	//image[player.x + (sizeY - 1 - player.y) * sizeX].chr = '@';
+	//image[player.x + (sizeY - 1 - player.y) * sizeX].color = 0x000F;
 }
 

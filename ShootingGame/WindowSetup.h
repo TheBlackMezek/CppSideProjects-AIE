@@ -4,8 +4,8 @@
 #include <windows.h>
 
 
-const int WIN_WIDTH = 100;
-const int WIN_HEIGHT = 50;
+const int WIN_WIDTH = 101;
+const int WIN_HEIGHT = 51;
 
 //Each CHAR_INFO contains data for a single character: its ASCII char and color
 extern CHAR_INFO consoleBuffer[];
