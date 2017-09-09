@@ -32,6 +32,10 @@ GameScreen::GameScreen(int winx, int winy, int mapx, int mapy)
 	{
 		charPhys[i] = false;
 	}
+	for (int i = 0; i < 256; ++i)
+	{
+		charLights[i] = 0;
+	}
 
 	player = Player();
 	
@@ -54,7 +58,7 @@ GameScreen::GameScreen(int winx, int winy, int mapx, int mapy)
 	lightMap = std::vector<int>(mapx * mapy);
 	for (int i = 0; i < mapx * mapy; ++i)
 	{
-		lightMap[i] = 1;
+		lightMap[i] = 0;
 	}
 	physMap = std::vector<bool>(mapx * mapy);
 	for (int i = 0; i < mapx * mapy; ++i)
@@ -108,6 +112,8 @@ void GameScreen::makeImage()
 	image = std::vector<CharData>();
 	image.resize(sizeX * sizeY);
 	char ap = ' ';
+
+	makeLight();
 
 	for (int y = 0; y < mapSizeY; ++y)
 	{
@@ -196,7 +202,7 @@ void GameScreen::loadMap(char name[])
 	file.open(name);
 
 	std::string line;
-	//Get color and physics data
+	//Get color, physics and light data
 	std::getline(file, line);
 	for (int i = 0; i < line.size(); i += 5)
 	{
@@ -206,6 +212,17 @@ void GameScreen::loadMap(char name[])
 	for (int i = 0; i < line.size(); i += 4)
 	{
 		charPhys[line[i]] = std::stoi(line.substr(i + 2, 1));
+	}
+	std::getline(file, line);
+	for (int i = 0; i < line.size(); i += 0)
+	{
+		int numEnd = line.find(' ', i+2);
+		charLights[line[i]] = std::stoi(line.substr(i + 2, line.size() - numEnd - 1));
+		i += numEnd - i + 1;
+		if (numEnd == line.npos)
+		{
+			break;
+		}
 	}
 
 	//Build map
@@ -249,4 +266,39 @@ void GameScreen::loadMap(char name[])
 	}
 
 	file.close();
+}
+
+
+void GameScreen::makeLight()
+{
+	for (int y = 0; y < mapSizeY; ++y)
+	{
+		for (int x = 0; x < mapSizeX; ++x)
+		{
+			lightMap[x + y * mapSizeX] = 0;
+		}
+	}
+
+	for (int y = 0; y < mapSizeY; ++y)
+	{
+		for (int x = 0; x < mapSizeX; ++x)
+		{
+
+			if (charLights[charMap[x + y * mapSizeX]] > 0)
+			{
+				int ls = charLights[charMap[x + y * mapSizeX]];
+				for (int yy = y - ls; yy <= y + ls; ++yy)
+				{
+					for (int xx = x - ls; xx <= x + ls; ++xx)
+					{
+						if (xx >= 0 && xx < mapSizeX && yy >= 0 && yy < mapSizeY)
+						{
+							lightMap[xx + yy * mapSizeX] = 1;
+						}
+					}
+				}
+			}
+
+		}
+	}
 }

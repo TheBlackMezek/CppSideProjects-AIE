@@ -20,6 +20,7 @@ public:
 	void update(int mouseX, int mouseY);
 	void makeImage();
 	void loadMap(char name[]);
+	void makeLight();
 private:
 	Player player;
 	int mapSizeX;
@@ -31,6 +32,7 @@ private:
 	std::vector<bool> physMap;
 	int charColors[256];
 	bool charPhys[256];
+	int charLights[256];
 };
 
 
