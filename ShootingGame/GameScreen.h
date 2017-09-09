@@ -27,6 +27,7 @@ private:
 	std::vector<char> charMap;
 	std::vector<int> colorMap;
 	std::vector<int> lightMap;
+	std::vector<bool> physMap;
 	int charColors[256];
 };
 

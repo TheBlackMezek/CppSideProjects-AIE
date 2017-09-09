@@ -29,11 +29,12 @@ GameScreen::GameScreen(int winx, int winy, int mapx, int mapy)
 	player = Player();
 	
 	charColors['.'] = 0x000A;
+	charColors['W'] = 0x0088;
 
 	charMap = std::vector<char>(mapx * mapy);
 	for (int i = 0; i < mapx * mapy; ++i)
 	{
-		charMap[i] = rand() % 256;
+		charMap[i] = '.';
 	}
 	colorMap = std::vector<int>(mapx * mapy);
 	for (int i = 0; i < mapx * mapy; ++i)
@@ -45,6 +46,18 @@ GameScreen::GameScreen(int winx, int winy, int mapx, int mapy)
 	{
 		lightMap[i] = 1;
 	}
+	physMap = std::vector<bool>(mapx * mapy);
+	for (int i = 0; i < mapx * mapy; ++i)
+	{
+		physMap[i] = false;
+	}
+	
+	for (int i = 0; i < 10; ++i)
+	{
+		charMap[i + 10 + 10 * mapx] = 'W';
+		physMap[i + 10 + 10 * mapx] = true;
+	}
+	
 }
 
 
@@ -57,19 +70,19 @@ void GameScreen::update(int mouseX, int mouseY)
 {
 	Screen::update(mouseX, mouseY);
 
-	if (UP)
+	if (UP && player.y + 1 < mapSizeY && physMap[player.x + (player.y + 1) * mapSizeX] == false)
 	{
 		++player.y;
 	}
-	if (DOWN)
+	if (DOWN && player.y - 1 >= 0 && physMap[player.x + (player.y - 1) * mapSizeX] == false)
 	{
 		--player.y;
 	}
-	if (RIGHT)
+	if (RIGHT && player.x + 1 < mapSizeX && physMap[player.x + 1 + player.y * mapSizeX] == false)
 	{
 		++player.x;
 	}
-	if (LEFT)
+	if (LEFT && player.x - 1 >= 0 && physMap[player.x - 1 + player.y * mapSizeX] == false)
 	{
 		--player.x;
 	}
@@ -112,15 +125,15 @@ void GameScreen::makeImage()
 				image[x + y * sizeX].color = 0x000F;
 			}
 			else if (x - sizeX / 2 + player.x >= 0 && x - sizeX / 2 + player.x < mapSizeX &&
-				     y - sizeY / 2 - player.y >= 0 && y - sizeY / 2 - player.y < mapSizeY)
+				     y - sizeY / 2 + player.y >= 0 && y - sizeY / 2 + player.y < mapSizeY)
 			{
-				image[x + y * sizeX].chr =   charMap [(x - sizeX / 2 + player.x) + (y - sizeY / 2 - player.y) * mapSizeX];
-				image[x + y * sizeX].color = colorMap[(x - sizeX / 2 + player.x) + (y - sizeY / 2 - player.y) * mapSizeX];
+				image[x + (sizeY - 1 - y) * sizeX].chr =   charMap [(x - sizeX / 2 + player.x) + (y - sizeY / 2 + player.y) * mapSizeX];
+				image[x + (sizeY - 1 - y) * sizeX].color = colorMap[(x - sizeX / 2 + player.x) + (y - sizeY / 2 + player.y) * mapSizeX];
 			}
 			else
 			{
-				image[x + y * sizeX].chr = ' ';
-				image[x + y * sizeX].color = 0x000F;
+				image[x + (sizeY - 1 - y) * sizeX].chr = ' ';
+				image[x + (sizeY - 1 - y) * sizeX].color = 0x000F;
 			}
 		}
 	}

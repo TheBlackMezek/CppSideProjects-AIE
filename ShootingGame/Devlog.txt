@@ -27,3 +27,8 @@ Finished quickly thanks to copying most of the code
 Goals:
 Make render map: char, color, light
 Render map around player
+Report:
+Started around 9:00, finished 10:50
+Finished quickly because it was just making and implementing a few arrays
+Extra goal: Collision map
+Finished 11:20
