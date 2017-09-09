@@ -8,6 +8,10 @@
 
 GameScreen::GameScreen()
 {
+	for (int i = 0; i < 256; ++i)
+	{
+		charColors[i] = 0x000F;
+	}
 	player = Player();
 }
 
@@ -18,22 +22,28 @@ GameScreen::GameScreen(int winx, int winy, int mapx, int mapy)
 	mapSizeX = mapx;
 	mapSizeY = mapy;
 
+	for (int i = 0; i < 256; ++i)
+	{
+		charColors[i] = rand() % 16;
+	}
 	player = Player();
 	
+	charColors['.'] = 0x000A;
+
 	charMap = std::vector<char>(mapx * mapy);
 	for (int i = 0; i < mapx * mapy; ++i)
 	{
-		charMap[i] = '.';
+		charMap[i] = rand() % 256;
 	}
 	colorMap = std::vector<int>(mapx * mapy);
 	for (int i = 0; i < mapx * mapy; ++i)
 	{
-		colorMap[i] = 0x000F;
+		colorMap[i] = 0;
 	}
 	lightMap = std::vector<int>(mapx * mapy);
 	for (int i = 0; i < mapx * mapy; ++i)
 	{
-		lightMap[i] = 0;
+		lightMap[i] = 1;
 	}
 }
 
@@ -73,6 +83,21 @@ void GameScreen::makeImage()
 	image = std::vector<CharData>();
 	image.resize(sizeX * sizeY);
 	char ap = ' ';
+
+	for (int y = 0; y < mapSizeY; ++y)
+	{
+		for (int x = 0; x < mapSizeX; ++x)
+		{
+			if (lightMap[x + y * mapSizeX] > 0)
+			{
+				colorMap[x + y * mapSizeX] = charColors[charMap[x + y * mapSizeX]];
+			}
+			else
+			{
+				colorMap[x + y * mapSizeX] = 0x0000;
+			}
+		}
+	}
 
 	//Make an empty image first, of the correct size
 	for (int y = 0; y < sizeY; ++y)
