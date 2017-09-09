@@ -37,3 +37,5 @@ Finished 11:20
 
 Afternoon goals:
 Load charmap from txt file
+Report:
+Started around 12:30, finished about 1:40

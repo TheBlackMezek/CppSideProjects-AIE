@@ -195,8 +195,21 @@ void GameScreen::loadMap(char name[])
 	std::fstream file;
 	file.open(name);
 
-	std::string text;
 	std::string line;
+	//Get color and physics data
+	std::getline(file, line);
+	for (int i = 0; i < line.size(); i += 5)
+	{
+		charColors[line[i]] = std::stoi(line.substr(i + 2, 2), nullptr, 16);
+	}
+	std::getline(file, line);
+	for (int i = 0; i < line.size(); i += 4)
+	{
+		charPhys[line[i]] = std::stoi(line.substr(i + 2, 1));
+	}
+
+	//Build map
+	std::string text;
 	int lineCount = 0;
 	while (std::getline(file, line))
 	{
