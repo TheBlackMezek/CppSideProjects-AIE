@@ -26,12 +26,20 @@ GameScreen::GameScreen(int winx, int winy, int mapx, int mapy)
 
 	for (int i = 0; i < 256; ++i)
 	{
-		charColors[i] = rand() % 16;
+		charColors[i] = 0x000F;
 	}
+	for (int i = 0; i < 256; ++i)
+	{
+		charPhys[i] = false;
+	}
+
 	player = Player();
 	
 	charColors['.'] = 0x000A;
 	charColors['W'] = 0x0088;
+	charPhys['W'] = true;
+
+
 
 	charMap = std::vector<char>(mapx * mapy);
 	for (int i = 0; i < mapx * mapy; ++i)
@@ -219,6 +227,10 @@ void GameScreen::loadMap(char name[])
 			else
 			{
 				charMap[x + (mapSizeY - 1 - y) * mapSizeX] = text[x + y * mapSizeX];
+				if (charPhys[text[x + y * mapSizeX]])
+				{
+					physMap[x + (mapSizeY - 1 - y) * mapSizeX] = true;
+				}
 			}
 		}
 	}

@@ -30,6 +30,7 @@ private:
 	std::vector<int> lightMap;
 	std::vector<bool> physMap;
 	int charColors[256];
+	bool charPhys[256];
 };
 
 
