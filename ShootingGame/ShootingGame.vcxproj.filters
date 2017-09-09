@@ -24,6 +24,9 @@
     <Text Include="Devlog.txt">
       <Filter>Resource Files</Filter>
     </Text>
+    <Text Include="map.txt">
+      <Filter>Resource Files</Filter>
+    </Text>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">

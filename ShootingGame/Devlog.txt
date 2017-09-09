@@ -23,6 +23,8 @@ Report:
 Started around 9:00, finished 12:15
 Finished quickly thanks to copying most of the code
 
+
+
 2017-9-9
 Goals:
 Make render map: char, color, light
@@ -32,3 +34,6 @@ Started around 9:00, finished 10:50
 Finished quickly because it was just making and implementing a few arrays
 Extra goal: Collision map
 Finished 11:20
+
+Afternoon goals:
+Load charmap from txt file

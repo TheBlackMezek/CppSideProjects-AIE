@@ -19,6 +19,7 @@ public:
 
 	void update(int mouseX, int mouseY);
 	void makeImage();
+	void loadMap(char name[]);
 private:
 	Player player;
 	int mapSizeX;

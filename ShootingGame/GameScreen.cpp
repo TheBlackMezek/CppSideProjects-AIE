@@ -1,5 +1,7 @@
 #include "GameScreen.h"
 
+#include <fstream>
+#include <string>
 
 #include "InputGetter.h"
 #include "Player.h"
@@ -57,6 +59,8 @@ GameScreen::GameScreen(int winx, int winy, int mapx, int mapy)
 		charMap[i + 10 + 10 * mapx] = 'W';
 		physMap[i + 10 + 10 * mapx] = true;
 	}
+
+	loadMap("map.txt");
 	
 }
 
@@ -177,3 +181,47 @@ void GameScreen::makeImage()
 	//image[player.x + (sizeY - 1 - player.y) * sizeX].color = 0x000F;
 }
 
+
+void GameScreen::loadMap(char name[])
+{
+	std::fstream file;
+	file.open(name);
+
+	std::string text;
+	std::string line;
+	int lineCount = 0;
+	while (std::getline(file, line))
+	{
+		if (line.at(line.size() - 1) == '\n')
+		{
+			line.erase(line.end());
+		}
+		text.append(line);
+		++lineCount;
+	}
+
+	mapSizeX = line.size();
+	mapSizeY = lineCount;
+
+	charMap.clear();
+	charMap.resize(mapSizeX * mapSizeY);
+
+	for (int y = 0; y < mapSizeY; ++y)
+	{
+		for (int x = 0; x < mapSizeX; ++x)
+		{
+			if (text[x + y * mapSizeX] == '@')
+			{
+				charMap[x + (mapSizeY - 1 - y) * mapSizeX] = '.';
+				player.x = x;
+				player.y = (mapSizeY - 1 - y);
+			}
+			else
+			{
+				charMap[x + (mapSizeY - 1 - y) * mapSizeX] = text[x + y * mapSizeX];
+			}
+		}
+	}
+
+	file.close();
+}
