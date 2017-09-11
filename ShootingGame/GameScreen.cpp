@@ -44,6 +44,8 @@ GameScreen::GameScreen(int winx, int winy, int mapx, int mapy)
 	charPhys['W'] = true;
 
 
+	entities = std::vector<GameEntity>();
+
 
 	charMap = std::vector<char>(mapx * mapy);
 	for (int i = 0; i < mapx * mapy; ++i)
@@ -128,6 +130,11 @@ void GameScreen::makeImage()
 				colorMap[x + y * mapSizeX] = 0x0000;
 			}
 		}
+	}
+
+	for (int i = 0; i < entities.size(); ++i)
+	{
+		charMap[entities[i].x + (mapSizeY - entities[i].y) * mapSizeX] = entities[i].icon;
 	}
 
 	//Make an empty image first, of the correct size
@@ -253,6 +260,11 @@ void GameScreen::loadMap(char name[])
 				charMap[x + (mapSizeY - 1 - y) * mapSizeX] = '.';
 				player.x = x;
 				player.y = (mapSizeY - 1 - y);
+			}
+			else if (text[x + y * mapSizeX] == '&')
+			{
+				charMap[x + (mapSizeY - 1 - y) * mapSizeX] = '.';
+				entities.push_back(GameEntity('&', x, y, &player, &physMap));
 			}
 			else
 			{

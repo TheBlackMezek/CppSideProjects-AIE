@@ -115,6 +115,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="DataMaker.cpp" />
+    <ClCompile Include="GameEntity.cpp" />
     <ClCompile Include="GameScreen.cpp" />
     <ClCompile Include="GameScreens.cpp" />
     <ClCompile Include="ImageMaker.cpp" />
@@ -127,6 +128,7 @@
   <ItemGroup>
     <ClInclude Include="DataMaker.h" />
     <ClInclude Include="ElementStructs.h" />
+    <ClInclude Include="GameEntity.h" />
     <ClInclude Include="GameScreen.h" />
     <ClInclude Include="GameScreens.h" />
     <ClInclude Include="ImageMaker.h" />
