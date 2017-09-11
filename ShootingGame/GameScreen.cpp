@@ -68,11 +68,7 @@ GameScreen::GameScreen(int winx, int winy, int mapx, int mapy)
 		physMap[i] = false;
 	}
 	
-	for (int i = 0; i < 10; ++i)
-	{
-		charMap[i + 10 + 10 * mapx] = 'W';
-		physMap[i + 10 + 10 * mapx] = true;
-	}
+	
 
 	loadMap("map.txt");
 	
@@ -103,6 +99,11 @@ void GameScreen::update(int mouseX, int mouseY)
 	if (LEFT && player.x - 1 >= 0 && physMap[player.x - 1 + player.y * mapSizeX] == false)
 	{
 		--player.x;
+	}
+
+	for (int i = 0; i < entities.size(); ++i)
+	{
+		entities[i].update();
 	}
 
 	makeImage();
@@ -264,7 +265,7 @@ void GameScreen::loadMap(char name[])
 			else if (text[x + y * mapSizeX] == '&')
 			{
 				charMap[x + (mapSizeY - 1 - y) * mapSizeX] = '.';
-				entities.push_back(GameEntity('&', x, y, &player, &physMap));
+				entities.push_back(GameEntity('&', x, y, &player, &physMap, mapSizeX, mapSizeY));
 			}
 			else
 			{
