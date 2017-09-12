@@ -332,6 +332,20 @@ void GameScreen::makeLight()
 					}
 				}
 			}
+			else if (gunLightFrames > 0 && y == player.y && x == player.x)
+			{
+				int ls = 3;
+				for (int yy = y - ls; yy <= y + ls; ++yy)
+				{
+					for (int xx = x - ls; xx <= x + ls; ++xx)
+					{
+						if (xx >= 0 && xx < mapSizeX && yy >= 0 && yy < mapSizeY)
+						{
+							lightMap[xx + yy * mapSizeX] = 1;
+						}
+					}
+				}
+			}
 
 		}
 	}

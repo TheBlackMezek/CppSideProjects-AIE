@@ -25,6 +25,8 @@ extern bool rdown;
 extern bool rclickswitch;
 extern bool shouldExit;
 
+extern int gunLightFrames;
+
 extern bool UP;
 extern bool DOWN;
 extern bool LEFT;
