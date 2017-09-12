@@ -9,6 +9,7 @@
 #include "Bullet.h"
 #include "LightSpot.h"
 #include "Enemy.h"
+#include "EnemySpawner.h"
 
 
 GameScreen::GameScreen()
@@ -102,7 +103,6 @@ void GameScreen::update(int mouseX, int mouseY)
 
 		LightSpot* l = new LightSpot('{', player.x, player.y, &player, &physMap, &entities, mapSizeX, mapSizeY);
 		l->vel.x = 10;
-		l->visible = false;
 		entities.push_back(l);
 	}
 
@@ -324,7 +324,7 @@ void GameScreen::loadMap(char name[])
 			{
 
 				charMap[x + (mapSizeY - 1 - y) * mapSizeX] = '.';
-				Enemy* en = new Enemy('&', x, y, &player, &physMap, &entities, mapSizeX, mapSizeY);
+				EnemySpawner* en = new EnemySpawner('{', x, y, &player, &physMap, &entities, mapSizeX, mapSizeY);
 				
 				entities.push_back(en);
 			}
