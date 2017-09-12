@@ -166,6 +166,10 @@ void GameScreen::makeImage()
 	for (int i = 0; i < entities.size(); ++i)
 	{
 		image[(entities[i]->x + sizeX / 2 - player.x) + (sizeY - 1 - (entities[i]->y + sizeY / 2 - player.y)) * sizeX].chr = entities[i]->icon;
+		if (colorMap[entities[i]->x + entities[i]->y * mapSizeX] > 0)
+		{
+			image[(entities[i]->x + sizeX / 2 - player.x) + (sizeY - 1 - (entities[i]->y + sizeY / 2 - player.y)) * sizeX].color = 0x000F;
+		}
 	}
 
 	//Add images from elements
