@@ -17,7 +17,6 @@ bool rdown = false;
 bool rclickswitch = false;
 bool shouldExit = false;
 
-int gunLightFrames = 0;
 
 bool UP = false;
 bool DOWN = false;
@@ -48,7 +47,6 @@ DWORD getInput(INPUT_RECORD **evB)
 
 void checkInput()
 {
-	if (gunLightFrames > 0) { --gunLightFrames; }
 
 	numEventsRead = getInput(&eventBuffer);
 
@@ -94,7 +92,6 @@ void checkInput()
 					{
 						lclickswitch = true;
 						lclick = true;
-						gunLightFrames = 10;
 					}
 				}
 				else

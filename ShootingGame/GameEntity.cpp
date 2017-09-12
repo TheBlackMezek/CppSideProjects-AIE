@@ -7,6 +7,7 @@ GameEntity::GameEntity(char ic, int xx, int yy, Player* p, std::vector<bool>* m,
 	alive = true;
 
 	icon = ic;
+	visible = true;
 	x = xx;
 	y = yy;
 	//vel = Vec2(0, 0);

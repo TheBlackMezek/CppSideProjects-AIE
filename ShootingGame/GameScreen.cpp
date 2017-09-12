@@ -7,6 +7,7 @@
 #include "Player.h"
 #include "ImageMaker.h"
 #include "Bullet.h"
+#include "LightSpot.h"
 
 
 GameScreen::GameScreen()
@@ -97,6 +98,11 @@ void GameScreen::update(int mouseX, int mouseY)
 		b->vel.y = vecy;
 		b->vel.unit();
 		entities.push_back(b);
+
+		LightSpot* l = new LightSpot('{', player.x, player.y, &player, &physMap, &entities, mapSizeX, mapSizeY);
+		l->vel.x = 10;
+		l->visible = false;
+		entities.push_back(l);
 	}
 
 	if (UP && player.y + 1 < mapSizeY && physMap[player.x + (player.y + 1) * mapSizeX] == false)
@@ -195,7 +201,7 @@ void GameScreen::makeImage()
 	for (int i = 0; i < entities.size(); ++i)
 	{
 		int imgpos = ((int)entities[i]->x + sizeX / 2 - player.x) + (sizeY - 1 - ((int)entities[i]->y + sizeY / 2 - player.y)) * sizeX;
-		if (imgpos < image.size() && imgpos > 0)
+		if (entities[i]->visible && imgpos < image.size() && imgpos > 0)
 		{
 			image[imgpos].chr = entities[i]->icon;
 			if (colorMap[(int)entities[i]->x + (int)entities[i]->y * mapSizeX] > 0)
@@ -365,7 +371,7 @@ void GameScreen::makeLight()
 					}
 				}
 			}
-			else if (gunLightFrames > 0 && y == player.y && x == player.x)
+			/*else if (gunLightFrames > 0 && y == player.y && x == player.x)
 			{
 				int ls = 9;
 				for (int yy = y - ls; yy <= y + ls; ++yy)
@@ -378,8 +384,28 @@ void GameScreen::makeLight()
 						}
 					}
 				}
-			}
+			}*/
 
+		}
+	}
+
+	for (int i = 0; i < entities.size(); ++i)
+	{
+		if (entities[i]->icon == '{')
+		{
+			int ls = 9;
+			int x = entities[i]->x;
+			int y = entities[i]->y;
+			for (int yy = y - ls; yy <= y + ls; ++yy)
+			{
+				for (int xx = x - ls; xx <= x + ls; ++xx)
+				{
+					if (xx >= 0 && xx < mapSizeX && yy >= 0 && yy < mapSizeY)
+					{
+						lightMap[xx + yy * mapSizeX] = 1;
+					}
+				}
+			}
 		}
 	}
 }

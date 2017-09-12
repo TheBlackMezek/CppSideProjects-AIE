@@ -16,6 +16,7 @@ public:
 	bool alive;
 
 	char icon;
+	bool visible;
 	float x;
 	float y;
 	Vec2 vel;

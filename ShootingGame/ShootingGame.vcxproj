@@ -121,6 +121,7 @@
     <ClCompile Include="GameScreens.cpp" />
     <ClCompile Include="ImageMaker.cpp" />
     <ClCompile Include="InputGetter.cpp" />
+    <ClCompile Include="LightSpot.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Player.cpp" />
     <ClCompile Include="Screen.cpp" />
@@ -136,6 +137,7 @@
     <ClInclude Include="GameScreens.h" />
     <ClInclude Include="ImageMaker.h" />
     <ClInclude Include="InputGetter.h" />
+    <ClInclude Include="LightSpot.h" />
     <ClInclude Include="Player.h" />
     <ClInclude Include="Screen.h" />
     <ClInclude Include="Vec2.h" />
