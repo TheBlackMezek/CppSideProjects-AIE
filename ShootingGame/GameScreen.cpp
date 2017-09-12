@@ -122,6 +122,7 @@ void GameScreen::makeImage()
 
 	makeLight();
 
+	//Make an empty image first, of the correct size
 	for (int y = 0; y < mapSizeY; ++y)
 	{
 		for (int x = 0; x < mapSizeX; ++x)
@@ -137,12 +138,6 @@ void GameScreen::makeImage()
 		}
 	}
 
-	for (int i = 0; i < entities.size(); ++i)
-	{
-		charMap[entities[i]->x + (mapSizeY - entities[i]->y) * mapSizeX] = entities[i]->icon;
-	}
-
-	//Make an empty image first, of the correct size
 	for (int y = 0; y < sizeY; ++y)
 	{
 		for (int x = 0; x < sizeX; ++x)
@@ -166,6 +161,11 @@ void GameScreen::makeImage()
 				image[x + (sizeY - 1 - y) * sizeX].color = 0x000F;
 			}
 		}
+	}
+
+	for (int i = 0; i < entities.size(); ++i)
+	{
+		image[(entities[i]->x + sizeX / 2 - player.x) + (sizeY - 1 - (entities[i]->y + sizeY / 2 - player.y)) * sizeX].chr = entities[i]->icon;
 	}
 
 	//Add images from elements
