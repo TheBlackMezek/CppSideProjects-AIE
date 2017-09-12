@@ -8,7 +8,7 @@
 INPUT_RECORD* eventBuffer;
 DWORD numEventsRead;
 
-vec2 mouse{ 0, 0 };
+Vec2 mouse( 0, 0 );
 bool lclick = false;
 bool ldown = false;
 bool lclickswitch = false;

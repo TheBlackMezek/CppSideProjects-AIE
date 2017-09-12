@@ -1,6 +1,7 @@
 
 
 #include <iostream>
+//#include <Windows.h>
 
 //#include "structs.h"
 #include "WindowSetup.h"
@@ -80,7 +81,7 @@ int main()
 		renderWindow();
 
 
-		
+		Sleep(100);
 	}
 
 	delete screen;

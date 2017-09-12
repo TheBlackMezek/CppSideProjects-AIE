@@ -6,6 +6,7 @@
 #include "InputGetter.h"
 #include "Player.h"
 #include "ImageMaker.h"
+#include "Bullet.h"
 
 
 GameScreen::GameScreen()
@@ -87,6 +88,16 @@ GameScreen::~GameScreen()
 void GameScreen::update(int mouseX, int mouseY)
 {
 	//Screen::update(mouseX, mouseY);
+	if (lclick)
+	{
+		Bullet* b = new Bullet('*', player.x, player.y, &player, &physMap, &entities, mapSizeX, mapSizeY);
+		float vecx = mouse.x - (sizeX / 2);
+		float vecy = mouse.y - (sizeY / 2);
+		b->vel.x = vecx;
+		b->vel.y = vecy;
+		b->vel.unit();
+		entities.push_back(b);
+	}
 
 	if (UP && player.y + 1 < mapSizeY && physMap[player.x + (player.y + 1) * mapSizeX] == false)
 	{
@@ -105,12 +116,30 @@ void GameScreen::update(int mouseX, int mouseY)
 		--player.x;
 	}
 
-	for (int i = 0; i < entities.size(); ++i)
+	for (int i = entities.size()-1; i >= 0; --i)
 	{
-		entities[i]->update();
+		if (entities[i]->alive)
+		{
+			entities[i]->update();
+			if (entities[i]->x < 0 || entities[i]->x >= mapSizeX ||
+				entities[i]->y < 0 || entities[i]->y >= mapSizeY)
+			{
+				delete entities[i];
+				entities.erase(entities.begin() + i);
+			}
+		}
 	}
 
 	makeImage();
+
+	for (int i = entities.size() - 1; i >= 0; --i)
+	{
+		if (!entities[i]->alive)
+		{
+			delete entities[i];
+			entities.erase(entities.begin() + i);
+		}
+	}
 }
 
 
@@ -165,10 +194,10 @@ void GameScreen::makeImage()
 
 	for (int i = 0; i < entities.size(); ++i)
 	{
-		image[(entities[i]->x + sizeX / 2 - player.x) + (sizeY - 1 - (entities[i]->y + sizeY / 2 - player.y)) * sizeX].chr = entities[i]->icon;
-		if (colorMap[entities[i]->x + entities[i]->y * mapSizeX] > 0)
+		image[((int)entities[i]->x + sizeX / 2 - player.x) + (sizeY - 1 - ((int)entities[i]->y + sizeY / 2 - player.y)) * sizeX].chr = entities[i]->icon;
+		if (colorMap[(int)entities[i]->x + (int)entities[i]->y * mapSizeX] > 0)
 		{
-			image[(entities[i]->x + sizeX / 2 - player.x) + (sizeY - 1 - (entities[i]->y + sizeY / 2 - player.y)) * sizeX].color = 0x000F;
+			image[((int)entities[i]->x + sizeX / 2 - player.x) + (sizeY - 1 - ((int)entities[i]->y + sizeY / 2 - player.y)) * sizeX].color = 0x000F;
 		}
 	}
 
@@ -284,9 +313,9 @@ void GameScreen::loadMap(char name[])
 			{
 
 				charMap[x + (mapSizeY - 1 - y) * mapSizeX] = '.';
-				GameEntity* terry = new GameEntity('&', x, y, &player, &physMap, mapSizeX, mapSizeY);
+				GameEntity* ent = new GameEntity('&', x, y, &player, &physMap, &entities, mapSizeX, mapSizeY);
 				
-				entities.push_back(terry);
+				entities.push_back(ent);
 			}
 			else
 			{
