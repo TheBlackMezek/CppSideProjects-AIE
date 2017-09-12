@@ -6,7 +6,7 @@ GameEntity::GameEntity(char ic, int xx, int yy, Player* p, std::vector<bool>* m,
 {
 	icon = ic;
 	x = xx;
-	y = xx;
+	y = yy;
 	player = p;
 	mapsizex = mx;
 	mapsizey = my;
@@ -23,7 +23,7 @@ void GameEntity::update()
 {
 	//stay, up, down, right, left
 	int dir = rand() % 5;
-
+	
 	if (dir == 1 && y < mapsizey - 1 && physmap->at(x + (y + 1) * mapsizex) == false)
 	{
 		++y;

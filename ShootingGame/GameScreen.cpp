@@ -44,7 +44,7 @@ GameScreen::GameScreen(int winx, int winy, int mapx, int mapy)
 	charPhys['W'] = true;
 
 
-	entities = std::vector<GameEntity>();
+	entities = std::vector<GameEntity*>();
 
 
 	charMap = std::vector<char>(mapx * mapy);
@@ -71,18 +71,22 @@ GameScreen::GameScreen(int winx, int winy, int mapx, int mapy)
 	
 
 	loadMap("map.txt");
-	
+	player = player;
 }
 
 
 GameScreen::~GameScreen()
 {
+	for (int i = 0; i < entities.size(); ++i)
+	{
+		delete entities[i];
+	}
 }
 
 
 void GameScreen::update(int mouseX, int mouseY)
 {
-	Screen::update(mouseX, mouseY);
+	//Screen::update(mouseX, mouseY);
 
 	if (UP && player.y + 1 < mapSizeY && physMap[player.x + (player.y + 1) * mapSizeX] == false)
 	{
@@ -103,7 +107,7 @@ void GameScreen::update(int mouseX, int mouseY)
 
 	for (int i = 0; i < entities.size(); ++i)
 	{
-		entities[i].update();
+		entities[i]->update();
 	}
 
 	makeImage();
@@ -135,7 +139,7 @@ void GameScreen::makeImage()
 
 	for (int i = 0; i < entities.size(); ++i)
 	{
-		charMap[entities[i].x + (mapSizeY - entities[i].y) * mapSizeX] = entities[i].icon;
+		charMap[entities[i]->x + (mapSizeY - entities[i]->y) * mapSizeX] = entities[i]->icon;
 	}
 
 	//Make an empty image first, of the correct size
@@ -251,6 +255,16 @@ void GameScreen::loadMap(char name[])
 
 	charMap.clear();
 	charMap.resize(mapSizeX * mapSizeY);
+	physMap.clear();
+	physMap.resize(mapSizeX * mapSizeY);
+	for (int i = 0; i < mapSizeX * mapSizeY; ++i)
+	{
+		physMap[i] = false;
+	}
+	lightMap.clear();
+	lightMap.resize(mapSizeX * mapSizeY);
+	colorMap.clear();
+	colorMap.resize(mapSizeX * mapSizeY);
 
 	for (int y = 0; y < mapSizeY; ++y)
 	{
@@ -264,8 +278,11 @@ void GameScreen::loadMap(char name[])
 			}
 			else if (text[x + y * mapSizeX] == '&')
 			{
+
 				charMap[x + (mapSizeY - 1 - y) * mapSizeX] = '.';
-				entities.push_back(GameEntity('&', x, y, &player, &physMap, mapSizeX, mapSizeY));
+				GameEntity* terry = new GameEntity('&', x, y, &player, &physMap, mapSizeX, mapSizeY);
+				
+				entities.push_back(terry);
 			}
 			else
 			{

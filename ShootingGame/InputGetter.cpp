@@ -1,6 +1,7 @@
 
 #include "InputGetter.h"
 
+#include "GameScreens.h"
 
 
 
@@ -45,6 +46,8 @@ DWORD getInput(INPUT_RECORD **evB)
 
 void checkInput()
 {
+	
+
 	numEventsRead = getInput(&eventBuffer);
 
 	ldown = false;

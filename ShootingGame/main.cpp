@@ -49,7 +49,7 @@ int main()
 	//initGalaxy();
 	Player();
 
-
+	
 
 
 	printf("Welcome to Space Trader!\n");
@@ -73,7 +73,7 @@ int main()
 	{
 		checkInput();
 
-		screen->update(mouse.x, WIN_HEIGHT - mouse.y);
+		gameScreen.update(mouse.x, WIN_HEIGHT - mouse.y);
 
 
 
@@ -83,7 +83,7 @@ int main()
 		
 	}
 
-
+	delete screen;
 
 	return 0;
 }

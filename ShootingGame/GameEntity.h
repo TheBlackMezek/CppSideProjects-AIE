@@ -17,8 +17,8 @@ public:
 	int y;
 	Player* player;
 	int mapsizex;
-	int mapsizey;
 	std::vector<bool>* physmap;
+	int mapsizey;
 
 	GameEntity(char ic, int xx, int yy, Player* p, std::vector<bool>* m, int mx, int my);
 	~GameEntity();
