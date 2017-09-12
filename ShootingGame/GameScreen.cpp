@@ -8,6 +8,7 @@
 #include "ImageMaker.h"
 #include "Bullet.h"
 #include "LightSpot.h"
+#include "Enemy.h"
 
 
 GameScreen::GameScreen()
@@ -323,9 +324,9 @@ void GameScreen::loadMap(char name[])
 			{
 
 				charMap[x + (mapSizeY - 1 - y) * mapSizeX] = '.';
-				GameEntity* ent = new GameEntity('&', x, y, &player, &physMap, &entities, mapSizeX, mapSizeY);
+				Enemy* en = new Enemy('&', x, y, &player, &physMap, &entities, mapSizeX, mapSizeY);
 				
-				entities.push_back(ent);
+				entities.push_back(en);
 			}
 			else
 			{

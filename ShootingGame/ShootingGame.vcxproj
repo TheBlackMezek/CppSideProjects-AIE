@@ -116,6 +116,7 @@
   <ItemGroup>
     <ClCompile Include="Bullet.cpp" />
     <ClCompile Include="DataMaker.cpp" />
+    <ClCompile Include="Enemy.cpp" />
     <ClCompile Include="GameEntity.cpp" />
     <ClCompile Include="GameScreen.cpp" />
     <ClCompile Include="GameScreens.cpp" />
@@ -132,6 +133,7 @@
     <ClInclude Include="Bullet.h" />
     <ClInclude Include="DataMaker.h" />
     <ClInclude Include="ElementStructs.h" />
+    <ClInclude Include="Enemy.h" />
     <ClInclude Include="GameEntity.h" />
     <ClInclude Include="GameScreen.h" />
     <ClInclude Include="GameScreens.h" />
