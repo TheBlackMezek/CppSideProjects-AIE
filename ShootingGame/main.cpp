@@ -81,7 +81,7 @@ int main()
 		renderWindow();
 
 
-		//Sleep(100);
+		Sleep(10);
 	}
 
 	delete screen;

@@ -25,13 +25,28 @@ Vec2::~Vec2()
 
 float Vec2::mag()
 {
-	return sqrt(x * x + y * y);
+	/*if (x == 0 && y == 0)
+	{
+		return 0;
+	}
+	else
+	{*/
+		return sqrt(x * x + y * y);
+	//}
 }
 
 void Vec2::unit()
 {
 	float m = mag();
 
-	x /= m;
-	y /= m;
+	if (m == 0)
+	{
+		x = 0;
+		y = 0;
+	}
+	else
+	{
+		x /= m;
+		y /= m;
+	}
 }
