@@ -19,7 +19,11 @@ void Bullet::update()
 	x += vel.x;
 	y += vel.y;
 
-	if (physmap->at((int)x + (int)y * mapsizex) == true)
+	if (x < 0 || x > mapsizex - 1 || y < 0 || y > mapsizey - 1)
+	{
+		alive = false;
+	}
+	else if (physmap->at((int)x + (int)y * mapsizex) == true)
 	{
 		alive = false;
 	}

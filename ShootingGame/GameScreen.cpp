@@ -130,8 +130,6 @@ void GameScreen::update(int mouseX, int mouseY)
 		}
 	}
 
-	makeImage();
-
 	for (int i = entities.size() - 1; i >= 0; --i)
 	{
 		if (!entities[i]->alive)
@@ -140,6 +138,8 @@ void GameScreen::update(int mouseX, int mouseY)
 			entities.erase(entities.begin() + i);
 		}
 	}
+
+	makeImage();
 }
 
 
@@ -194,13 +194,17 @@ void GameScreen::makeImage()
 
 	for (int i = 0; i < entities.size(); ++i)
 	{
-		image[((int)entities[i]->x + sizeX / 2 - player.x) + (sizeY - 1 - ((int)entities[i]->y + sizeY / 2 - player.y)) * sizeX].chr = entities[i]->icon;
-		if (colorMap[(int)entities[i]->x + (int)entities[i]->y * mapSizeX] > 0)
+		int imgpos = ((int)entities[i]->x + sizeX / 2 - player.x) + (sizeY - 1 - ((int)entities[i]->y + sizeY / 2 - player.y)) * sizeX;
+		if (imgpos < image.size() && imgpos > 0)
 		{
-			image[((int)entities[i]->x + sizeX / 2 - player.x) + (sizeY - 1 - ((int)entities[i]->y + sizeY / 2 - player.y)) * sizeX].color = 0x000F;
+			image[imgpos].chr = entities[i]->icon;
+			if (colorMap[(int)entities[i]->x + (int)entities[i]->y * mapSizeX] > 0)
+			{
+				image[((int)entities[i]->x + sizeX / 2 - player.x) + (sizeY - 1 - ((int)entities[i]->y + sizeY / 2 - player.y)) * sizeX].color = 0x000F;
+			}
 		}
 	}
-
+	
 	//Add images from elements
 	/*for (int i = 0; i < maxElms; ++i)
 	{
@@ -363,7 +367,7 @@ void GameScreen::makeLight()
 			}
 			else if (gunLightFrames > 0 && y == player.y && x == player.x)
 			{
-				int ls = 3;
+				int ls = 9;
 				for (int yy = y - ls; yy <= y + ls; ++yy)
 				{
 					for (int xx = x - ls; xx <= x + ls; ++xx)
