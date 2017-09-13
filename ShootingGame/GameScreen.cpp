@@ -338,7 +338,7 @@ void GameScreen::loadMap(char name[])
 			{
 
 				charMap[x + (mapSizeY - 1 - y) * mapSizeX] = '.';
-				EnemySpawner* en = new EnemySpawner(x, y, &player, &physMap, &entities, mapSizeX, mapSizeY);
+				EnemySpawner* en = new EnemySpawner(x, (mapSizeY - 1 - y), &player, &physMap, &entities, mapSizeX, mapSizeY);
 				
 				entities.push_back(en);
 			}
