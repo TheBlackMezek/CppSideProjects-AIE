@@ -1,0 +1,9 @@
+
+My ideas:
+Time and killcounter at bottom of screen
+Slowly increase spawn rate
+
+
+
+Players:
+Ability to see spawners

@@ -111,6 +111,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <Text Include="Devlog.txt" />
+    <Text Include="Feedback.txt" />
     <Text Include="map.txt" />
   </ItemGroup>
   <ItemGroup>
