@@ -52,6 +52,8 @@ void checkInput()
 	rdown = false;
 	LEFT = RIGHT = UP = DOWN = false;
 
+	
+
 	if (numEventsRead)
 	{
 		for (int i = 0; i < numEventsRead; ++i)
@@ -95,6 +97,8 @@ void checkInput()
 				{
 					lclickswitch = false;
 				}
+
+				
 
 				//Right click
 				if (eventBuffer[i].Event.MouseEvent.dwButtonState == 0x0002)
