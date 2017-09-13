@@ -11,6 +11,8 @@ Player::Player()
 	y = 0;
 	gunCoolDown = 10;
 	gunHeat = 10;
+	walkCoolDown = 3;
+	walkHeat = 0;
 }
 
 
@@ -26,5 +28,11 @@ void Player::update()
 	if (gunHeat < 0)
 	{
 		gunHeat = 0;
+	}
+
+	--walkHeat;
+	if (walkHeat < 0)
+	{
+		walkHeat = 0;
 	}
 }

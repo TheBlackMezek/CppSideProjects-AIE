@@ -17,6 +17,9 @@ public:
 	int gunCoolDown;
 	int gunHeat;
 
+	int walkCoolDown;
+	int walkHeat;
+
 
 	void update();
 };

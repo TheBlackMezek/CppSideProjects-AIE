@@ -110,21 +110,28 @@ void GameScreen::update(int mouseX, int mouseY)
 		entities.push_back(l);
 	}
 
-	if (UP && player.y + 1 < mapSizeY && physMap[player.x + (player.y + 1) * mapSizeX] == false)
+	if (player.walkHeat == 0)
 	{
-		++player.y;
-	}
-	if (DOWN && player.y - 1 >= 0 && physMap[player.x + (player.y - 1) * mapSizeX] == false)
-	{
-		--player.y;
-	}
-	if (RIGHT && player.x + 1 < mapSizeX && physMap[player.x + 1 + player.y * mapSizeX] == false)
-	{
-		++player.x;
-	}
-	if (LEFT && player.x - 1 >= 0 && physMap[player.x - 1 + player.y * mapSizeX] == false)
-	{
-		--player.x;
+		if (UP && player.y + 1 < mapSizeY && physMap[player.x + (player.y + 1) * mapSizeX] == false)
+		{
+			player.walkHeat = player.walkCoolDown;
+			++player.y;
+		}
+		if (DOWN && player.y - 1 >= 0 && physMap[player.x + (player.y - 1) * mapSizeX] == false)
+		{
+			player.walkHeat = player.walkCoolDown;
+			--player.y;
+		}
+		if (RIGHT && player.x + 1 < mapSizeX && physMap[player.x + 1 + player.y * mapSizeX] == false)
+		{
+			player.walkHeat = player.walkCoolDown;
+			++player.x;
+		}
+		if (LEFT && player.x - 1 >= 0 && physMap[player.x - 1 + player.y * mapSizeX] == false)
+		{
+			player.walkHeat = player.walkCoolDown;
+			--player.x;
+		}
 	}
 
 	for (int i = entities.size()-1; i >= 0; --i)
