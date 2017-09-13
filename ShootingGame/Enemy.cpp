@@ -70,7 +70,7 @@ void Enemy::update()
 		y = mapsizey - 1;
 	}
 
-	if ((int)x == player->x && (int)y == player->y)
+	if (((int)x == player->x && (int)y == player->y) || vel.dist(x, y, player->x, player->y) < 1)
 	{
 		shouldExit = true;
 	}

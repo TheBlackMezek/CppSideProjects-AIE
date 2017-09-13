@@ -50,3 +50,18 @@ void Vec2::unit()
 		y /= m;
 	}
 }
+
+float Vec2::dist(Vec2 v)
+{
+	return sqrt(pow(x - v.x, 2) + pow(y - v.y, 2));
+}
+
+float Vec2::dist(float x1, float y1, float x2, float y2)
+{
+	return sqrt(pow(x1 - x2, 2) + pow(y1 - y2, 2));
+}
+
+float Vec2::dist(float x2, float y2)
+{
+	return sqrt(pow(x - x2, 2) + pow(y - y2, 2));
+}

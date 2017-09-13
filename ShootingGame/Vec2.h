@@ -22,6 +22,9 @@ public:
 
 	float mag();
 	void unit();
+	float dist(Vec2 v);
+	float dist(float x1, float y1, float x2, float y2);
+	float dist(float x2, float y2);
 };
 
 #endif
