@@ -106,7 +106,6 @@ void GameScreen::update(int mouseX, int mouseY)
 		entities.push_back(b);
 
 		LightSpot* l = new LightSpot('{', player.x, player.y, &player, &physMap, &entities, mapSizeX, mapSizeY);
-		l->vel.x = 10;
 		entities.push_back(l);
 	}
 
@@ -152,6 +151,10 @@ void GameScreen::update(int mouseX, int mouseY)
 	{
 		if (!entities[i]->alive)
 		{
+			if (entities[i]->icon == '&')
+			{
+				charMap[(int)entities[i]->x + (int)entities[i]->y * mapSizeX] = ',';
+			}
 			delete entities[i];
 			entities.erase(entities.begin() + i);
 		}

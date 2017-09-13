@@ -9,9 +9,9 @@ Player::Player()
 
 	x = 0;
 	y = 0;
-	gunCoolDown = 10;
+	gunCoolDown = 10 * 2;
 	gunHeat = 10;
-	walkCoolDown = 3;
+	walkCoolDown = 3 * 2;
 	walkHeat = 0;
 }
 

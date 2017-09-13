@@ -6,6 +6,7 @@ LightSpot::LightSpot(char ic, int xx, int yy, Player* p, std::vector<bool>* m, s
 	: GameEntity(ic, xx, yy, p, m, e, mx, my)
 {
 	visible = false;
+	vel.x = 10 * 2;
 }
 
 

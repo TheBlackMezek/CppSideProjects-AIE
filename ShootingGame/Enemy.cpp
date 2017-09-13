@@ -41,8 +41,8 @@ void Enemy::update()
 	vel.y = player->y - y;
 	vel.unit();
 
-	vel.x /= 10;
-	vel.y /= 10;
+	vel.x /= 10 * 2;
+	vel.y /= 10 * 2;
 
 	x += vel.x;
 	y += vel.y;
