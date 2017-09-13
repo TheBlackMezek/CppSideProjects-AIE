@@ -29,7 +29,7 @@ void EnemySpawner::update()
 
 		if (vel.y > 100)
 		{
-			--vel.y;
+			vel.y -= 10;
 		}
 
 		Enemy* e = new Enemy(x, y, player, physmap, entities, mapsizex, mapsizey);
