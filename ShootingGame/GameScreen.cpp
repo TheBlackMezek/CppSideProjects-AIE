@@ -91,8 +91,12 @@ GameScreen::~GameScreen()
 void GameScreen::update(int mouseX, int mouseY)
 {
 	//Screen::update(mouseX, mouseY);
-	if (lclick)
+	player.update();
+	//if (lclick)
+	if(ldown && player.gunHeat == 0)
 	{
+		player.gunHeat = player.gunCoolDown;
+
 		Bullet* b = new Bullet('*', player.x, player.y, &player, &physMap, &entities, mapSizeX, mapSizeY);
 		float vecx = mouse.x - (sizeX / 2);
 		float vecy = mouse.y - (sizeY / 2);

@@ -50,9 +50,9 @@ void checkInput()
 
 	numEventsRead = getInput(&eventBuffer);
 
-	ldown = false;
+	//ldown = false;
 	lclick = false;
-	rdown = false;
+	//rdown = false;
 	LEFT = RIGHT = UP = DOWN = false;
 
 	if (numEventsRead)
@@ -96,6 +96,7 @@ void checkInput()
 				}
 				else
 				{
+					ldown = false;
 					lclickswitch = false;
 				}
 
@@ -111,6 +112,7 @@ void checkInput()
 				}
 				else
 				{
+					rdown = false;
 					rclickswitch = false;
 				}
 
