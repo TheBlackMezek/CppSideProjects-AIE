@@ -53,7 +53,7 @@ void checkInput()
 	//ldown = false;
 	lclick = false;
 	//rdown = false;
-	LEFT = RIGHT = UP = DOWN = false;
+	//LEFT = RIGHT = UP = DOWN = false;
 
 	if (numEventsRead)
 	{
@@ -79,6 +79,24 @@ void checkInput()
 						break;
 					case 0x44: //D
 						RIGHT = true;
+						break;
+					}
+				}
+				else
+				{
+					switch (eventBuffer[i].Event.KeyEvent.wVirtualKeyCode)
+					{
+					case 0x57: //W
+						UP = false;
+						break;
+					case 0x41: //A
+						LEFT = false;
+						break;
+					case 0x53: //S
+						DOWN = false;
+						break;
+					case 0x44: //D
+						RIGHT = false;
 						break;
 					}
 				}
