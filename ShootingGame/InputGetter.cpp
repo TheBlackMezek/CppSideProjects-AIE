@@ -1,13 +1,14 @@
 
 #include "InputGetter.h"
 
+#include "GameScreens.h"
 
 
 
 INPUT_RECORD* eventBuffer;
 DWORD numEventsRead;
 
-vec2 mouse{ 0, 0 };
+Vec2 mouse( 0, 0 );
 bool lclick = false;
 bool ldown = false;
 bool lclickswitch = false;
@@ -15,6 +16,7 @@ bool rclick = false;
 bool rdown = false;
 bool rclickswitch = false;
 bool shouldExit = false;
+
 
 bool UP = false;
 bool DOWN = false;
@@ -45,12 +47,13 @@ DWORD getInput(INPUT_RECORD **evB)
 
 void checkInput()
 {
+
 	numEventsRead = getInput(&eventBuffer);
 
-	ldown = false;
+	//ldown = false;
 	lclick = false;
-	rdown = false;
-	LEFT = RIGHT = UP = DOWN = false;
+	//rdown = false;
+	//LEFT = RIGHT = UP = DOWN = false;
 
 	
 
@@ -81,6 +84,24 @@ void checkInput()
 						break;
 					}
 				}
+				else
+				{
+					switch (eventBuffer[i].Event.KeyEvent.wVirtualKeyCode)
+					{
+					case 0x57: //W
+						UP = false;
+						break;
+					case 0x41: //A
+						LEFT = false;
+						break;
+					case 0x53: //S
+						DOWN = false;
+						break;
+					case 0x44: //D
+						RIGHT = false;
+						break;
+					}
+				}
 				break;
 			case MOUSE_EVENT:
 				//Left click
@@ -95,6 +116,7 @@ void checkInput()
 				}
 				else
 				{
+					ldown = false;
 					lclickswitch = false;
 				}
 
@@ -112,6 +134,7 @@ void checkInput()
 				}
 				else
 				{
+					rdown = false;
 					rclickswitch = false;
 				}
 

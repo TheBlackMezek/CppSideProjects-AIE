@@ -13,6 +13,15 @@ public:
 
 	int x;
 	int y;
+
+	int gunCoolDown;
+	int gunHeat;
+
+	int walkCoolDown;
+	int walkHeat;
+
+
+	void update();
 };
 
 #endif

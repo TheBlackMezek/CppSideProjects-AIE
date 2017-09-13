@@ -10,7 +10,7 @@
 
 
 GameScreen* screen;
-GameScreen gameScreen;
+GameScreen gameScreenNO;
 
 
 
@@ -23,7 +23,9 @@ void initScreens()
 
 void initGameScreen()
 {
-	gameScreen = GameScreen(WIN_WIDTH, WIN_HEIGHT, 200, 200);
+	//gameScreen = GameScreen(WIN_WIDTH, WIN_HEIGHT, 200, 200);
+	screen = new GameScreen(WIN_WIDTH, WIN_HEIGHT, 200, 200);
+
 	//gameScreen.setSize(WIN_WIDTH, WIN_HEIGHT);
 
 	//std::string termStr = "TERMINOLOGY:\n\n"
@@ -48,7 +50,7 @@ void initGameScreen()
 	//gameScreen.addButton(idx, butDat);
 
 
-	gameScreen.makeImage();
+	//gameScreen.makeImage();
 }
 
 

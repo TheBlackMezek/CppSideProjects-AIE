@@ -6,6 +6,10 @@
 #include "InputGetter.h"
 #include "Player.h"
 #include "ImageMaker.h"
+#include "Bullet.h"
+#include "LightSpot.h"
+#include "Enemy.h"
+#include "EnemySpawner.h"
 
 
 GameScreen::GameScreen()
@@ -44,6 +48,8 @@ GameScreen::GameScreen(int winx, int winy, int mapx, int mapy)
 	charPhys['W'] = true;
 
 
+	entities = std::vector<GameEntity*>();
+
 
 	charMap = std::vector<char>(mapx * mapy);
 	for (int i = 0; i < mapx * mapy; ++i)
@@ -66,41 +72,92 @@ GameScreen::GameScreen(int winx, int winy, int mapx, int mapy)
 		physMap[i] = false;
 	}
 	
-	for (int i = 0; i < 10; ++i)
-	{
-		charMap[i + 10 + 10 * mapx] = 'W';
-		physMap[i + 10 + 10 * mapx] = true;
-	}
+	
 
 	loadMap("map.txt");
-	
+	player = player;
 }
 
 
 GameScreen::~GameScreen()
 {
+	for (int i = 0; i < entities.size(); ++i)
+	{
+		delete entities[i];
+	}
 }
 
 
 void GameScreen::update(int mouseX, int mouseY)
 {
-	Screen::update(mouseX, mouseY);
+	//Screen::update(mouseX, mouseY);
+	player.update();
+	//if (lclick)
+	if(ldown && player.gunHeat == 0)
+	{
+		player.gunHeat = player.gunCoolDown;
 
-	if (UP && player.y + 1 < mapSizeY && physMap[player.x + (player.y + 1) * mapSizeX] == false)
-	{
-		++player.y;
+		Bullet* b = new Bullet('*', player.x, player.y, &player, &physMap, &entities, mapSizeX, mapSizeY);
+		float vecx = mouse.x - (sizeX / 2);
+		float vecy = mouse.y - (sizeY / 2);
+		b->vel.x = vecx;
+		b->vel.y = vecy;
+		b->vel.unit();
+		entities.push_back(b);
+
+		LightSpot* l = new LightSpot('{', player.x, player.y, &player, &physMap, &entities, mapSizeX, mapSizeY);
+		entities.push_back(l);
 	}
-	if (DOWN && player.y - 1 >= 0 && physMap[player.x + (player.y - 1) * mapSizeX] == false)
+
+	if (player.walkHeat == 0)
 	{
-		--player.y;
+		if (UP && player.y + 1 < mapSizeY && physMap[player.x + (player.y + 1) * mapSizeX] == false)
+		{
+			player.walkHeat = player.walkCoolDown;
+			++player.y;
+		}
+		if (DOWN && player.y - 1 >= 0 && physMap[player.x + (player.y - 1) * mapSizeX] == false)
+		{
+			player.walkHeat = player.walkCoolDown;
+			--player.y;
+		}
+		if (RIGHT && player.x + 1 < mapSizeX && physMap[player.x + 1 + player.y * mapSizeX] == false)
+		{
+			player.walkHeat = player.walkCoolDown;
+			++player.x;
+		}
+		if (LEFT && player.x - 1 >= 0 && physMap[player.x - 1 + player.y * mapSizeX] == false)
+		{
+			player.walkHeat = player.walkCoolDown;
+			--player.x;
+		}
 	}
-	if (RIGHT && player.x + 1 < mapSizeX && physMap[player.x + 1 + player.y * mapSizeX] == false)
+
+	for (int i = entities.size()-1; i >= 0; --i)
 	{
-		++player.x;
+		if (entities[i]->alive)
+		{
+			entities[i]->update();
+			if (entities[i]->x < 0 || entities[i]->x >= mapSizeX ||
+				entities[i]->y < 0 || entities[i]->y >= mapSizeY)
+			{
+				delete entities[i];
+				entities.erase(entities.begin() + i);
+			}
+		}
 	}
-	if (LEFT && player.x - 1 >= 0 && physMap[player.x - 1 + player.y * mapSizeX] == false)
+
+	for (int i = entities.size() - 1; i >= 0; --i)
 	{
-		--player.x;
+		if (!entities[i]->alive)
+		{
+			if (entities[i]->icon == '&')
+			{
+				charMap[(int)entities[i]->x + (int)entities[i]->y * mapSizeX] = ',';
+			}
+			delete entities[i];
+			entities.erase(entities.begin() + i);
+		}
 	}
 
 	makeImage();
@@ -115,6 +172,7 @@ void GameScreen::makeImage()
 
 	makeLight();
 
+	//Make an empty image first, of the correct size
 	for (int y = 0; y < mapSizeY; ++y)
 	{
 		for (int x = 0; x < mapSizeX; ++x)
@@ -130,7 +188,6 @@ void GameScreen::makeImage()
 		}
 	}
 
-	//Make an empty image first, of the correct size
 	for (int y = 0; y < sizeY; ++y)
 	{
 		for (int x = 0; x < sizeX; ++x)
@@ -156,6 +213,19 @@ void GameScreen::makeImage()
 		}
 	}
 
+	for (int i = 0; i < entities.size(); ++i)
+	{
+		int imgpos = ((int)entities[i]->x + sizeX / 2 - player.x) + (sizeY - 1 - ((int)entities[i]->y + sizeY / 2 - player.y)) * sizeX;
+		if (entities[i]->visible && imgpos < image.size() && imgpos > 0)
+		{
+			image[imgpos].chr = entities[i]->icon;
+			if (colorMap[(int)entities[i]->x + (int)entities[i]->y * mapSizeX] > 0)
+			{
+				image[((int)entities[i]->x + sizeX / 2 - player.x) + (sizeY - 1 - ((int)entities[i]->y + sizeY / 2 - player.y)) * sizeX].color = 0x000F;
+			}
+		}
+	}
+	
 	//Add images from elements
 	/*for (int i = 0; i < maxElms; ++i)
 	{
@@ -243,6 +313,16 @@ void GameScreen::loadMap(char name[])
 
 	charMap.clear();
 	charMap.resize(mapSizeX * mapSizeY);
+	physMap.clear();
+	physMap.resize(mapSizeX * mapSizeY);
+	for (int i = 0; i < mapSizeX * mapSizeY; ++i)
+	{
+		physMap[i] = false;
+	}
+	lightMap.clear();
+	lightMap.resize(mapSizeX * mapSizeY);
+	colorMap.clear();
+	colorMap.resize(mapSizeX * mapSizeY);
 
 	for (int y = 0; y < mapSizeY; ++y)
 	{
@@ -253,6 +333,14 @@ void GameScreen::loadMap(char name[])
 				charMap[x + (mapSizeY - 1 - y) * mapSizeX] = '.';
 				player.x = x;
 				player.y = (mapSizeY - 1 - y);
+			}
+			else if (text[x + y * mapSizeX] == '&')
+			{
+
+				charMap[x + (mapSizeY - 1 - y) * mapSizeX] = '.';
+				EnemySpawner* en = new EnemySpawner('}', x, y, &player, &physMap, &entities, mapSizeX, mapSizeY);
+				
+				entities.push_back(en);
 			}
 			else
 			{
@@ -298,7 +386,41 @@ void GameScreen::makeLight()
 					}
 				}
 			}
+			/*else if (gunLightFrames > 0 && y == player.y && x == player.x)
+			{
+				int ls = 9;
+				for (int yy = y - ls; yy <= y + ls; ++yy)
+				{
+					for (int xx = x - ls; xx <= x + ls; ++xx)
+					{
+						if (xx >= 0 && xx < mapSizeX && yy >= 0 && yy < mapSizeY)
+						{
+							lightMap[xx + yy * mapSizeX] = 1;
+						}
+					}
+				}
+			}*/
 
+		}
+	}
+
+	for (int i = 0; i < entities.size(); ++i)
+	{
+		if (entities[i]->icon == '{')
+		{
+			int ls = 9;
+			int x = entities[i]->x;
+			int y = entities[i]->y;
+			for (int yy = y - ls; yy <= y + ls; ++yy)
+			{
+				for (int xx = x - ls; xx <= x + ls; ++xx)
+				{
+					if (xx >= 0 && xx < mapSizeX && yy >= 0 && yy < mapSizeY)
+					{
+						lightMap[xx + yy * mapSizeX] = 1;
+					}
+				}
+			}
 		}
 	}
 }

@@ -7,6 +7,7 @@
 #include <vector>
 
 #include "Player.h"
+#include "GameEntity.h"
 
 
 class GameScreen :
@@ -30,6 +31,7 @@ private:
 	std::vector<int> colorMap;
 	std::vector<int> lightMap;
 	std::vector<bool> physMap;
+	std::vector<GameEntity*> entities;
 	int charColors[256];
 	bool charPhys[256];
 	int charLights[256];

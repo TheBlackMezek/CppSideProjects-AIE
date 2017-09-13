@@ -1,6 +1,7 @@
 
 
 #include <iostream>
+//#include <Windows.h>
 
 //#include "structs.h"
 #include "WindowSetup.h"
@@ -49,7 +50,7 @@ int main()
 	//initGalaxy();
 	Player();
 
-
+	
 
 
 	printf("Welcome to Space Trader!\n");
@@ -73,17 +74,17 @@ int main()
 	{
 		checkInput();
 
-		screen->update(mouse.x, WIN_HEIGHT - mouse.y);
+		gameScreen.update(mouse.x, WIN_HEIGHT - mouse.y);
 
 
 
 		renderWindow();
 
 
-		
+		Sleep(10);
 	}
 
-
+	delete screen;
 
 	return 0;
 }

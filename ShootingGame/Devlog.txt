@@ -39,3 +39,10 @@ Afternoon goals:
 Load charmap from txt file
 Report:
 Started around 12:30, finished about 1:40
+
+
+
+2017-9-11
+Goals:
+When not busy in class, add entities:
+entities have pointer to player & physmap

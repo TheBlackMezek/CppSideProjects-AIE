@@ -6,7 +6,9 @@
 
 
 extern GameScreen* screen;
-extern GameScreen gameScreen;
+//extern GameScreen gameScreen;
+
+#define gameScreen (*screen)
 
 void initScreens();
 
