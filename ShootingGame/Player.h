@@ -20,6 +20,8 @@ public:
 	int walkCoolDown;
 	int walkHeat;
 
+	int kills;
+
 
 	void update();
 };

@@ -6,7 +6,7 @@
 
 Player::Player()
 {
-
+	kills = 0;
 	x = 0;
 	y = 0;
 	gunCoolDown = 10 * 2;

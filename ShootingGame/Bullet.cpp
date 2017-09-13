@@ -35,6 +35,7 @@ void Bullet::update()
 			{
 				entities->at(i)->alive = false;
 				alive = false;
+				++player->kills;
 				break;
 			}
 		}

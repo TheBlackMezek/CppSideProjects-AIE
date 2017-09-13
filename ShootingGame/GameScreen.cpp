@@ -90,7 +90,7 @@ GameScreen::~GameScreen()
 
 void GameScreen::update(int mouseX, int mouseY)
 {
-	//Screen::update(mouseX, mouseY);
+	Screen::update(mouseX, mouseY);
 	player.update();
 	//if (lclick)
 	if(ldown && player.gunHeat == 0)
@@ -227,7 +227,7 @@ void GameScreen::makeImage()
 	}
 	
 	//Add images from elements
-	/*for (int i = 0; i < maxElms; ++i)
+	for (int i = 0; i < maxElms; ++i)
 	{
 
 		if (elements[i].exists && elmDat[elements[i].elementData].visible)
@@ -259,7 +259,7 @@ void GameScreen::makeImage()
 				}
 			}
 		}
-	}*/
+	}
 
 	//image[player.x + (sizeY - 1 - player.y) * sizeX].chr = '@';
 	//image[player.x + (sizeY - 1 - player.y) * sizeX].color = 0x000F;

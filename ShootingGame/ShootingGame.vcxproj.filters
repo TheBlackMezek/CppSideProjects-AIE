@@ -33,7 +33,7 @@
     <Text Include="Feedback.txt">
       <Filter>Resource Files</Filter>
     </Text>
-    <Text Include="map1.txt">
+    <Text Include="mapx.txt">
       <Filter>Resource Files</Filter>
     </Text>
     <Text Include="map.txt">

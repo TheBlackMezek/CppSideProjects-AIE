@@ -41,6 +41,21 @@ void initGameScreen()
 	//gameScreen.addElement(elmdat);
 	//
 
+	std::string termStr = "TERMINOLOGY:\n\n"
+		"object - Anything in space, be it planet, moon, star, or ship.\n"
+		"satellite - Anything in orbit of something else.\n"
+		"    Moons are satellites of planets.\n"
+		"\n"
+		"synthlife - Artificial plants and animals.\n"
+		"    Some are for pleasure, but most are for utility.\n"
+		"    Most cannot reproduce and must be manufactured.\n";
+	ElementData elmdat = makeElementData(1, WIN_HEIGHT - 2, 12, 3, 0x000F);
+	VarText var = makeVarText("Kills: %i", 0, &gameScreen.player.kills);
+	//makeTextImageMultiLine(false, termStr.c_str(), termStr.size(), &elmdat);
+	makeTextImageWithVars(true, "%i", 2, &elmdat, &var);
+	int idx = gameScreen.addElement(elmdat);
+	gameScreen.addVarText(idx, var);
+
 
 	////Screen buttons
 	//elmdat = makeElementData(1, 1, 6, 3, 0x000F);

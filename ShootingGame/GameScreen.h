@@ -18,12 +18,13 @@ public:
 	GameScreen(int winx, int winy, int mapx, int mapy);
 	~GameScreen();
 
+	Player player;
+
 	void update(int mouseX, int mouseY);
 	void makeImage();
 	void loadMap(char name[]);
 	void makeLight();
 private:
-	Player player;
 	int mapSizeX;
 	int mapSizeY;
 
