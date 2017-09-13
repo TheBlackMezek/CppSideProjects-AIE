@@ -30,10 +30,13 @@
     <Text Include="Devlog.txt">
       <Filter>Resource Files</Filter>
     </Text>
-    <Text Include="map.txt">
+    <Text Include="Feedback.txt">
       <Filter>Resource Files</Filter>
     </Text>
-    <Text Include="Feedback.txt">
+    <Text Include="map1.txt">
+      <Filter>Resource Files</Filter>
+    </Text>
+    <Text Include="map.txt">
       <Filter>Resource Files</Filter>
     </Text>
   </ItemGroup>
