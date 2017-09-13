@@ -1,5 +1,6 @@
 #include "Enemy.h"
 
+#include "InputGetter.h"
 
 
 Enemy::Enemy(char ic, int xx, int yy, Player* p, std::vector<bool>* m, std::vector<GameEntity*>* e, int mx, int my)
@@ -67,6 +68,11 @@ void Enemy::update()
 	if (y > mapsizey - 1)
 	{
 		y = mapsizey - 1;
+	}
+
+	if ((int)x == player->x && (int)y == player->y)
+	{
+		shouldExit = true;
 	}
 
 

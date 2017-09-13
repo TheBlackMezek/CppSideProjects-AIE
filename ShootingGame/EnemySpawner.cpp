@@ -7,7 +7,7 @@ EnemySpawner::EnemySpawner(char ic, int xx, int yy, Player* p, std::vector<bool>
 	: GameEntity(ic, xx, yy, p, m, e, mx, my)
 {
 	vel.x = 0;
-	vel.y = 100;
+	vel.y = 200;
 
 	visible = false;
 }
