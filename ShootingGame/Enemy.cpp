@@ -3,8 +3,8 @@
 #include "InputGetter.h"
 
 
-Enemy::Enemy(char ic, int xx, int yy, Player* p, std::vector<bool>* m, std::vector<GameEntity*>* e, int mx, int my)
-	: GameEntity(ic, xx, yy, p, m, e, mx, my)
+Enemy::Enemy(int xx, int yy, Player* p, std::vector<bool>* m, std::vector<GameEntity*>* e, int mx, int my)
+	: GameEntity('&', xx, yy, p, m, e, mx, my)
 {
 	vel = Vec2(p->x - x, p->y - y);
 	vel.unit();

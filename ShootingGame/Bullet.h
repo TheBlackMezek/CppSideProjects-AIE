@@ -13,7 +13,7 @@ class Bullet :
 	public GameEntity
 {
 public:
-	Bullet(char ic, int xx, int yy, Player* p, std::vector<bool>* m, std::vector<GameEntity*>* e, int mx, int my);
+	Bullet(int xx, int yy, Player* p, std::vector<bool>* m, std::vector<GameEntity*>* e, int mx, int my);
 	~Bullet();
 
 	void update();

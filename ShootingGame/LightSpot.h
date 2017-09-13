@@ -11,7 +11,7 @@ class LightSpot :
 	public GameEntity
 {
 public:
-	LightSpot(char ic, int xx, int yy, Player* p, std::vector<bool>* m, std::vector<GameEntity*>* e, int mx, int my);
+	LightSpot(int xx, int yy, Player* p, std::vector<bool>* m, std::vector<GameEntity*>* e, int mx, int my);
 	~LightSpot();
 
 	void update();

@@ -97,7 +97,7 @@ void GameScreen::update(int mouseX, int mouseY)
 	{
 		player.gunHeat = player.gunCoolDown;
 
-		Bullet* b = new Bullet('*', player.x, player.y, &player, &physMap, &entities, mapSizeX, mapSizeY);
+		Bullet* b = new Bullet(player.x, player.y, &player, &physMap, &entities, mapSizeX, mapSizeY);
 		float vecx = mouse.x - (sizeX / 2);
 		float vecy = mouse.y - (sizeY / 2);
 		b->vel.x = vecx;
@@ -105,7 +105,7 @@ void GameScreen::update(int mouseX, int mouseY)
 		b->vel.unit();
 		entities.push_back(b);
 
-		LightSpot* l = new LightSpot('{', player.x, player.y, &player, &physMap, &entities, mapSizeX, mapSizeY);
+		LightSpot* l = new LightSpot(player.x, player.y, &player, &physMap, &entities, mapSizeX, mapSizeY);
 		entities.push_back(l);
 	}
 
@@ -338,7 +338,7 @@ void GameScreen::loadMap(char name[])
 			{
 
 				charMap[x + (mapSizeY - 1 - y) * mapSizeX] = '.';
-				EnemySpawner* en = new EnemySpawner('}', x, y, &player, &physMap, &entities, mapSizeX, mapSizeY);
+				EnemySpawner* en = new EnemySpawner(x, y, &player, &physMap, &entities, mapSizeX, mapSizeY);
 				
 				entities.push_back(en);
 			}

@@ -13,7 +13,7 @@ class Enemy :
 	public GameEntity
 {
 public:
-	Enemy(char ic, int xx, int yy, Player* p, std::vector<bool>* m, std::vector<GameEntity*>* e, int mx, int my);
+	Enemy(int xx, int yy, Player* p, std::vector<bool>* m, std::vector<GameEntity*>* e, int mx, int my);
 	~Enemy();
 
 	void update();
