@@ -37,17 +37,21 @@ int EndSocket();
 
 int main()
 {
-	for (int i = 0; i < 4; ++i)
+	while (true)
 	{
-		MyPacket packet;
-		Send((char*)&packet, sizeof(packet), i); //send to all 4 clients
+		for (int i = 0; i < 4; ++i)
+		{
+			MyPacket packet;
+			Send((char*)&packet, sizeof(packet), i); //send to all 4 clients
+		}
+
+		for (int i = 0; i < 4; ++i)
+		{
+			MyPacket packet;
+			Receive((char*)&packet, sizeof(packet), i); //send to all 4 clients
+		}
 	}
 
-	for (int i = 0; i < 4; ++i)
-	{
-		MyPacket packet;
-		Receive((char*)&packet, sizeof(packet), i); //send to all 4 clients
-	}
 
 	return 0;
 }
