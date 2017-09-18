@@ -39,15 +39,18 @@ ScoreScreen::ScoreScreen(int winx, int winy)
 			int thisScore = std::stoi(line.substr(0, line.find(' ')));
 
 			std::list<int>::iterator it;
+			bool foundFlag = false;
 			for (it = highScores.begin(); it != highScores.end(); ++it)
 			{
 				if (thisScore >= *it)
 				{
+					foundFlag = true;
 					highScores.insert(it, thisScore);
 					break;
 				}
 			}
-			if (highScores.empty())
+
+			if (foundFlag == false || highScores.empty())
 			{
 				highScores.push_back(thisScore);
 			}

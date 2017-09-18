@@ -96,6 +96,8 @@ void GameScreen::update(int mouseX, int mouseY)
 	if (endGame)
 	{
 		saveScore();
+		delete scoreScreen;
+		scoreScreen = new ScoreScreen(sizeX, sizeY);
 		screen = scoreScreen;
 		screen->update(mouseX, mouseY);
 		endGame = false;
