@@ -74,8 +74,9 @@ int main()
 	{
 		checkInput();
 
-		gameScreen->update(mouse.x, WIN_HEIGHT - mouse.y);
-		scoreScreen->update(mouse.x, WIN_HEIGHT - mouse.y);
+		screen->update(mouse.x, WIN_HEIGHT - mouse.y);
+		//gameScreen->update(mouse.x, WIN_HEIGHT - mouse.y);
+		//scoreScreen->update(mouse.x, WIN_HEIGHT - mouse.y);
 
 
 

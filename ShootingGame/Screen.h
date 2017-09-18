@@ -36,7 +36,7 @@ public:
 	VarText     varTxt[100];
 	// -------------------------------------- //
 
-	void update(int mouseX, int mouseY);
+	virtual void update(int mouseX, int mouseY);
 	void makeImage();
 	void click();
 

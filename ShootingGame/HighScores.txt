@@ -1,11 +1,6 @@
-10 Barred Hall
-47 Barred Hall
-25 Cross Hall
-70 Cross Hall
-13 Barred Hall
-0 Barred Hall
-4 Barred Hall
-4 Barred Hall
-0 Barred Hall
-4 Barred Hall
-14 Barred Hall
+176 Barred Hall
+7 Barred Hall
+89 Barred Hall
+38 Barred Hall
+29 Barred Hall
+21 Barred Hall
