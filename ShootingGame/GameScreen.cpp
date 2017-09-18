@@ -446,7 +446,7 @@ void GameScreen::saveScore()
 	}
 
 	file.close();
-	file.open("HighScores.txt", std::ios_base::out);
+	file.open("HighScores.txt", std::ios_base::out | std::ios_base::app);
 
 	file << player.kills << std::endl;
 
