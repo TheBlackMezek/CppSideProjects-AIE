@@ -24,6 +24,7 @@ public:
 	void makeImage();
 	void loadMap(char name[]);
 	void makeLight();
+	void saveScore();
 private:
 	int mapSizeX;
 	int mapSizeY;

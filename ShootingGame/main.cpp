@@ -84,6 +84,8 @@ int main()
 		Sleep(10);
 	}
 
+	gameScreen.saveScore();
+
 	delete screen;
 
 	return 0;

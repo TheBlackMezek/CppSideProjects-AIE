@@ -424,3 +424,33 @@ void GameScreen::makeLight()
 		}
 	}
 }
+
+void GameScreen::saveScore()
+{
+	std::fstream file;
+	file.open("HighScores.txt", std::ios_base::in);
+
+	std::string line;
+	int lowestScore = INT_MAX;
+
+	if (file.is_open())
+	{
+		while (std::getline(file, line))
+		{
+			int thisScore = std::stoi(line.substr(0, line.size() - line.find(' ')));
+			if (thisScore < lowestScore)
+			{
+				lowestScore = thisScore;
+			}
+		}
+	}
+
+	file.close();
+	file.open("HighScores.txt", std::ios_base::out);
+
+	file << player.kills << std::endl;
+
+
+
+	file.close();
+}
