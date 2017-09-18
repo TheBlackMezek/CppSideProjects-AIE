@@ -10,7 +10,7 @@
 
 
 GameScreen* screen;
-GameScreen gameScreenNO;
+GameScreen* gameScreen;
 
 
 
@@ -23,8 +23,9 @@ void initScreens()
 
 void initGameScreen()
 {
-	//gameScreen = GameScreen(WIN_WIDTH, WIN_HEIGHT, 200, 200);
-	screen = new GameScreen(WIN_WIDTH, WIN_HEIGHT, 200, 200);
+	gameScreen = new GameScreen(WIN_WIDTH, WIN_HEIGHT, 200, 200);
+	//screen = new GameScreen(WIN_WIDTH, WIN_HEIGHT, 200, 200);
+	screen = gameScreen;
 
 	//gameScreen.setSize(WIN_WIDTH, WIN_HEIGHT);
 
@@ -50,11 +51,11 @@ void initGameScreen()
 		"    Some are for pleasure, but most are for utility.\n"
 		"    Most cannot reproduce and must be manufactured.\n";
 	ElementData elmdat = makeElementData(1, WIN_HEIGHT - 2, 12, 3, 0x000F);
-	VarText var = makeVarText("Kills: %i", 0, &gameScreen.player.kills);
+	VarText var = makeVarText("Kills: %i", 0, &gameScreen->player.kills);
 	//makeTextImageMultiLine(false, termStr.c_str(), termStr.size(), &elmdat);
 	makeTextImageWithVars(true, "%i", 2, &elmdat, &var);
-	int idx = gameScreen.addElement(elmdat);
-	gameScreen.addVarText(idx, var);
+	int idx = gameScreen->addElement(elmdat);
+	gameScreen->addVarText(idx, var);
 
 
 	////Screen buttons
@@ -68,12 +69,17 @@ void initGameScreen()
 	//gameScreen.makeImage();
 }
 
+void cleanupScreens()
+{
+	delete gameScreen;
+}
+
 
 
 
 void switchScreenToGame()
 {
-	screen = &gameScreen;
+	screen = gameScreen;
 }
 
 

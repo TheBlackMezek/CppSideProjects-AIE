@@ -74,7 +74,7 @@ int main()
 	{
 		checkInput();
 
-		gameScreen.update(mouse.x, WIN_HEIGHT - mouse.y);
+		gameScreen->update(mouse.x, WIN_HEIGHT - mouse.y);
 
 
 
@@ -84,9 +84,10 @@ int main()
 		Sleep(10);
 	}
 
-	gameScreen.saveScore();
+	gameScreen->saveScore();
 
-	delete screen;
+	cleanupScreens();
+	//delete screen;
 
 	return 0;
 }

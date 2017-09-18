@@ -430,7 +430,8 @@ void GameScreen::makeLight()
 void GameScreen::saveScore()
 {
 	std::fstream file;
-	file.open("HighScores.txt", std::ios_base::in);
+
+	/*file.open("HighScores.txt", std::ios_base::in);
 
 	std::string line;
 	int lowestScore = INT_MAX;
@@ -447,7 +448,8 @@ void GameScreen::saveScore()
 		}
 	}
 
-	file.close();
+	file.close();*/
+
 	file.open("HighScores.txt", std::ios_base::out | std::ios_base::app);
 
 	file << player.kills << ' ' << mapName << std::endl;

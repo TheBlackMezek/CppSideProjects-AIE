@@ -6,11 +6,13 @@
 
 
 extern GameScreen* screen;
-//extern GameScreen gameScreen;
+extern GameScreen* gameScreen;
 
-#define gameScreen (*screen)
+//#define gameScreen (*screen)
 
 void initScreens();
+
+void cleanupScreens();
 
 void initGameScreen();
 
