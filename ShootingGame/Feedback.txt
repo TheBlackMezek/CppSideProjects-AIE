@@ -7,3 +7,5 @@ Slowly increase spawn rate
 
 Players:
 Ability to see spawners
+Blood splatter instead of spot
+Grenades

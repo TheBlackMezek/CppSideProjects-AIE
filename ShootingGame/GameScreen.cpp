@@ -272,7 +272,9 @@ void GameScreen::loadMap(char name[])
 	file.open(name);
 
 	std::string line;
-	//Get color, physics and light data
+	//Get map name & color, physics and light data
+	std::getline(file, line);
+	mapName = line.substr(line.find(' ') + 1, line.npos);
 	std::getline(file, line);
 	for (int i = 0; i < line.size(); i += 5)
 	{
@@ -448,7 +450,7 @@ void GameScreen::saveScore()
 	file.close();
 	file.open("HighScores.txt", std::ios_base::out | std::ios_base::app);
 
-	file << player.kills << std::endl;
+	file << player.kills << ' ' << mapName << std::endl;
 
 
 

@@ -1,3 +1,4 @@
+MAP Barred Hall
 . 0A W 88 X 0B , 0C T 0F
 . 0 W 1 X 1 T 1
 X 5 T 11
