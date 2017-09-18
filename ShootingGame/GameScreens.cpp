@@ -9,14 +9,16 @@
 #include "InputGetter.h"
 
 
-GameScreen* screen;
+Screen* screen;
 GameScreen* gameScreen;
+ScoreScreen* scoreScreen;
 
 
 
 void initScreens()
 {
 	initGameScreen();
+	scoreScreen = new ScoreScreen(WIN_WIDTH, WIN_HEIGHT);
 }
 
 
@@ -72,6 +74,7 @@ void initGameScreen()
 void cleanupScreens()
 {
 	delete gameScreen;
+	delete scoreScreen;
 }
 
 
@@ -79,6 +82,8 @@ void cleanupScreens()
 
 void switchScreenToGame()
 {
+	gameScreen->loadMap("map.txt");
+	gameScreen->endGame = false;
 	screen = gameScreen;
 }
 

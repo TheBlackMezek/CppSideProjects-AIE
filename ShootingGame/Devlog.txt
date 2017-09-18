@@ -56,3 +56,6 @@ entities have pointer to player & physmap
 
 2017-9-18 block 1
 Make high score save
+Finished pretty easily
+block 2
+Make high score screen

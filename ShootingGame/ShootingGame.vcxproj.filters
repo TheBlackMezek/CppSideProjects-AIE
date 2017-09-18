@@ -86,6 +86,9 @@
     <ClCompile Include="EnemySpawner.cpp">
       <Filter>Source Files\Entities</Filter>
     </ClCompile>
+    <ClCompile Include="ScoreScreen.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="DataMaker.h">
@@ -132,6 +135,9 @@
     </ClInclude>
     <ClInclude Include="EnemySpawner.h">
       <Filter>Header Files\Entities</Filter>
+    </ClInclude>
+    <ClInclude Include="ScoreScreen.h">
+      <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

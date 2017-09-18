@@ -3,10 +3,12 @@
 #include "Screen.h"
 
 #include "GameScreen.h"
+#include "ScoreScreen.h"
 
 
-extern GameScreen* screen;
+extern Screen* screen;
 extern GameScreen* gameScreen;
+extern ScoreScreen* scoreScreen;
 
 //#define gameScreen (*screen)
 

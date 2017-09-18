@@ -84,7 +84,6 @@ int main()
 		Sleep(10);
 	}
 
-	gameScreen->saveScore();
 
 	cleanupScreens();
 	//delete screen;

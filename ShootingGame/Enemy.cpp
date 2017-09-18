@@ -1,6 +1,7 @@
 #include "Enemy.h"
 
 #include "InputGetter.h"
+#include "GameScreens.h"
 
 
 Enemy::Enemy(int xx, int yy, Player* p, std::vector<bool>* m, std::vector<GameEntity*>* e, int mx, int my)
@@ -72,7 +73,8 @@ void Enemy::update()
 
 	if (((int)x == player->x && (int)y == player->y) || vel.dist(x, y, player->x, player->y) < 1)
 	{
-		shouldExit = true;
+		//shouldExit = true;
+		gameScreen->endGame = true;
 	}
 
 

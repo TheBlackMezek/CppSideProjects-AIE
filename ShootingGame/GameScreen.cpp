@@ -10,6 +10,7 @@
 #include "LightSpot.h"
 #include "Enemy.h"
 #include "EnemySpawner.h"
+#include "GameScreens.h"
 
 
 GameScreen::GameScreen()
@@ -27,6 +28,8 @@ GameScreen::GameScreen(int winx, int winy, int mapx, int mapy)
 	sizeY = winy;
 	mapSizeX = mapx;
 	mapSizeY = mapy;
+
+	endGame = false;
 
 	for (int i = 0; i < 256; ++i)
 	{
@@ -90,6 +93,14 @@ GameScreen::~GameScreen()
 
 void GameScreen::update(int mouseX, int mouseY)
 {
+	if (endGame)
+	{
+		saveScore();
+		screen = scoreScreen;
+		screen->update(mouseX, mouseY);
+		endGame = false;
+	}
+
 	Screen::update(mouseX, mouseY);
 	player.update();
 	//if (lclick)
@@ -325,6 +336,9 @@ void GameScreen::loadMap(char name[])
 	lightMap.resize(mapSizeX * mapSizeY);
 	colorMap.clear();
 	colorMap.resize(mapSizeX * mapSizeY);
+
+	entities.clear();
+	player.kills = 0;
 
 	for (int y = 0; y < mapSizeY; ++y)
 	{

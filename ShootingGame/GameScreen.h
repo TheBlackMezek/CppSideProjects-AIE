@@ -19,6 +19,9 @@ public:
 	~GameScreen();
 
 	Player player;
+	bool endGame;
+
+	std::string mapName;
 
 	void update(int mouseX, int mouseY);
 	void makeImage();
@@ -28,8 +31,6 @@ public:
 private:
 	int mapSizeX;
 	int mapSizeY;
-
-	std::string mapName;
 
 	std::vector<char> charMap;
 	std::vector<int> colorMap;
