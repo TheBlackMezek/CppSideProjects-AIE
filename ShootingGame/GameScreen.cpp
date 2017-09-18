@@ -99,6 +99,7 @@ void GameScreen::update(int mouseX, int mouseY)
 		screen = scoreScreen;
 		screen->update(mouseX, mouseY);
 		endGame = false;
+		entities.clear();
 	}
 
 	Screen::update(mouseX, mouseY);
