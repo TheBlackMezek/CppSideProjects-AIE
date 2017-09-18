@@ -14,6 +14,12 @@ Shooting emits flash of light, light sources can be placed on map.
 Player picks map from list at start of game, returned to menu after end.
 Stats window at end of game, high scores.
 
+FileIO additions:
+Save and display high scores at end of game
+Offer to try again
+Map selection
+If there's time, add text input field to get player name for high score
+
 
 
 2017-9-8

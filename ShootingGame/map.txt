@@ -1,5 +1,5 @@
 . 0A W 88 X 0B , 0C T 0F
-. 0 W 1 X 0
+. 0 W 1 X 1 T 1
 X 5 T 11
 WWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWW
 WWWWWWWWWWWWWWW....................WWWWWWWWWWWWWWW
@@ -10,10 +10,10 @@ WWWWWWWWWWWWWWW....................WWWWWWWWWWWWWWW
 WWWWWWWWWWWWWWW....................WWWWWWWWWWWWWWW
 WWWWWWWWWWWWWWWX..................XWWWWWWWWWWWWWWW
 W................................................W
-W.&.........................................&....W
+W...........&........................&...........W
 W................................................W
-WWWWWWWWWWWWWWW....................WWWWWWWWWWWWWWW
-WWWWWWWWWWWWWWW....................WWWWWWWWWWWWWWW
+WWWWWWWWWWWWW........................WWWWWWWWWWWWW
+WWWWWWWWWWWWWW......................WWWWWWWWWWWWWW
 WWWWWWWWWWWWWWW....................WWWWWWWWWWWWWWW
 WWWWWWWWWWWWWWW....................WWWWWWWWWWWWWWW
 WWWWWWWWWWWWWWW....................WWWWWWWWWWWWWWW
@@ -35,12 +35,12 @@ WWWWWWWWWWWWWWW....................WWWWWWWWWWWWWWW
 WWWWWWWWWWWWWWW....................WWWWWWWWWWWWWWW
 WWWWWWWWWWWWWWW....................WWWWWWWWWWWWWWW
 WWWWWWWWWWWWWWW....................WWWWWWWWWWWWWWW
-WWWWWWWWWWWWWWW....................WWWWWWWWWWWWWWW
+WWWWWWWWWWWWWW......................WWWWWWWWWWWWWW
+WWWWWWWWWWWWW........................WWWWWWWWWWWWW
+W................................................W
+W...........&........................&...........W
+W................................................W
 WWWWWWWWWWWWWWWX..................XWWWWWWWWWWWWWWW
-W................................................W
-W.&........................................&.....W
-W................................................W
-WWWWWWWWWWWWWWW....................WWWWWWWWWWWWWWW
 WWWWWWWWWWWWWWW....................WWWWWWWWWWWWWWW
 WWWWWWWWWWWWWWW....................WWWWWWWWWWWWWWW
 WWWWWWWWWWWWWWW....................WWWWWWWWWWWWWWW
