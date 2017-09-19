@@ -25,7 +25,7 @@ public:
 
 	void update(int mouseX, int mouseY);
 	void makeImage();
-	void loadMap(char name[]);
+	void loadMap(const char name[]);
 	void makeLight();
 	void saveScore();
 private:

@@ -67,7 +67,8 @@ int main()
 
 
 
-	switchScreenToGame();
+	//switchScreenToGame();
+	switchScreenToMap();
 
 
 	while (!shouldExit)

@@ -12,6 +12,7 @@
 Screen* screen;
 GameScreen* gameScreen;
 ScoreScreen* scoreScreen;
+MapScreen* mapScreen;
 
 
 
@@ -19,6 +20,7 @@ void initScreens()
 {
 	initGameScreen();
 	scoreScreen = new ScoreScreen(WIN_WIDTH, WIN_HEIGHT);
+	mapScreen = new MapScreen(WIN_WIDTH, WIN_HEIGHT);
 }
 
 
@@ -82,9 +84,15 @@ void cleanupScreens()
 
 void switchScreenToGame()
 {
-	gameScreen->loadMap("map.txt");
+	//gameScreen->loadMap("map.txt");
 	gameScreen->endGame = false;
 	screen = gameScreen;
+	screen->update(mouse.x, WIN_HEIGHT - mouse.y);
+}
+
+void switchScreenToMap()
+{
+	screen = mapScreen;
 }
 
 

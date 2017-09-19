@@ -76,8 +76,8 @@ ScoreScreen::ScoreScreen(int winx, int winy)
 	}
 	
 
-	elmdat = makeElementData(sizeX - 13, 1, 11, 3, 0x000F);
-	ButtonData butDat = makeButtonData(true, 0x000A, 0x000C, "Try Again", &switchScreenToGame);
+	elmdat = makeElementData(sizeX - 13, 1, 12, 3, 0x000F);
+	ButtonData butDat = makeButtonData(true, 0x000A, 0x000C, "Play Again", &switchScreenToMap);
 	makeButtonImage(&elmdat, &butDat);
 	idx = addElement(elmdat);
 	addButton(idx, butDat);

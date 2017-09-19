@@ -33,10 +33,10 @@
     <Text Include="Feedback.txt">
       <Filter>Resource Files</Filter>
     </Text>
-    <Text Include="mapb.txt">
+    <Text Include="map1.txt">
       <Filter>Resource Files</Filter>
     </Text>
-    <Text Include="map.txt">
+    <Text Include="map2.txt">
       <Filter>Resource Files</Filter>
     </Text>
   </ItemGroup>
@@ -89,6 +89,9 @@
     <ClCompile Include="ScoreScreen.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="MapScreen.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="DataMaker.h">
@@ -137,6 +140,9 @@
       <Filter>Header Files\Entities</Filter>
     </ClInclude>
     <ClInclude Include="ScoreScreen.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="MapScreen.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

@@ -77,7 +77,7 @@ GameScreen::GameScreen(int winx, int winy, int mapx, int mapy)
 	
 	
 
-	loadMap("map.txt");
+	loadMap("map1.txt");
 	player = player;
 }
 
@@ -280,7 +280,7 @@ void GameScreen::makeImage()
 }
 
 
-void GameScreen::loadMap(char name[])
+void GameScreen::loadMap(const char name[])
 {
 	std::fstream file;
 	file.open(name);

@@ -112,8 +112,8 @@
   <ItemGroup>
     <Text Include="Devlog.txt" />
     <Text Include="Feedback.txt" />
-    <Text Include="map.txt" />
-    <Text Include="mapb.txt" />
+    <Text Include="map1.txt" />
+    <Text Include="map2.txt" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Bullet.cpp" />
@@ -127,6 +127,7 @@
     <ClCompile Include="InputGetter.cpp" />
     <ClCompile Include="LightSpot.cpp" />
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="MapScreen.cpp" />
     <ClCompile Include="Player.cpp" />
     <ClCompile Include="ScoreScreen.cpp" />
     <ClCompile Include="Screen.cpp" />
@@ -145,6 +146,7 @@
     <ClInclude Include="ImageMaker.h" />
     <ClInclude Include="InputGetter.h" />
     <ClInclude Include="LightSpot.h" />
+    <ClInclude Include="MapScreen.h" />
     <ClInclude Include="Player.h" />
     <ClInclude Include="ScoreScreen.h" />
     <ClInclude Include="Screen.h" />
