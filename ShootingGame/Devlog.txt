@@ -59,3 +59,8 @@ Make high score save
 Finished pretty easily
 block 2
 Make high score screen
+
+2017-9-19
+block 1
+Make map selection screen
+Screen has page forward/back buttons

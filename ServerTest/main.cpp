@@ -2,6 +2,7 @@
 #include <Windows.h>
 #include <stdio.h>
 #include <string>
+#include <iostream>
 
 #pragma comment(lib, "ws2_32.lib")
 
@@ -38,6 +39,7 @@ int EndSocket();
 
 int main()
 {
+	std::string input;
 
 	//std::string input;
 
@@ -47,24 +49,45 @@ int main()
 	}*/
 	StartServer(278);
 
-	while (true)
+	while (input != "exit")
 	{
 		//for (int i = 0; i < 4; ++i)
 		//{
 		//	MyPacket packet;
 		//	Send((char*)&packet, sizeof(packet), i); //send to all 4 clients
 		//}
+		std::getline(std::cin, input);
+
+		if (input != "exit")
+		{
+			MyPacket packet;
+			for (int i = 0; i < 256 && i < input.size(); ++i)
+			{
+				packet.mystring[i] = input[i];
+			}
+			for (int i = 0; i < 4; ++i)
+			{
+				MyPacket packet;
+				Receive((char*)&packet, sizeof(packet), i); //send to all 4 clients
+				if (packet.mystring)
+				{
+					printf(packet.mystring);
+				}
+			}
+		}
 
 		for (int i = 0; i < 4; ++i)
 		{
 			MyPacket packet;
-			Receive((char*)&packet, sizeof(packet), i); //send to all 4 clients
+			Receive((char*)&packet, sizeof(packet), i); //receive from all 4 clients
 			if (packet.mystring)
 			{
 				printf(packet.mystring);
 			}
 		}
 	}
+
+	EndSocket();
 
 
 	return 0;
@@ -101,6 +124,13 @@ int StartServer(int Port)
 	{
 		for (int i = 0; i < 4; ++i)
 		{
+			MyPacket packet;
+			Receive((char*)&packet, sizeof(packet), i); //receive from all 4 clients
+			if (packet.mystring)
+			{
+				printf(packet.mystring);
+			}
+
 			if (clients < 4)
 			{
 				int so2len = sizeof(i_sock2);

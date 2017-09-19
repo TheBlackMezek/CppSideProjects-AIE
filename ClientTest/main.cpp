@@ -29,7 +29,7 @@ int EndSocket();
 
 int main()
 {
-	std::string message = "Hello world!";
+	//std::string message = "Hello world!";
 	std::string input;
 
 	while (input != "exit")
@@ -40,6 +40,25 @@ int main()
 		{
 			Connect("10.15.20.4", 278);
 		}
+		else if (input != "")
+		{
+			MyPacket packet;
+			for (int i = 0; i < 256 && i < input.size(); ++i)
+			{
+				packet.mystring[i] = input[i];
+			}
+			for (int i = input.size(); i < 256; ++i)
+			{
+				packet.mystring[i] = 0;
+			}
+			Send((char*)&packet, sizeof(packet)); //send to all 4 clients
+			/*if (packet.mystring)
+			{
+				printf(packet.mystring);
+			}*/
+		}
+
+		input = "";
 		//MyPacket packet;
 		//for (int i = 0; i < message.size(); ++i)
 		//{
@@ -49,6 +68,8 @@ int main()
 
 		//Receive((char*)&packet, sizeof(packet)); //send to all 4 clients
 	}
+
+	EndSocket();
 
 
 	return 0;
