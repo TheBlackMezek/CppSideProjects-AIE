@@ -122,16 +122,9 @@ int StartServer(int Port)
 
 	while (true)
 	{
-		for (int i = 0; i < 4; ++i)
+		for (int i = 0; i < 1; ++i)
 		{
-			MyPacket packet;
-			Receive((char*)&packet, sizeof(packet), i); //receive from all 4 clients
-			if (packet.mystring)
-			{
-				printf(packet.mystring);
-			}
-
-			if (clients < 4)
+			if (clients < 1)
 			{
 				int so2len = sizeof(i_sock2);
 				sock2[clients] = accept(sock, (sockaddr*)&i_sock2, &so2len);
@@ -146,6 +139,13 @@ int StartServer(int Port)
 			}
 			else
 			{
+				MyPacket packet;
+				Receive((char*)&packet, sizeof(packet), i); //receive from all 4 clients
+				if (packet.mystring)
+				{
+					printf(packet.mystring);
+					printf("\n");
+				}
 				break;
 			}
 		}

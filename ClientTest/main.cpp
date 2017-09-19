@@ -40,6 +40,10 @@ int main()
 		{
 			Connect("10.15.20.4", 278);
 		}
+		else if (input == "exit")
+		{
+			break;
+		}
 		else if (input != "")
 		{
 			MyPacket packet;
@@ -101,7 +105,7 @@ int Connect(char* IP, int Port)
 
 int Send(char* Buf, int len)
 {
-	int slen;
+	int slen = 1;
 	slen = send(sock, Buf, len, 0);
 	if (slen < 0)
 	{
