@@ -12,6 +12,10 @@ SOCKADDR_IN i_sock; //socket info
 WSADATA Data; //socket version
 
 
+
+//Taken from tutorial at http://www.dreamincode.net/forums/topic/137293-networking-tutorial/
+
+
 struct MyPacket
 {
 	int mylong;
