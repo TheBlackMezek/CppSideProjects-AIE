@@ -9,3 +9,4 @@ Players:
 Ability to see spawners
 Blood splatter instead of spot
 Grenades
+Constant light on avatar

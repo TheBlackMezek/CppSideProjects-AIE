@@ -64,3 +64,5 @@ Make high score screen
 block 1
 Make map selection screen
 Screen has page forward/back buttons
+block 2
+Find and make improvements

@@ -119,8 +119,8 @@ void GameScreen::update(int mouseX, int mouseY)
 		b->vel.unit();
 		entities.push_back(b);
 
-		LightSpot* l = new LightSpot(player.x, player.y, &player, &physMap, &entities, mapSizeX, mapSizeY);
-		entities.push_back(l);
+		//LightSpot* l = new LightSpot(player.x, player.y, &player, &physMap, &entities, mapSizeX, mapSizeY);
+		//entities.push_back(l);
 	}
 
 	if (player.walkHeat == 0)
@@ -420,6 +420,18 @@ void GameScreen::makeLight()
 				}
 			}*/
 
+		}
+	}
+
+	int ls = 9;
+	for (int yy = player.y - ls; yy <= player.y + ls; ++yy)
+	{
+		for (int xx = player.x - ls; xx <= player.x + ls; ++xx)
+		{
+			if (xx >= 0 && xx < mapSizeX && yy >= 0 && yy < mapSizeY)
+			{
+				lightMap[xx + yy * mapSizeX] = 1;
+			}
 		}
 	}
 
