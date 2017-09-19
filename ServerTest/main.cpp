@@ -19,7 +19,7 @@ int clients = 0;
 
 
 //Taken from tutorial at http://www.dreamincode.net/forums/topic/137293-networking-tutorial/
-
+//also https://gafferongames.com/post/sending_and_receiving_packets/
 
 struct MyPacket
 {
