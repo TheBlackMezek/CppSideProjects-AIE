@@ -1,6 +1,7 @@
 
 #include <Windows.h>
 #include <stdio.h>
+#include <string>
 
 #pragma comment(lib, "ws2_32.lib")
 
@@ -37,18 +38,31 @@ int EndSocket();
 
 int main()
 {
+
+	//std::string input;
+
+	/*while (input != "exit")
+	{
+		printf("")
+	}*/
+	StartServer(278);
+
 	while (true)
 	{
-		for (int i = 0; i < 4; ++i)
-		{
-			MyPacket packet;
-			Send((char*)&packet, sizeof(packet), i); //send to all 4 clients
-		}
+		//for (int i = 0; i < 4; ++i)
+		//{
+		//	MyPacket packet;
+		//	Send((char*)&packet, sizeof(packet), i); //send to all 4 clients
+		//}
 
 		for (int i = 0; i < 4; ++i)
 		{
 			MyPacket packet;
 			Receive((char*)&packet, sizeof(packet), i); //send to all 4 clients
+			if (packet.mystring)
+			{
+				printf(packet.mystring);
+			}
 		}
 	}
 
@@ -95,7 +109,8 @@ int StartServer(int Port)
 				{
 					return 0;
 				}
-				printf("a client has joined the server(IP: %s)\n", i_sock2.sin_addr.s_addr);
+				printf("a client has joined the server(IP: %i)\n", i_sock2.sin_addr);
+				//printf("a client has joined the server(IP: %s)\n", i_sock2.sin_addr.s_addr);
 				++clients;
 				continue;
 			}
@@ -125,7 +140,7 @@ int Receive(char* Buf, int len, int Client)
 	int slen = recv(sock2[Client], Buf, len, 0);
 	if (slen < 0)
 	{
-		printf("Cannot receive data!\n");
+		//printf("Did not receive data!\n");
 		return 1;
 	}
 	return slen;

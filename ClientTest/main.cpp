@@ -1,6 +1,8 @@
 
 #include <Windows.h>
 #include <stdio.h>
+#include <string>
+#include <iostream>
 
 #pragma comment(lib, "ws2_32.lib")
 
@@ -27,12 +29,25 @@ int EndSocket();
 
 int main()
 {
-	while (true)
-	{
-		MyPacket packet;
-		Send((char*)&packet, sizeof(packet)); //send to all 4 clients
+	std::string message = "Hello world!";
+	std::string input;
 
-		Receive((char*)&packet, sizeof(packet)); //send to all 4 clients
+	while (input != "exit")
+	{
+		std::getline(std::cin, input);
+
+		if (input == "connect")
+		{
+			Connect("10.15.20.4", 278);
+		}
+		//MyPacket packet;
+		//for (int i = 0; i < message.size(); ++i)
+		//{
+		//	packet.mystring[i] = message[i];
+		//}
+		//Send((char*)&packet, sizeof(packet)); //send to all 4 clients
+
+		//Receive((char*)&packet, sizeof(packet)); //send to all 4 clients
 	}
 
 
@@ -69,7 +84,7 @@ int Send(char* Buf, int len)
 	slen = send(sock, Buf, len, 0);
 	if (slen < 0)
 	{
-		printf("Cannot send data\n");
+		printf("Did not send data\n");
 		return 1;
 	}
 	return slen;
