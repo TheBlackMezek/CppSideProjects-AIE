@@ -112,8 +112,8 @@
   <ItemGroup>
     <Text Include="Devlog.txt" />
     <Text Include="Feedback.txt" />
-    <Text Include="mapx.txt" />
     <Text Include="map.txt" />
+    <Text Include="mapb.txt" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Bullet.cpp" />

@@ -45,6 +45,24 @@ void Enemy::update()
 	vel.x /= 10 * 2;
 	vel.y /= 10 * 2;
 
+	if (vel.x < 0.001f && vel.x > 0)
+	{
+		vel.x = 0.001f;
+	}
+	else if (vel.x > -0.001f && vel.x < 0)
+	{
+		vel.x = -0.001f;
+	}
+
+	if (vel.y < 0.001f && vel.y > 0)
+	{
+		vel.y = 0.001f;
+	}
+	else if (vel.y > -0.001f && vel.y < 0)
+	{
+		vel.y = -0.001f;
+	}
+
 	x += vel.x;
 
 	if (physmap->at((int)x + (int)y * mapsizex) == true)
