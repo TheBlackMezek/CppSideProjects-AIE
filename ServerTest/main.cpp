@@ -4,16 +4,17 @@
 #include <string>
 #include <iostream>
 
-#pragma comment(lib, "ws2_32.lib")
+//#pragma comment(lib, "ws2_32.lib")
+#pragma comment (lib, "wsock32.lib")
 
 
-SOCKET sock; //the socket to be used
+SOCKET handle; //the socket to be used
 SOCKET sock2[200]; //the sockets received from and sent to Clients
 
 SOCKADDR_IN i_sock2; //info about connected clients
 
-SOCKADDR_IN i_sock; //info about socket
-WSADATA Data; //socket version
+SOCKADDR_IN address; //info about socket
+WSADATA WsaData; //socket version
 int clients = 0;
 
 
@@ -47,7 +48,7 @@ int main()
 	{
 		printf("")
 	}*/
-	StartServer(278);
+	StartServer(2567);
 
 	while (input != "exit")
 	{
@@ -56,7 +57,7 @@ int main()
 		//	MyPacket packet;
 		//	Send((char*)&packet, sizeof(packet), i); //send to all 4 clients
 		//}
-		std::getline(std::cin, input);
+		//std::getline(std::cin, input);
 
 		if (input != "exit")
 		{
@@ -96,25 +97,33 @@ int main()
 int StartServer(int Port)
 {
 	int err;
-	WSAStartup(MAKEWORD(2, 2), &Data); //init socket & set version
-	sock = socket(AF_INET, SOCK_STREAM, 0); //0 means UDP by default
-	if (sock == INVALID_SOCKET)
+	WSAStartup(MAKEWORD(2, 2), &WsaData); //init socket & set version
+
+	handle = socket(AF_INET, SOCK_STREAM, 0); //0 means UDP by default
+	if (handle == INVALID_SOCKET)
 	{
 		Sleep(4000);
 		exit(0);
 		return 0;
 	}
 
-	i_sock.sin_family = AF_INET;
-	i_sock.sin_addr.s_addr = htonl(INADDR_ANY); //start server at my IP
-	i_sock.sin_port = htons(Port);
-	err = bind(sock, (LPSOCKADDR)&i_sock, sizeof(i_sock)); //associate local address with socket
+	address.sin_family = AF_INET;
+	address.sin_addr.s_addr = htonl(INADDR_ANY); //start server at my IP
+	address.sin_port = htons(Port);
+	err = bind(handle, (LPSOCKADDR)&address, sizeof(address)); //associate local address with socket
 	if (err != 0)
 	{
 		return 0;
 	}
 
-	err = listen(sock, 2); //2 is max number of clients supported
+	DWORD nonBlocking = 1;
+	if (ioctlsocket(handle, FIONBIO, &nonBlocking) != 0)
+	{
+		printf("Failed to set non-blocking\n");
+		return 0;
+	}
+
+	err = listen(handle, 2); //2 is max number of clients supported
 	if (err == SOCKET_ERROR)
 	{
 		return 0;
@@ -124,21 +133,21 @@ int StartServer(int Port)
 	{
 		for (int i = 0; i < 1; ++i)
 		{
-			if (clients < 1)
-			{
-				int so2len = sizeof(i_sock2);
-				sock2[clients] = accept(sock, (sockaddr*)&i_sock2, &so2len);
-				if (sock2[clients] == INVALID_SOCKET)
-				{
-					return 0;
-				}
-				printf("a client has joined the server(IP: %i)\n", i_sock2.sin_addr);
-				//printf("a client has joined the server(IP: %s)\n", i_sock2.sin_addr.s_addr);
-				++clients;
-				continue;
-			}
-			else
-			{
+			//if (clients < 1)
+			//{
+			//	int so2len = sizeof(i_sock2);
+			//	sock2[clients] = accept(handle, (sockaddr*)&i_sock2, &so2len);
+			//	if (sock2[clients] == INVALID_SOCKET)
+			//	{
+			//		return 0;
+			//	}
+			//	printf("a client has joined the server(IP: %i)\n", i_sock2.sin_addr);
+			//	//printf("a client has joined the server(IP: %s)\n", i_sock2.sin_addr.s_addr);
+			//	++clients;
+			//	continue;
+			//}
+			//else
+			//{
 				MyPacket packet;
 				Receive((char*)&packet, sizeof(packet), i); //receive from all 4 clients
 				if (packet.mystring)
@@ -147,7 +156,7 @@ int StartServer(int Port)
 					printf("\n");
 				}
 				break;
-			}
+			//}
 		}
 	}
 
@@ -178,7 +187,7 @@ int Receive(char* Buf, int len, int Client)
 
 int EndSocket()
 {
-	closesocket(sock);
+	closesocket(handle);
 	WSACleanup();
 	return 1;
 }

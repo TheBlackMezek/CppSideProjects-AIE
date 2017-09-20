@@ -4,12 +4,13 @@
 #include <string>
 #include <iostream>
 
-#pragma comment(lib, "ws2_32.lib")
+//#pragma comment(lib, "ws2_32.lib")
+#pragma comment (lib, "wsock32.lib")
 
 
-SOCKET sock;
-SOCKADDR_IN i_sock; //socket info
-WSADATA Data; //socket version
+SOCKET handle;
+SOCKADDR_IN address; //socket info
+WSADATA WsaData; //socket version
 
 
 
@@ -42,7 +43,7 @@ int main()
 
 		if (input == "connect")
 		{
-			Connect("10.15.20.4", 278);
+			Connect("10.15.20.4", 2567);
 		}
 		else if (input == "exit")
 		{
@@ -86,20 +87,28 @@ int main()
 
 int Connect(char* IP, int Port)
 {
-	WSAStartup(MAKEWORD(2, 2), &Data);
-	sock = socket(AF_INET, SOCK_STREAM, 0);
-	if (sock == INVALID_SOCKET)
+	WSAStartup(MAKEWORD(2, 2), &WsaData);
+
+	handle = socket(AF_INET, SOCK_STREAM, 0);
+	if (handle == INVALID_SOCKET)
 	{
 		return 1;
 	}
 
-	i_sock.sin_family = AF_INET;
-	i_sock.sin_addr.s_addr = inet_addr(IP);
-	i_sock.sin_port = htons(Port);
-	int ss = connect(sock, (struct sockaddr*)&i_sock, sizeof(i_sock));
+	address.sin_family = AF_INET;
+	address.sin_addr.s_addr = inet_addr(IP);
+	address.sin_port = htons(Port);
+	int ss = connect(handle, (struct sockaddr*)&address, sizeof(address));
 	if (ss != 0)
 	{
 		printf("Cannot connect\n");
+		return 0;
+	}
+
+	DWORD nonBlocking = 1;
+	if (ioctlsocket(handle, FIONBIO, &nonBlocking) != 0)
+	{
+		printf("Failed to set non-blocking\n");
 		return 0;
 	}
 
@@ -110,7 +119,7 @@ int Connect(char* IP, int Port)
 int Send(char* Buf, int len)
 {
 	int slen = 1;
-	slen = send(sock, Buf, len, 0);
+	slen = send(handle, Buf, len, 0);
 	if (slen < 0)
 	{
 		printf("Did not send data\n");
@@ -122,7 +131,7 @@ int Send(char* Buf, int len)
 int Receive(char* Buf, int len)
 {
 	int slen;
-	slen = recv(sock, Buf, len, 0);
+	slen = recv(handle, Buf, len, 0);
 	if (slen < 0)
 	{
 		printf("Cannot receive data\n");
@@ -133,7 +142,7 @@ int Receive(char* Buf, int len)
 
 int EndSocket()
 {
-	closesocket(sock);
+	closesocket(handle);
 	WSACleanup();
 	return 1;
 }
